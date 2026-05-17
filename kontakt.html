@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Klik. — Pokreni projekt</title>
+  <meta name="description" content="Pokrenite vaš web projekt s Klik. studijem iz Zagreba. Ispunite upit i javit ćemo se unutar 24 sata.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #080808;
+      color: #F6F5F3;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* === FLOATING NAV === */
+    #site-nav {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 50;
+    }
+    .fnav-inner {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(15,15,15,0.82);
+      backdrop-filter: blur(16px) saturate(1.4);
+      -webkit-backdrop-filter: blur(16px) saturate(1.4);
+      border: 1px solid rgba(232,230,226,0.10);
+      border-radius: 9999px;
+      padding: 6px 6px 6px 17px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.45), inset 0 1px 0 rgba(246,245,243,0.05);
+    }
+    .fnav-brand {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .fnav-mark {
+      width: 30px; height: 30px;
+      background: #C8503A;
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .fnav-brand:hover .fnav-mark { transform: scale(1.08); }
+    .fnav-logotype {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 19px;
+      letter-spacing: -0.4px;
+      color: #F6F5F3;
+    }
+    .fnav-logotype span { color: #C8503A; }
+    .fnav-divider {
+      width: 1px;
+      height: 21px;
+      background: rgba(232,230,226,0.15);
+      margin: 0 8px;
+      flex-shrink: 0;
+    }
+    .fnav-tabs {
+      position: relative;
+      display: flex;
+      align-items: center;
+      list-style: none;
+    }
+    .fnav-tab {
+      position: relative;
+      z-index: 10;
+      cursor: pointer;
+      padding: 9px 17px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #F6F5F3;
+      mix-blend-mode: difference;
+      white-space: nowrap;
+      user-select: none;
+      border-radius: 9999px;
+    }
+    .fnav-tab:focus-visible {
+      outline: 2px solid rgba(246,245,243,0.5);
+      outline-offset: -2px;
+    }
+    .fnav-cursor {
+      position: absolute;
+      z-index: 0;
+      top: 0;
+      height: 100%;
+      border-radius: 9999px;
+      background: #F6F5F3;
+      pointer-events: none;
+      opacity: 0;
+      transition: left 0.22s cubic-bezier(0.22,1,0.36,1),
+                  width 0.22s cubic-bezier(0.22,1,0.36,1),
+                  opacity 0.15s ease;
+    }
+
+    /* === BACKGROUND SCENE === */
+    #bg-scene {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+      background-color: #080808;
+    }
+    /* Layer A — ambient colored mesh spotlights */
+    .bg-mesh {
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(ellipse 80% 65% at 12% 15%, rgba(194,81,56,0.08) 0%, transparent 55%),
+        radial-gradient(ellipse 65% 75% at 82% 58%, rgba(63,63,70,0.22) 0%, transparent 60%);
+    }
+    /* Layer B — dot grid blended over the mesh so dots absorb the spotlight color */
+    .bg-dots {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(246,245,243,1) 1px, transparent 1px);
+      background-size: 30px 30px;
+      opacity: 0.055;
+      mix-blend-mode: screen;
+    }
+
+    /* === PAGE LAYOUT === */
+    .page-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 120px 40px 80px;
+      position: relative;
+      z-index: 10;
+    }
+    .kontakt-grid {
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 5fr 7fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    /* === LEFT COLUMN === */
+    .kontakt-left {
+      padding-top: 8px;
+      position: relative;
+      z-index: 10;
+      animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s both;
+    }
+    .k-eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(246,245,243,0.4);
+      margin-bottom: 28px;
+    }
+    .k-headline {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(36px, 4.2vw, 56px);
+      font-weight: 400;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      color: #F6F5F3;
+      margin-bottom: 24px;
+    }
+    .k-headline em {
+      color: #C8503A;
+      font-style: italic;
+    }
+    .k-desc {
+      font-size: 15px;
+      line-height: 1.72;
+      color: rgba(246,245,243,0.5);
+      margin-bottom: 48px;
+      max-width: 340px;
+    }
+    .k-divider {
+      width: 36px;
+      height: 1px;
+      background: rgba(232,230,226,0.18);
+      margin-bottom: 36px;
+    }
+    .k-details {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+    .k-detail-label {
+      display: block;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: rgba(246,245,243,0.28);
+      margin-bottom: 3px;
+    }
+    .k-detail-value {
+      font-size: 14px;
+      color: rgba(246,245,243,0.65);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    a.k-detail-value:hover { color: #F6F5F3; }
+
+    /* === RIGHT COLUMN — FORM === */
+    .kontakt-right {
+      background: rgba(255,255,255,0.034);
+      /* border removed — supplied by .card-glow-wrap gradient shell */
+      border-radius: 20px;
+      padding: 48px 44px;
+      backdrop-filter: blur(20px) saturate(1.3);
+      -webkit-backdrop-filter: blur(20px) saturate(1.3);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06),
+                  0 24px 80px rgba(0,0,0,0.40);
+      animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.22s both;
+    }
+    .form-title {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(246,245,243,0.3);
+      margin-bottom: 36px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(246,245,243,0.4);
+    }
+    .label-opt {
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      color: rgba(246,245,243,0.25);
+      text-transform: none;
+      margin-left: 6px;
+    }
+    input[type="text"],
+    input[type="email"],
+    select,
+    textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(232,230,226,0.11);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: #F6F5F3;
+      outline: none;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    input::placeholder,
+    textarea::placeholder { color: rgba(246,245,243,0.2); }
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: rgba(200,80,58,0.75);
+      background: rgba(200,80,58,0.055);
+      box-shadow: 0 0 0 3px rgba(200,80,58,0.15),
+                  0 0 20px rgba(200,80,58,0.09);
+    }
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(246,245,243,0.3)' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
+      cursor: pointer;
+    }
+    select option { background: #1c1c1c; color: #F6F5F3; }
+    textarea { resize: vertical; min-height: 130px; line-height: 1.62; }
+
+    /* Error states */
+    input.error, select.error, textarea.error {
+      border-color: rgba(200,80,58,0.45);
+      background: rgba(200,80,58,0.05);
+    }
+    .field-error {
+      font-size: 11px;
+      color: #C8503A;
+      letter-spacing: 0.01em;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      min-height: 16px;
+    }
+    .field-error.visible { opacity: 1; transform: translateY(0); }
+
+    /* Submit button — mirrors .btn-primary from index.html */
+    .btn-submit {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px 32px;
+      background: #C8503A;
+      color: #F6F5F3;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 28px;
+      transition: background 0.2s ease,
+                  transform 0.25s cubic-bezier(0.34,1.56,0.64,1),
+                  box-shadow 0.25s ease;
+      box-shadow: 0 2px 12px rgba(200,80,58,0.35);
+    }
+    .btn-submit:hover {
+      background: #B8432E;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(200,80,58,0.45);
+    }
+    .btn-submit:active { transform: translateY(0); }
+    .btn-submit:focus-visible { outline: 2px solid #C8503A; outline-offset: 3px; }
+    .btn-submit svg { transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+    .btn-submit:hover svg { transform: translateX(5px); }
+
+    /* Success state */
+    .form-success {
+      text-align: center;
+      padding: 56px 0;
+    }
+    .success-icon {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: rgba(200,80,58,0.10);
+      border: 1px solid rgba(200,80,58,0.28);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 28px;
+      font-size: 26px;
+      color: #C8503A;
+      animation: successPop 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards;
+    }
+    @keyframes successPop {
+      from { transform: scale(0.6); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+    .success-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 30px;
+      font-weight: 400;
+      color: #F6F5F3;
+      margin-bottom: 12px;
+    }
+    .success-desc {
+      font-size: 15px;
+      line-height: 1.65;
+      color: rgba(246,245,243,0.48);
+      margin-bottom: 36px;
+      max-width: 320px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border: 1px solid rgba(232,230,226,0.18);
+      color: rgba(246,245,243,0.55);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      border-radius: 9px;
+      text-decoration: none;
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+    .btn-back:hover { border-color: rgba(232,230,226,0.45); color: #F6F5F3; }
+
+    /* Entrance animation */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* === GRAIN OVERLAY === */
+    .bg-grain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0.038;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+    }
+
+    /* === CARD GLOW & GRADIENT BORDER SHELL === */
+    .card-glow-wrap {
+      position: relative;
+      /* 1px padding reveals the gradient as the border */
+      padding: 1px;
+      border-radius: 21px;
+      /* gradient border: bright at top-left, fades to transparent at bottom-right */
+      background: linear-gradient(
+        135deg,
+        rgba(255,255,255,0.14) 0%,
+        rgba(255,255,255,0.06) 38%,
+        rgba(255,255,255,0)    100%
+      );
+    }
+    .card-glow {
+      position: absolute;
+      inset: -48px;
+      border-radius: 48px;
+      background: radial-gradient(ellipse 72% 60% at 50% 50%, rgba(200,80,58,0.08) 0%, transparent 68%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .card-glow-wrap > .kontakt-right { position: relative; z-index: 1; }
+
+    /* === FLOATING LABELS === */
+    .form-field.floating { position: relative; }
+    .form-field.floating label {
+      position: absolute;
+      top: 15px;
+      left: 16px;
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 0;
+      text-transform: none;
+      color: rgba(246,245,243,0.32);
+      pointer-events: none;
+      z-index: 1;
+      transition: top 0.22s cubic-bezier(0.16,1,0.3,1),
+                  font-size 0.22s cubic-bezier(0.16,1,0.3,1),
+                  letter-spacing 0.22s ease,
+                  color 0.22s ease;
+    }
+    .form-field.floating input,
+    .form-field.floating textarea {
+      padding-top: 24px;
+      padding-bottom: 8px;
+    }
+    .form-field.floating textarea { padding-top: 28px; }
+    .form-field.floating input:focus + label,
+    .form-field.floating input:not(:placeholder-shown) + label,
+    .form-field.floating textarea:focus + label,
+    .form-field.floating textarea:not(:placeholder-shown) + label {
+      top: 5px;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: rgba(200,80,58,0.9);
+    }
+
+    /* === SELECT CHEVRON === */
+    .select-wrap { position: relative; }
+    .select-wrap select { background-image: none; }
+    .select-chevron {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: rgba(246,245,243,0.3);
+      transition: transform 0.25s cubic-bezier(0.16,1,0.3,1);
+    }
+    .select-wrap.open .select-chevron {
+      transform: translateY(-50%) rotate(180deg);
+    }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 900px) {
+      #site-nav { top: 12px; }
+      .fnav-brand { display: none; }
+      .fnav-divider { display: none; }
+      .fnav-inner { padding: 5px; }
+      .fnav-tab { padding: 9px 12px; font-size: 11px; }
+
+      .page-wrap { padding: 100px 20px 60px; }
+      .kontakt-grid { grid-template-columns: 1fr; gap: 48px; }
+      .k-desc { max-width: 100%; }
+      .kontakt-right { padding: 32px 24px; }
+      .form-row { grid-template-columns: 1fr; gap: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Background scene: mesh spotlights + blended dot grid -->
+<div id="bg-scene" aria-hidden="true">
+  <div class="bg-mesh"></div>
+  <div class="bg-dots"></div>
+</div>
+<div class="bg-grain" aria-hidden="true"></div>
+
+<!-- NAV -->
+<nav id="site-nav" aria-label="Glavna navigacija">
+  <div class="fnav-inner">
+    <a href="./index.html" class="fnav-brand" aria-label="Klik. — natrag na početnu">
+      <div class="fnav-mark">
+        <svg width="16" height="16" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+          <path d="M6 5 L6 17" stroke="#0F0F0F" stroke-width="2.3" stroke-linecap="round"/>
+          <path d="M6 11 L16 6"  stroke="white"  stroke-width="2"   stroke-linecap="round"/>
+          <path d="M6 11 L16 17" stroke="white"  stroke-width="2"   stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="fnav-logotype">Klik<span>.</span></span>
+    </a>
+    <div class="fnav-divider" aria-hidden="true"></div>
+    <ul class="fnav-tabs" id="fnav-tabs" role="list">
+      <li class="fnav-tab" data-href="./index.html"          role="listitem" tabindex="0">Početna</li>
+      <li class="fnav-tab" data-href="./index.html#radovi"   role="listitem" tabindex="0">Radovi</li>
+      <li class="fnav-tab" data-href="./index.html#o-nama"   role="listitem" tabindex="0">O nama</li>
+      <li class="fnav-tab" data-href="./proces.html"         role="listitem" tabindex="0">Proces</li>
+      <li class="fnav-tab" data-href="./kontakt.html"        role="listitem" tabindex="0">Kontakt</li>
+      <li class="fnav-cursor" id="fnav-cursor" aria-hidden="true"></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main>
+  <div class="page-wrap">
+    <div class="kontakt-grid">
+
+      <!-- LEFT — Studio info -->
+      <div class="kontakt-left">
+        <p class="k-eyebrow">Web Studio · Zagreb, Hrvatska</p>
+        <h1 class="k-headline">Začnimo nešto<br><em>vrijedno.</em></h1>
+        <p class="k-desc">Svaki uspješan projekt počinje pravim razgovorom. Ispunite obrazac i javit ćemo se unutar 24 sata s prijedlogom strategije.</p>
+
+        <div class="k-divider"></div>
+
+        <div class="k-details">
+          <div>
+            <span class="k-detail-label">Email</span>
+            <a href="mailto:hello@klik.studio" class="k-detail-value">hello@klik.studio</a>
+          </div>
+          <div>
+            <span class="k-detail-label">Lokacija</span>
+            <span class="k-detail-value">Zagreb, Hrvatska</span>
+          </div>
+          <div>
+            <span class="k-detail-label">Odgovor</span>
+            <span class="k-detail-value">Unutar 24 sata</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT — Form -->
+      <div class="card-glow-wrap">
+      <div class="card-glow" aria-hidden="true"></div>
+      <div class="kontakt-right">
+        <p class="form-title">Novi projekt</p>
+
+        <form id="kontakt-form" novalidate>
+          <div class="form-row">
+            <div class="form-field floating">
+              <input type="text" id="ime" name="ime" placeholder=" " required autocomplete="name">
+              <label for="ime">Ime i prezime</label>
+              <span class="field-error" id="ime-err" role="alert"></span>
+            </div>
+            <div class="form-field floating">
+              <input type="email" id="email" name="email" placeholder=" " required autocomplete="email">
+              <label for="email">Email adresa</label>
+              <span class="field-error" id="email-err" role="alert"></span>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="vrsta">Vrsta projekta</label>
+            <div class="select-wrap" id="vrsta-wrap">
+              <select id="vrsta" name="vrsta" required>
+                <option value="" disabled selected>Odaberite vrstu projekta</option>
+                <option value="web-stranica">Web stranica</option>
+                <option value="ecommerce">E-commerce</option>
+                <option value="digitalni-identitet">Digitalni identitet &amp; branding</option>
+                <option value="redesign">Redesign postojeće stranice</option>
+                <option value="ostalo">Ostalo</option>
+              </select>
+              <svg class="select-chevron" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+                <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <span class="field-error" id="vrsta-err" role="alert"></span>
+          </div>
+
+          <div class="form-field">
+            <label for="proracun">Planirani budžet <span class="label-opt">(nije obavezno)</span></label>
+            <div class="select-wrap" id="proracun-wrap">
+              <select id="proracun" name="proracun">
+                <option value="" disabled selected>Okvirni raspon</option>
+                <option value="ispod-2k">Ispod 2.000 €</option>
+                <option value="2k-5k">2.000 € – 5.000 €</option>
+                <option value="5k-10k">5.000 € – 10.000 €</option>
+                <option value="iznad-10k">Iznad 10.000 €</option>
+              </select>
+              <svg class="select-chevron" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+                <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="form-field floating">
+            <textarea id="poruka" name="poruka" placeholder=" " required></textarea>
+            <label for="poruka">Poruka</label>
+            <span class="field-error" id="poruka-err" role="alert"></span>
+          </div>
+
+          <button type="submit" class="btn-submit">
+            <span>Pošalji upit</span>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </form>
+
+        <!-- Success state (shown after valid submit) -->
+        <div class="form-success" id="form-success" hidden>
+          <div class="success-icon" aria-hidden="true">✓</div>
+          <h2 class="success-title">Upit je poslan!</h2>
+          <p class="success-desc">Hvala na povjerenju. Javit ćemo se u roku od 24 sata s prijedlogom sljedećih koraka.</p>
+          <a href="./index.html" class="btn-back">← Povratak na početnu</a>
+        </div>
+      </div>
+      </div><!-- /card-glow-wrap -->
+
+    </div>
+  </div>
+</main>
+
+<script>
+/* === Floating nav cursor === */
+(function () {
+  const tabs   = document.querySelectorAll('.fnav-tab');
+  const cursor = document.getElementById('fnav-cursor');
+  const list   = document.getElementById('fnav-tabs');
+  if (!cursor || !list) return;
+
+  function moveTo(el) {
+    cursor.style.left    = el.offsetLeft + 'px';
+    cursor.style.width   = el.offsetWidth + 'px';
+    cursor.style.opacity = '1';
+  }
+
+  tabs.forEach(tab => {
+    tab.addEventListener('mouseenter', () => moveTo(tab));
+    tab.addEventListener('focus',      () => moveTo(tab));
+    tab.addEventListener('click', () => { window.location.href = tab.dataset.href; });
+    tab.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        window.location.href = tab.dataset.href;
+      }
+    });
+  });
+
+  list.addEventListener('mouseleave', () => { cursor.style.opacity = '0'; });
+  list.addEventListener('focusout',   e => {
+    if (!list.contains(e.relatedTarget)) cursor.style.opacity = '0';
+  });
+})();
+
+/* === Form validation & submit === */
+(function () {
+  const form      = document.getElementById('kontakt-form');
+  const successEl = document.getElementById('form-success');
+  if (!form) return;
+
+  const fields = {
+    ime:    { el: document.getElementById('ime'),    err: document.getElementById('ime-err'),    msg: 'Molimo unesite vaše ime i prezime.' },
+    email:  { el: document.getElementById('email'),  err: document.getElementById('email-err'),  msg: 'Molimo unesite ispravnu email adresu.' },
+    vrsta:  { el: document.getElementById('vrsta'),  err: document.getElementById('vrsta-err'),  msg: 'Molimo odaberite vrstu projekta.' },
+    poruka: { el: document.getElementById('poruka'), err: document.getElementById('poruka-err'), msg: 'Molimo opišite vaš projekt.' },
+  };
+
+  function showError(key) {
+    const f = fields[key];
+    f.el.classList.add('error');
+    f.err.textContent = f.msg;
+    f.err.classList.add('visible');
+  }
+  function clearError(key) {
+    const f = fields[key];
+    f.el.classList.remove('error');
+    f.err.classList.remove('visible');
+  }
+
+  Object.keys(fields).forEach(key => {
+    const el = fields[key].el;
+    el.addEventListener('input',  () => clearError(key));
+    el.addEventListener('change', () => clearError(key));
+    el.addEventListener('focus',  () => clearError(key));
+  });
+
+  function isValidEmail(v) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  }
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    let valid = true;
+
+    if (!fields.ime.el.value.trim())                        { showError('ime');    valid = false; }
+    if (!isValidEmail(fields.email.el.value.trim()))        { showError('email');  valid = false; }
+    if (!fields.vrsta.el.value)                             { showError('vrsta');  valid = false; }
+    if (!fields.poruka.el.value.trim())                     { showError('poruka'); valid = false; }
+
+    if (!valid) {
+      const firstKey = Object.keys(fields).find(k => fields[k].el.classList.contains('error'));
+      if (firstKey) fields[firstKey].el.focus();
+      return;
+    }
+
+    // Animate form out, reveal success
+    form.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+    form.style.opacity    = '0';
+    form.style.transform  = 'translateY(8px)';
+    setTimeout(() => {
+      form.hidden     = true;
+      successEl.hidden = false;
+      successEl.style.opacity    = '0';
+      successEl.style.transition = 'opacity 0.4s ease';
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        successEl.style.opacity = '1';
+      }));
+    }, 320);
+  });
+})();
+
+/* === Magnetic Button === */
+(function () {
+  const STIFFNESS = 400;
+  const DAMPING   = 100;
+  const DISTANCE  = 0.45;
+
+  function Axis(k, c) {
+    this.k = k; this.c = c;
+    this.pos = 0; this.vel = 0; this.target = 0;
+  }
+  Axis.prototype.update = function (dt) {
+    const a = -this.k * (this.pos - this.target) - this.c * this.vel;
+    this.vel += a * dt;
+    this.pos += this.vel * dt;
+  };
+  Axis.prototype.settled = function () {
+    return Math.abs(this.pos - this.target) < 0.05 && Math.abs(this.vel) < 0.05;
+  };
+
+  function applyMagnetic(el) {
+    const sx = new Axis(STIFFNESS, DAMPING);
+    const sy = new Axis(STIFFNESS, DAMPING);
+    let hovered = false, raf = null, lastTime = 0;
+
+    function onMove(e) {
+      if (!hovered) return;
+      const r = el.getBoundingClientRect();
+      sx.target = (e.clientX - (r.left + r.width  / 2)) * DISTANCE;
+      sy.target = (e.clientY - (r.top  + r.height / 2)) * DISTANCE;
+    }
+
+    function tick(now) {
+      const dt = Math.min((now - lastTime) / 1000, 0.05);
+      lastTime = now;
+      sx.update(dt); sy.update(dt);
+      el.style.transform = 'translate(' + sx.pos.toFixed(2) + 'px,' + sy.pos.toFixed(2) + 'px)';
+      if (!hovered && sx.settled() && sy.settled()) {
+        sx.pos = sx.vel = sy.pos = sy.vel = 0;
+        el.style.transform = '';
+        raf = null; return;
+      }
+      raf = requestAnimationFrame(tick);
+    }
+
+    el.addEventListener('mouseenter', function () {
+      hovered = true;
+      if (!raf) { lastTime = performance.now(); raf = requestAnimationFrame(tick); }
+    });
+    el.addEventListener('mouseleave', function () {
+      hovered = false; sx.target = 0; sy.target = 0;
+    });
+    document.addEventListener('mousemove', onMove, { passive: true });
+  }
+
+
+/* === Select chevron rotation === */
+(function () {
+  document.querySelectorAll('.select-wrap select').forEach(function (sel) {
+    var wrap = sel.closest('.select-wrap');
+    sel.addEventListener('focus', function () { wrap.classList.add('open'); });
+    sel.addEventListener('blur',  function () { wrap.classList.remove('open'); });
+  });
+})();
+
+  document.querySelectorAll('.btn-submit').forEach(function (btn) {
+    var wrap = document.createElement('div');
+    wrap.style.cssText = 'display:inline-block;will-change:transform;';
+    btn.parentNode.insertBefore(wrap, btn);
+    wrap.appendChild(btn);
+    applyMagnetic(wrap);
+  });
+})();
+</script>
+
+</body>
+</html>

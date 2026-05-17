@@ -1,0 +1,260 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.wrap { font-family: var(--font-sans); color: var(--color-text-primary); padding: 2rem 0; }
+.section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--color-text-tertiary); margin-bottom: 14px; }
+.card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+.grid3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 24px; }
+.grid4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 24px; }
+.divider { height: 0.5px; background: var(--color-border-tertiary); margin: 28px 0; }
+
+/* Hero */
+.hero { text-align: center; padding: 2.5rem 1rem 2rem; }
+.hero-name { font-size: 64px; font-weight: 500; letter-spacing: -2.5px; line-height: 1; color: #0F0F0F; }
+.hero-name span { color: #C8503A; }
+.hero-sub { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #888; margin-top: 10px; }
+
+/* Swatches */
+.sw-card { padding: 1rem; }
+.swatch { height: 54px; border-radius: 6px; margin-bottom: 10px; }
+.sw-name { font-size: 12px; color: var(--color-text-secondary); font-weight: 500; }
+.sw-hex { font-size: 11px; color: var(--color-text-tertiary); font-family: var(--font-mono); margin-top: 2px; }
+.sw-role { font-size: 11px; color: var(--color-text-tertiary); margin-top: 4px; }
+
+/* Logo */
+.logo-wrap { padding: 0.75rem; }
+.logo-surface { border-radius: 8px; padding: 2rem 1rem; display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 8px; }
+.logo-light-bg { background: #F6F5F3; }
+.logo-dark-bg { background: #0F0F0F; }
+.mark { width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.mark-on-light { background: #0F0F0F; }
+.mark-on-dark { background: #C8503A; }
+.logotype { font-size: 26px; font-weight: 500; letter-spacing: -0.8px; line-height: 1; }
+.lt-dark { color: #0F0F0F; }
+.lt-light { color: #F6F5F3; }
+.lt-dot-red { color: #C8503A; }
+.lt-dot-light { color: #F6F5F3; }
+.logo-caption { font-size: 11px; color: var(--color-text-tertiary); text-align: center; }
+
+/* Mark detail */
+.mark-solo { width: 56px; height: 56px; border-radius: 11px; background: #0F0F0F; display: flex; align-items: center; justify-content: center; }
+.mark-solo-inv { background: #C8503A; }
+
+/* Type */
+.type-row { padding: 13px 0; border-bottom: 0.5px solid var(--color-border-tertiary); display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.type-row:last-child { border-bottom: none; }
+.type-meta { font-size: 11px; color: var(--color-text-tertiary); white-space: nowrap; }
+
+/* Business card */
+.bc-outer { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 1.5rem; margin-bottom: 24px; }
+.bc { background: #F6F5F3; border-radius: 10px; padding: 1.6rem 1.8rem; position: relative; min-height: 140px; overflow: hidden; }
+.bc-top-bar { position: absolute; top: 0; left: 0; right: 0; height: 3px; background: #C8503A; border-radius: 10px 10px 0 0; }
+.bc-name { font-size: 15px; font-weight: 500; color: #0F0F0F; margin-top: 4px; }
+.bc-role { font-size: 11px; color: #888; margin-top: 3px; letter-spacing: 0.05em; }
+.bc-contact { font-size: 11px; color: #555; margin-top: 18px; line-height: 2; }
+.bc-brand { position: absolute; top: 1.6rem; right: 1.8rem; font-size: 16px; font-weight: 500; letter-spacing: -0.5px; color: #0F0F0F; }
+.bc-brand span { color: #C8503A; }
+
+/* Taglines */
+.tag-card { padding: 1.2rem 1.4rem; }
+.tl { font-size: 10px; font-weight: 500; letter-spacing: 0.13em; text-transform: uppercase; color: var(--color-text-tertiary); margin-bottom: 8px; }
+.tv { font-size: 13px; color: var(--color-text-primary); line-height: 1.65; }
+.tv em { color: #C8503A; font-style: normal; font-weight: 500; }
+
+/* Usage rules */
+.rule-row { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.rule-row:last-child { border-bottom: none; }
+.rule-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+.rule-text { font-size: 12px; color: var(--color-text-secondary); line-height: 1.6; }
+.rule-text strong { color: var(--color-text-primary); font-weight: 500; }
+
+@media (prefers-color-scheme: dark) {
+  .hero-name { color: #F0F0F0; }
+  .bc { background: #1A1A1A; }
+  .bc-name { color: #F0F0F0; }
+  .bc-brand { color: #F0F0F0; }
+  .bc-contact { color: #888; }
+  .bc-role { color: #666; }
+}
+</style>
+
+<div class="wrap">
+  <h2 class="sr-only">Klik — full brand identity system</h2>
+
+  <div class="hero">
+    <div class="hero-name">Klik<span>.</span></div>
+    <div class="hero-sub">Web Studio · Zagreb, Croatia</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <p class="section-label">Color palette</p>
+  <div class="grid4">
+    <div class="card sw-card">
+      <div class="swatch" style="background:#C8503A;"></div>
+      <div class="sw-name">Ember red</div>
+      <div class="sw-hex">#C8503A</div>
+      <div class="sw-role">Primary accent</div>
+    </div>
+    <div class="card sw-card">
+      <div class="swatch" style="background:#0F0F0F;"></div>
+      <div class="sw-name">Carbon</div>
+      <div class="sw-hex">#0F0F0F</div>
+      <div class="sw-role">Text / dark surfaces</div>
+    </div>
+    <div class="card sw-card">
+      <div class="swatch" style="background:#F6F5F3; border:0.5px solid #E8E6E2;"></div>
+      <div class="sw-name">Chalk</div>
+      <div class="sw-hex">#F6F5F3</div>
+      <div class="sw-role">Background</div>
+    </div>
+    <div class="card sw-card">
+      <div class="swatch" style="background:#E8E6E2; border:0.5px solid #D8D5D0;"></div>
+      <div class="sw-name">Linen</div>
+      <div class="sw-hex">#E8E6E2</div>
+      <div class="sw-role">Borders / dividers</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <p class="section-label">Logo lockup</p>
+  <div class="grid2">
+    <div class="card logo-wrap">
+      <div class="logo-surface logo-light-bg">
+        <div class="mark mark-on-light">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M6 5 L6 17" stroke="#C8503A" stroke-width="2.2" stroke-linecap="round"/>
+            <path d="M6 11 L16 6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            <path d="M6 11 L16 17" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <div class="logotype lt-dark">Klik<span class="lt-dot-red">.</span></div>
+        </div>
+      </div>
+      <p class="logo-caption">Light</p>
+    </div>
+    <div class="card logo-wrap">
+      <div class="logo-surface logo-dark-bg">
+        <div class="mark mark-on-dark">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M6 5 L6 17" stroke="#0F0F0F" stroke-width="2.2" stroke-linecap="round"/>
+            <path d="M6 11 L16 6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            <path d="M6 11 L16 17" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <div class="logotype lt-light">Klik<span class="lt-dot-light">.</span></div>
+        </div>
+      </div>
+      <p class="logo-caption">Dark</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <p class="section-label">Icon mark — standalone</p>
+  <div class="card" style="padding: 1.5rem; margin-bottom: 24px;">
+    <div style="display: flex; gap: 20px; align-items: center;">
+      <div class="mark-solo">
+        <svg width="28" height="28" viewBox="0 0 22 22" fill="none">
+          <path d="M6 5 L6 17" stroke="#C8503A" stroke-width="2.2" stroke-linecap="round"/>
+          <path d="M6 11 L16 6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <path d="M6 11 L16 17" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="mark-solo mark-solo-inv">
+        <svg width="28" height="28" viewBox="0 0 22 22" fill="none">
+          <path d="M6 5 L6 17" stroke="#0F0F0F" stroke-width="2.2" stroke-linecap="round"/>
+          <path d="M6 11 L16 6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <path d="M6 11 L16 17" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div style="font-size: 12px; color: var(--color-text-secondary); line-height: 1.7; max-width: 360px;">
+        The mark is a stylised cursor arrow — direct reference to a click. Vertical stem with two diverging arms. Works as favicon, app icon, social avatar, and embossed on print materials.
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <p class="section-label">Typography</p>
+  <div class="card" style="padding: 1rem 1.4rem; margin-bottom: 24px;">
+    <div class="type-row">
+      <span style="font-size: 30px; font-weight: 500; letter-spacing: -0.8px; color: var(--color-text-primary);">Display heading</span>
+      <span class="type-meta">DM Serif Display · 400</span>
+    </div>
+    <div class="type-row">
+      <span style="font-size: 20px; font-weight: 500; letter-spacing: -0.3px; color: var(--color-text-primary);">Section heading</span>
+      <span class="type-meta">Inter · 500 · 20px</span>
+    </div>
+    <div class="type-row">
+      <span style="font-size: 15px; font-weight: 400; color: var(--color-text-secondary); line-height: 1.65;">Body — clean, readable, professional at every size.</span>
+      <span class="type-meta">Inter · 400 · 15px</span>
+    </div>
+    <div class="type-row">
+      <span style="font-size: 11px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--color-text-tertiary);">Eyebrow / label</span>
+      <span class="type-meta">Inter · 500 · tracked</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <p class="section-label">Business card</p>
+  <div class="bc-outer">
+    <div class="bc">
+      <div class="bc-top-bar"></div>
+      <div class="bc-brand">Klik<span>.</span></div>
+      <div class="bc-name">Ivan Horvat</div>
+      <div class="bc-role">Founder · Web Studio</div>
+      <div class="bc-contact">
+        ivan@klik.hr<br>
+        +385 91 000 0000<br>
+        klik.hr
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <p class="section-label">Brand voice — tagline options</p>
+  <div class="grid3">
+    <div class="card tag-card">
+      <div class="tl">Croatian · primary</div>
+      <div class="tv">Jedan <em>klik</em> do vašeg novog weba.</div>
+    </div>
+    <div class="card tag-card">
+      <div class="tl">English · global</div>
+      <div class="tv">The last click <em>you'll ever need.</em></div>
+    </div>
+    <div class="card tag-card">
+      <div class="tl">Positioning</div>
+      <div class="tv">Premium websites. <em>Built in Croatia.</em></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <p class="section-label">Brand usage rules</p>
+  <div class="card" style="padding: 1rem 1.4rem; margin-bottom: 8px;">
+    <div class="rule-row">
+      <div class="rule-dot" style="background:#C8503A;"></div>
+      <div class="rule-text"><strong>Always use the period.</strong> "Klik." not "Klik" — the full stop is part of the mark and signals confidence.</div>
+    </div>
+    <div class="rule-row">
+      <div class="rule-dot" style="background:#C8503A;"></div>
+      <div class="rule-text"><strong>Ember red is an accent, not a fill.</strong> Use it on the dot, the icon mark, and key CTAs only — never flood a page with it.</div>
+    </div>
+    <div class="rule-row">
+      <div class="rule-dot" style="background:#C8503A;"></div>
+      <div class="rule-text"><strong>Chalk background only.</strong> Never use pure white (#FFF) — always the warm off-white #F6F5F3 for surfaces.</div>
+    </div>
+    <div class="rule-row">
+      <div class="rule-dot" style="background:#C8503A;"></div>
+      <div class="rule-text"><strong>Serif for headlines, Inter for everything else.</strong> Never mix more than two typefaces in one layout.</div>
+    </div>
+  </div>
+
+</div>
