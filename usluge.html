@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Klik. — Usluge & Proces</title>
+  <meta name="description" content="Usluge i radni proces web studija Klik. iz Zagreba — web dizajn, frontend razvoj, digitalni brending i naš trostupanjski okvir izvrsnosti.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #080808;
+      color: #F6F5F3;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* =====================================================================
+       FLOATING NAV
+    ===================================================================== */
+    #site-nav {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 50;
+    }
+    .fnav-inner {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(15,15,15,0.82);
+      backdrop-filter: blur(16px) saturate(1.4);
+      -webkit-backdrop-filter: blur(16px) saturate(1.4);
+      border: 1px solid rgba(232,230,226,0.10);
+      border-radius: 9999px;
+      padding: 6px 6px 6px 17px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.45), inset 0 1px 0 rgba(246,245,243,0.05);
+    }
+    .fnav-brand {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .fnav-mark {
+      width: 30px; height: 30px;
+      background: #C8503A;
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .fnav-brand:hover .fnav-mark { transform: scale(1.08); }
+    .fnav-logotype {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 19px;
+      letter-spacing: -0.4px;
+      color: #F6F5F3;
+    }
+    .fnav-logotype span { color: #C8503A; }
+    .fnav-divider {
+      width: 1px; height: 21px;
+      background: rgba(232,230,226,0.15);
+      margin: 0 8px;
+      flex-shrink: 0;
+    }
+    .fnav-tabs {
+      position: relative;
+      display: flex;
+      align-items: center;
+      list-style: none;
+    }
+    .fnav-tab {
+      position: relative;
+      z-index: 10;
+      cursor: pointer;
+      padding: 9px 17px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #F6F5F3;
+      mix-blend-mode: difference;
+      white-space: nowrap;
+      user-select: none;
+      border-radius: 9999px;
+    }
+    .fnav-tab:focus-visible {
+      outline: 2px solid rgba(246,245,243,0.5);
+      outline-offset: -2px;
+    }
+    .fnav-cursor {
+      position: absolute;
+      z-index: 0;
+      top: 0; height: 100%;
+      border-radius: 9999px;
+      background: #F6F5F3;
+      pointer-events: none;
+      opacity: 0;
+      transition: left 0.22s cubic-bezier(0.22,1,0.36,1),
+                  width 0.22s cubic-bezier(0.22,1,0.36,1),
+                  opacity 0.15s ease;
+    }
+
+    /* =====================================================================
+       BACKGROUND SCENE
+    ===================================================================== */
+    #bg-scene {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+      background-color: #080808;
+    }
+    .bg-mesh {
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(ellipse 80% 60% at 10% 8%,  rgba(194,81,56,0.08) 0%, transparent 55%),
+        radial-gradient(ellipse 65% 70% at 88% 55%, rgba(63,63,70,0.20)   0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 50% 95%, rgba(194,81,56,0.05)  0%, transparent 50%);
+    }
+    .bg-dots {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(246,245,243,1) 1px, transparent 1px);
+      background-size: 30px 30px;
+      opacity: 0.055;
+      mix-blend-mode: screen;
+    }
+    .bg-grain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0.038;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+    }
+
+    /* =====================================================================
+       PAGE STRUCTURE
+    ===================================================================== */
+    main { position: relative; z-index: 10; }
+
+    /* =====================================================================
+       HERO
+    ===================================================================== */
+    .hero {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 152px 40px 88px;
+      text-align: center;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(246,245,243,0.36);
+      margin-bottom: 38px;
+      animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 0.05s both;
+    }
+    .hero-eyebrow::before,
+    .hero-eyebrow::after {
+      content: '';
+      display: block;
+      width: 22px; height: 1px;
+      background: rgba(232,230,226,0.20);
+      flex-shrink: 0;
+    }
+    .hero-headline {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(40px, 5.6vw, 72px);
+      font-weight: 400;
+      line-height: 1.07;
+      letter-spacing: -0.034em;
+      color: #F6F5F3;
+      margin-bottom: 26px;
+      animation: fadeUp 0.85s cubic-bezier(0.16,1,0.3,1) 0.13s both;
+    }
+    .hero-headline em { color: #C8503A; font-style: italic; }
+    .hero-desc {
+      font-size: 16px;
+      line-height: 1.72;
+      color: rgba(246,245,243,0.44);
+      max-width: 500px;
+      margin: 0 auto 52px;
+      animation: fadeUp 0.85s cubic-bezier(0.16,1,0.3,1) 0.21s both;
+    }
+    .hero-rule {
+      width: 1px; height: 48px;
+      background: linear-gradient(to bottom, rgba(200,80,58,0.55), rgba(200,80,58,0));
+      margin: 0 auto;
+      animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 0.30s both;
+    }
+
+    /* =====================================================================
+       SHARED SECTION LABEL
+    ===================================================================== */
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(246,245,243,0.26);
+      margin-bottom: 52px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(232,230,226,0.07);
+    }
+    /* Override label spacing in process section to tighten above subtitle */
+    .process-section .section-label { margin-bottom: 14px; }
+
+    .proc-section-sub {
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.03em;
+      color: rgba(246,245,243,0.22);
+      margin-bottom: 32px;
+    }
+
+    .proc-connector {
+      height: 1px;
+      margin-bottom: 22px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(200,80,58,0.24) 18%,
+        rgba(232,230,226,0.10) 50%,
+        rgba(200,80,58,0.24) 82%,
+        transparent
+      );
+    }
+
+    /* =====================================================================
+       SERVICES SECTION
+    ===================================================================== */
+    .services-section {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 0 40px 96px;
+      animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.28s both;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    /* Gradient-border shell */
+    .card-outer {
+      position: relative;
+      padding: 1px;
+      border-radius: 20px;
+      height: 100%;
+      background: linear-gradient(
+        148deg,
+        rgba(255,255,255,0.13) 0%,
+        rgba(255,255,255,0.05) 44%,
+        rgba(255,255,255,0)    100%
+      );
+      transition: transform 0.42s cubic-bezier(0.16,1,0.3,1);
+    }
+    .card-outer:hover { transform: translateY(-7px); }
+
+    /* Ambient glow on hover */
+    .card-outer::before {
+      content: '';
+      position: absolute;
+      inset: -28px;
+      border-radius: 36px;
+      background: radial-gradient(ellipse 68% 55% at 50% 50%, rgba(200,80,58,0.08) 0%, transparent 70%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+      z-index: -1;
+    }
+    .card-outer:hover::before { opacity: 1; }
+
+    /* Glass panel */
+    .card-inner {
+      background: rgba(255,255,255,0.028);
+      border-radius: 19px;
+      padding: 40px 32px 36px;
+      backdrop-filter: blur(24px) saturate(1.25);
+      -webkit-backdrop-filter: blur(24px) saturate(1.25);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.055),
+                  0 20px 56px rgba(0,0,0,0.34);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.42s ease;
+    }
+    .card-outer:hover .card-inner {
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.07),
+                  0 28px 72px rgba(0,0,0,0.42);
+    }
+
+    .card-num {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #C8503A;
+      margin-bottom: 22px;
+    }
+    .card-icon {
+      width: 42px; height: 42px;
+      border-radius: 10px;
+      background: rgba(200,80,58,0.09);
+      border: 1px solid rgba(200,80,58,0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #C8503A;
+      margin-bottom: 22px;
+      flex-shrink: 0;
+    }
+    .card-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 1.18;
+      letter-spacing: -0.02em;
+      color: #F6F5F3;
+      margin-bottom: 13px;
+    }
+    .card-desc {
+      font-size: 14px;
+      line-height: 1.74;
+      color: rgba(246,245,243,0.46);
+      margin-bottom: 26px;
+      flex-grow: 1;
+    }
+    .card-rule {
+      width: 100%; height: 1px;
+      background: rgba(232,230,226,0.08);
+      margin-bottom: 22px;
+    }
+    .card-list-label {
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(246,245,243,0.22);
+      margin-bottom: 13px;
+    }
+    .card-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+    .card-list li {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: rgba(246,245,243,0.56);
+    }
+    .card-list li::before {
+      content: '·';
+      color: #C8503A;
+      font-size: 17px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    /* =====================================================================
+       SECTION BRIDGE — visual separator between services and process
+    ===================================================================== */
+    .bridge {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 0 40px 80px;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    .bridge-line {
+      flex: 1;
+      height: 1px;
+      background: rgba(232,230,226,0.07);
+    }
+    .bridge-label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(246,245,243,0.18);
+      white-space: nowrap;
+    }
+    .bridge-dot {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: rgba(200,80,58,0.50);
+      flex-shrink: 0;
+    }
+
+    /* =====================================================================
+       PROCESS SECTION
+    ===================================================================== */
+    .process-section {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 0 40px 0;
+    }
+
+    .proc-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-bottom: 80px;
+      list-style: none;
+      position: relative;
+      background: rgba(255,255,255,0.012);
+      border: 1px solid rgba(232,230,226,0.06);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .proc-card {
+      position: relative;
+      padding: 48px 36px 52px;
+      border: 1px solid rgba(232,230,226,0.08);
+      overflow: hidden;
+      cursor: default;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.72s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.72s cubic-bezier(0.16,1,0.3,1);
+    }
+    .proc-card:first-child { border-radius: 14px 0 0 14px; }
+    .proc-card:last-child  { border-radius: 0 14px 14px 0; }
+    .proc-card.is-visible  { opacity: 1; transform: translateY(0); }
+
+    /* Coral top accent — grows on hover */
+    .proc-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      height: 2px; width: 0;
+      background: #C8503A;
+      transition: width 0.52s cubic-bezier(0.22,1,0.36,1);
+    }
+    .proc-card:hover::before { width: 100%; }
+
+    /* Ambient glow */
+    .proc-card::after {
+      content: '';
+      position: absolute;
+      top: -60px; left: -60px;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse, rgba(200,80,58,0.10) 0%, transparent 68%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+    .proc-card:hover::after { opacity: 1; }
+
+    .proc-card-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(44px, 4.2vw, 60px);
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      color: #C8503A;
+      margin-bottom: 28px;
+    }
+
+    .proc-card-tag {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(200,80,58,0.55);
+      margin-bottom: 10px;
+      transition: color 0.3s ease;
+    }
+    .proc-card:hover .proc-card-tag { color: #C8503A; }
+
+    .proc-card-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(21px, 1.9vw, 27px);
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: rgba(246,245,243,0.88);
+      margin-bottom: 8px;
+      transition: color 0.3s ease;
+    }
+    .proc-card:hover .proc-card-title { color: #F6F5F3; }
+
+    .proc-card-duration {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: rgba(246,245,243,0.18);
+      margin-bottom: 20px;
+      transition: color 0.3s ease;
+    }
+    .proc-card:hover .proc-card-duration { color: rgba(246,245,243,0.38); }
+
+    .proc-card-desc {
+      font-size: 14px;
+      line-height: 1.74;
+      color: rgba(246,245,243,0.38);
+      margin-bottom: 28px;
+      transition: color 0.3s ease;
+    }
+    .proc-card:hover .proc-card-desc { color: rgba(246,245,243,0.56); }
+
+    .proc-card-rule {
+      width: 100%; height: 1px;
+      background: rgba(232,230,226,0.07);
+      margin-bottom: 20px;
+    }
+
+    .proc-card-deliverables {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+    .proc-card-deliverables li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: rgba(246,245,243,0.30);
+      transition: color 0.3s ease;
+    }
+    .proc-card:hover .proc-card-deliverables li { color: rgba(246,245,243,0.52); }
+    .proc-card-deliverables li::before {
+      content: '';
+      width: 14px; height: 1px;
+      background: rgba(200,80,58,0.38);
+      flex-shrink: 0;
+      transition: background 0.3s ease;
+    }
+    .proc-card:hover .proc-card-deliverables li::before { background: #C8503A; }
+
+    /* =====================================================================
+       BOTTOM CTA
+    ===================================================================== */
+    .cta-section {
+      border-top: 1px solid rgba(232,230,226,0.08);
+      padding: 108px 40px 128px;
+      text-align: center;
+    }
+    .cta-eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: rgba(246,245,243,0.26);
+      margin-bottom: 20px;
+    }
+    .cta-headline {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(32px, 4.2vw, 54px);
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      color: #F6F5F3;
+      margin-bottom: 44px;
+    }
+    .cta-headline em { color: #C8503A; font-style: italic; }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px 34px;
+      background: #C8503A;
+      color: #F6F5F3;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: background 0.35s ease,
+                  transform 0.5s cubic-bezier(0.34,1.56,0.64,1),
+                  box-shadow 0.5s ease;
+      box-shadow: 0 2px 14px rgba(200,80,58,0.36);
+    }
+    .btn-primary:hover {
+      background: #B8432E;
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 10px 32px rgba(200,80,58,0.42), 0 0 0 1px rgba(200,80,58,0.06);
+    }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-primary:focus-visible { outline: 2px solid #C8503A; outline-offset: 3px; }
+    .btn-primary svg { transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1); }
+    .btn-primary:hover svg { transform: translateX(4px); }
+
+    /* =====================================================================
+       ANIMATIONS
+    ===================================================================== */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* =====================================================================
+       RESPONSIVE
+    ===================================================================== */
+    @media (max-width: 900px) {
+      #site-nav { top: 12px; }
+      .fnav-brand { display: none; }
+      .fnav-divider { display: none; }
+      .fnav-inner { padding: 5px; }
+      .fnav-tab { padding: 9px 10px; font-size: 10px; }
+
+      .hero { padding: 110px 24px 64px; }
+      .services-section { padding: 0 24px 72px; }
+      .services-grid { grid-template-columns: 1fr; gap: 16px; }
+      .bridge { padding: 0 24px 60px; }
+      .process-section { padding: 0 24px; }
+      .proc-connector { display: none; }
+      .proc-grid { grid-template-columns: 1fr; gap: 0; border-radius: 12px; }
+      .proc-card { padding: 40px 24px 44px; }
+      .proc-card:first-child { border-radius: 11px 11px 0 0; }
+      .proc-card:last-child  { border-radius: 0 0 11px 11px; }
+      .cta-section { padding: 80px 24px 100px; }
+    }
+
+    @media (min-width: 901px) and (max-width: 1080px) {
+      .services-grid { gap: 14px; }
+      .card-inner { padding: 32px 24px 28px; }
+    }
+
+    /* === FOOTER === */
+    footer { background: #0A0A0A; border-top: 1px solid rgba(246,245,243,0.06); position: relative; overflow: hidden; }
+    .ft-signature { position: absolute; inset: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; pointer-events: none; z-index: 0; }
+    .ft-sig-text { font-family: 'DM Serif Display', serif; font-style: italic; font-size: 20vw; font-weight: 400; color: rgba(246,245,243,0.055); letter-spacing: -0.04em; white-space: nowrap; user-select: none; line-height: 1; }
+    .ft-inner { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 72px 32px 36px; }
+    .ft-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 48px; align-items: start; margin-bottom: 56px; }
+    .ft-brand-col { display: flex; flex-direction: column; align-items: flex-start; text-align: left; }
+    .ft-nav-col   { display: flex; flex-direction: column; align-items: center; text-align: center; }
+    .ft-contact-col { display: flex; flex-direction: column; align-items: flex-end; text-align: right; }
+    .ft-contact-col .ft-links { align-items: flex-end; }
+    .ft-nav-col .ft-links { align-items: center; }
+    .ft-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+    .ft-logo-mark { width: 28px; height: 28px; background: #C8503A; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .ft-logotype { font-family: 'DM Serif Display', serif; font-style: italic; font-size: 18px; color: rgba(246,245,243,0.5); letter-spacing: -0.3px; }
+    .ft-logotype span { color: #C8503A; }
+    .ft-tagline { font-size: 13px; line-height: 1.72; color: rgba(246,245,243,0.22); max-width: 220px; }
+    .ft-col-label { font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(246,245,243,0.2); margin-bottom: 20px; }
+    .ft-links { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 13px; }
+    .ft-links a { font-size: 14px; color: rgba(246,245,243,0.42); text-decoration: none; letter-spacing: 0.01em; transition: color 0.16s ease; }
+    .ft-links a:hover { color: #C8503A; }
+    .ft-links a:focus-visible { outline: 2px solid #C8503A; outline-offset: 3px; border-radius: 2px; }
+    .ft-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 22px; border-top: 1px solid rgba(246,245,243,0.06); }
+    .ft-copy { font-size: 11px; color: rgba(246,245,243,0.16); }
+    .ft-top { font-size: 11px; font-weight: 500; letter-spacing: 0.07em; color: rgba(246,245,243,0.26); text-decoration: none; transition: color 0.16s ease; }
+    .ft-top:hover { color: #C8503A; }
+    .ft-top:focus-visible { outline: 2px solid #C8503A; outline-offset: 3px; border-radius: 2px; }
+    @media (max-width: 900px) {
+      .ft-grid { grid-template-columns: 1fr; gap: 40px; }
+      .ft-nav-col { align-items: flex-start; text-align: left; }
+      .ft-nav-col .ft-links { align-items: flex-start; }
+      .ft-contact-col { align-items: flex-start; text-align: left; }
+      .ft-contact-col .ft-links { align-items: flex-start; }
+      .ft-inner { padding: 56px 24px 28px; }
+      .ft-sig-text { font-size: 36vw; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Background -->
+<div id="bg-scene" aria-hidden="true">
+  <div class="bg-mesh"></div>
+  <div class="bg-dots"></div>
+</div>
+<div class="bg-grain" aria-hidden="true"></div>
+
+<!-- NAV — order: POČETNA · RADOVI · O NAMA · USLUGE · KONTAKT -->
+<nav id="site-nav" aria-label="Glavna navigacija">
+  <div class="fnav-inner">
+    <a href="./index.html" class="fnav-brand" aria-label="Klik. — natrag na početnu">
+      <div class="fnav-mark">
+        <svg width="16" height="16" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+          <path d="M6 5 L6 17" stroke="#0F0F0F" stroke-width="2.3" stroke-linecap="round"/>
+          <path d="M6 11 L16 6"  stroke="white"  stroke-width="2"   stroke-linecap="round"/>
+          <path d="M6 11 L16 17" stroke="white"  stroke-width="2"   stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="fnav-logotype">Klik<span>.</span></span>
+    </a>
+    <div class="fnav-divider" aria-hidden="true"></div>
+    <ul class="fnav-tabs" id="fnav-tabs" role="list">
+      <li class="fnav-tab" data-href="./index.html"          role="listitem" tabindex="0">Početna</li>
+      <li class="fnav-tab" data-href="./index.html#radovi"   role="listitem" tabindex="0">Radovi</li>
+      <li class="fnav-tab" data-href="./index.html#o-nama"   role="listitem" tabindex="0">O nama</li>
+      <li class="fnav-tab" data-href="./usluge.html"         role="listitem" tabindex="0">Usluge</li>
+      <li class="fnav-tab" data-href="./kontakt.html"        role="listitem" tabindex="0">Kontakt</li>
+      <li class="fnav-cursor" id="fnav-cursor" aria-hidden="true"></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ===================================================================
+       HERO
+  ==================================================================== -->
+  <div class="hero">
+    <p class="hero-eyebrow">Studio · Zagreb</p>
+    <h1 class="hero-headline">
+      Oblikujemo digitalna iskustva<br>koja <em>čine razliku.</em>
+    </h1>
+    <p class="hero-desc">
+      Spajamo dizajn, tehnologiju i strategiju u produkte koji ostavljaju trajan trag — za brandove koji ne žele biti samo prisutni, već zapamćeni.
+    </p>
+    <div class="hero-rule" aria-hidden="true"></div>
+  </div>
+
+  <!-- ===================================================================
+       SERVICES
+  ==================================================================== -->
+  <section class="services-section" aria-labelledby="services-heading">
+    <p class="section-label" id="services-heading">Naše usluge</p>
+
+    <div class="services-grid">
+
+      <!-- Kartica 1 — Web Dizajn & UI/UX -->
+      <div class="card-outer">
+        <div class="card-inner">
+          <p class="card-num">01</p>
+          <div class="card-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <rect x="2" y="3" width="20" height="14" rx="2.5" stroke="currentColor" stroke-width="1.6"/>
+              <path d="M8 21h8M12 17v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+              <path d="M7 9l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M13 14h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h2 class="card-title">Web Dizajn<br>&amp; UI/UX</h2>
+          <p class="card-desc">
+            Stvaramo vizualno snažna, intuitivna sučelja koja ostavljaju trajan dojam. Od prvog wireframea do finalnog piksela — svaki detalj ima svoju svrhu.
+          </p>
+          <div class="card-rule" aria-hidden="true"></div>
+          <p class="card-list-label">Što dobivate</p>
+          <ul class="card-list">
+            <li>Dizajn korisničkog sučelja (UI)</li>
+            <li>Korisničko iskustvo (UX)</li>
+            <li>Interaktivni wireframeovi</li>
+            <li>Animirani prototipi</li>
+            <li>Responzivni mobilni dizajn</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Kartica 2 — Frontend Razvoj -->
+      <div class="card-outer">
+        <div class="card-inner">
+          <p class="card-num">02</p>
+          <div class="card-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M8 6L3 12l5 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M16 6l5 6-5 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M14 4l-4 16" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h2 class="card-title">Frontend<br>Razvoj</h2>
+          <p class="card-desc">
+            Gradimo brze, moderne web aplikacije s naglaskom na performanse, čitljivost koda i dugoročnu održivost. Fluid animacije i precizna interakcija su naš standard.
+          </p>
+          <div class="card-rule" aria-hidden="true"></div>
+          <p class="card-list-label">Što dobivate</p>
+          <ul class="card-list">
+            <li>Prilagođene web aplikacije</li>
+            <li>Optimizacija performansi (Core Web Vitals)</li>
+            <li>Fluid animacije i mikro-interakcije</li>
+            <li>Integracija CMS sustava</li>
+            <li>Tehnička SEO optimizacija</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Kartica 3 — Digitalni Brending -->
+      <div class="card-outer">
+        <div class="card-inner">
+          <p class="card-num">03</p>
+          <div class="card-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M12 2l2.9 5.8L21 9l-4.5 4.4 1.1 6.3L12 17l-5.6 2.7 1.1-6.3L3 9l6.1-.2L12 2z" stroke="currentColor" stroke-width="1.55" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h2 class="card-title">Digitalni<br>Brending</h2>
+          <p class="card-desc">
+            Oblikujemo vizualne identitete koji jasno komuniciraju vrijednosti vašeg branda — dosljedno, snažno i pamtljivo na svim digitalnim platformama.
+          </p>
+          <div class="card-rule" aria-hidden="true"></div>
+          <p class="card-list-label">Što dobivate</p>
+          <ul class="card-list">
+            <li>Logo i vizualni identitet</li>
+            <li>Sustav boja i tipografije</li>
+            <li>Brand book i smjernice</li>
+            <li>Digitalni materijali i predlošci</li>
+            <li>Grafički dizajn za digitalne kanale</li>
+          </ul>
+        </div>
+      </div>
+
+    </div><!-- /services-grid -->
+  </section>
+
+  <!-- ===================================================================
+       SECTION BRIDGE
+  ==================================================================== -->
+  <div class="bridge" aria-hidden="true">
+    <div class="bridge-line"></div>
+    <div class="bridge-dot"></div>
+    <span class="bridge-label">Naš radni okvir</span>
+    <div class="bridge-dot"></div>
+    <div class="bridge-line"></div>
+  </div>
+
+  <!-- ===================================================================
+       PROCESS SECTION
+  ==================================================================== -->
+  <section class="process-section" aria-labelledby="process-heading">
+    <p class="section-label" id="process-heading">Kako radimo</p>
+    <p class="proc-section-sub">Strukturirani pristup od ideje do realizacije.</p>
+    <div class="proc-connector" aria-hidden="true"></div>
+
+    <ul class="proc-grid">
+
+      <!-- Faza 01 -->
+      <li class="proc-card">
+        <div class="proc-card-num" aria-hidden="true">01</div>
+        <p class="proc-card-tag">Istraživanje</p>
+        <h3 class="proc-card-title">Koncept &amp; Strategija</h3>
+        <p class="proc-card-duration">1–2 tjedna</p>
+        <p class="proc-card-desc">Duboko istraživanje brenda i postavljanje vizualnog smjera. Prije nego što nacrtamo ikakav piksel, zajedno s vama definiramo čvrste temelje projekta.</p>
+        <div class="proc-card-rule" aria-hidden="true"></div>
+        <ul class="proc-card-deliverables" aria-label="Ključni isporučeni rezultati">
+          <li>Analiza tržišta i konkurencije</li>
+          <li>Definiranje vizualnog identiteta</li>
+          <li>Informacijska arhitektura stranice</li>
+        </ul>
+      </li>
+
+      <!-- Faza 02 -->
+      <li class="proc-card">
+        <div class="proc-card-num" aria-hidden="true">02</div>
+        <p class="proc-card-tag">Dizajn</p>
+        <h3 class="proc-card-title">Vrhunski Dizajn</h3>
+        <p class="proc-card-duration">2–3 tjedna</p>
+        <p class="proc-card-desc">Izrada unikatnih UI/UX rješenja i naprednih prototipa bez ikakvih šablona. Svaki element je ručno dizajniran za vaš brend i vaše korisnike.</p>
+        <div class="proc-card-rule" aria-hidden="true"></div>
+        <ul class="proc-card-deliverables" aria-label="Ključni isporučeni rezultati">
+          <li>UI sustav i komponente po mjeri</li>
+          <li>Interaktivni prototip za odobrenje</li>
+          <li>Responzivni dizajn za sve uređaje</li>
+        </ul>
+      </li>
+
+      <!-- Faza 03 -->
+      <li class="proc-card">
+        <div class="proc-card-num" aria-hidden="true">03</div>
+        <p class="proc-card-tag">Razvoj</p>
+        <h3 class="proc-card-title">Inženjering &amp; Motion</h3>
+        <p class="proc-card-duration">3–5 tjedana</p>
+        <p class="proc-card-desc">Pretvaranje dizajna u munjevito brz, fluidan kod s premium animacijama. Lansiramo web koji ne samo što izgleda savršeno, već i performira savršeno.</p>
+        <div class="proc-card-rule" aria-hidden="true"></div>
+        <ul class="proc-card-deliverables" aria-label="Ključni isporučeni rezultati">
+          <li>Frontend razvoj (Next.js / React)</li>
+          <li>Premium animacije i micro-interakcije</li>
+          <li>Performanse, SEO i tehničke optimizacije</li>
+        </ul>
+      </li>
+
+    </ul>
+  </section>
+
+  <!-- ===================================================================
+       BOTTOM CTA
+  ==================================================================== -->
+  <div class="cta-section">
+    <p class="cta-eyebrow">Sljedeći korak</p>
+    <h2 class="cta-headline">
+      Spremi za pokretanje<br>vašeg <em>projekta?</em>
+    </h2>
+    <a href="./kontakt.html" class="btn-primary">
+      Započnimo projekt
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+        <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  </div>
+
+</main>
+
+<script>
+/* === Floating nav cursor === */
+(function () {
+  var tabs   = document.querySelectorAll('.fnav-tab');
+  var cursor = document.getElementById('fnav-cursor');
+  var list   = document.getElementById('fnav-tabs');
+  if (!cursor || !list) return;
+
+  function moveTo(el) {
+    cursor.style.left    = el.offsetLeft + 'px';
+    cursor.style.width   = el.offsetWidth + 'px';
+    cursor.style.opacity = '1';
+  }
+
+  tabs.forEach(function (tab) {
+    tab.addEventListener('mouseenter', function () { moveTo(tab); });
+    tab.addEventListener('focus',      function () { moveTo(tab); });
+    tab.addEventListener('click',      function () { window.location.href = tab.dataset.href; });
+    tab.addEventListener('keydown',    function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        window.location.href = tab.dataset.href;
+      }
+    });
+  });
+
+  list.addEventListener('mouseleave', function () { cursor.style.opacity = '0'; });
+  list.addEventListener('focusout',   function (e) {
+    if (!list.contains(e.relatedTarget)) cursor.style.opacity = '0';
+  });
+})();
+
+/* === Scroll-triggered process step entrance via IntersectionObserver === */
+(function () {
+  if (!('IntersectionObserver' in window)) {
+    /* Fallback: make all cards immediately visible */
+    document.querySelectorAll('.proc-card').forEach(function (el) {
+      el.classList.add('is-visible');
+    });
+    return;
+  }
+
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        /* Stagger siblings that enter together */
+        var siblings = entry.target.parentElement.querySelectorAll('.proc-card');
+        var idx = Array.prototype.indexOf.call(siblings, entry.target);
+        setTimeout(function () {
+          entry.target.classList.add('is-visible');
+        }, idx * 90);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.proc-card').forEach(function (el) {
+    observer.observe(el);
+  });
+})();
+
+/* === Magnetic CTA button === */
+(function () {
+  var STIFFNESS = 400, DAMPING = 100, DISTANCE = 0.45;
+
+  function Axis(k, c) {
+    this.k = k; this.c = c;
+    this.pos = 0; this.vel = 0; this.target = 0;
+  }
+  Axis.prototype.update = function (dt) {
+    var a = -this.k * (this.pos - this.target) - this.c * this.vel;
+    this.vel += a * dt; this.pos += this.vel * dt;
+  };
+  Axis.prototype.settled = function () {
+    return Math.abs(this.pos - this.target) < 0.05 && Math.abs(this.vel) < 0.05;
+  };
+
+  function applyMagnetic(el) {
+    var sx = new Axis(STIFFNESS, DAMPING);
+    var sy = new Axis(STIFFNESS, DAMPING);
+    var hovered = false, raf = null, lastTime = 0;
+
+    function onMove(e) {
+      if (!hovered) return;
+      var r = el.getBoundingClientRect();
+      sx.target = (e.clientX - (r.left + r.width  / 2)) * DISTANCE;
+      sy.target = (e.clientY - (r.top  + r.height / 2)) * DISTANCE;
+    }
+    function tick(now) {
+      var dt = Math.min((now - lastTime) / 1000, 0.05);
+      lastTime = now;
+      sx.update(dt); sy.update(dt);
+      el.style.transform = 'translate(' + sx.pos.toFixed(2) + 'px,' + sy.pos.toFixed(2) + 'px)';
+      if (!hovered && sx.settled() && sy.settled()) {
+        sx.pos = sx.vel = sy.pos = sy.vel = 0;
+        el.style.transform = '';
+        raf = null; return;
+      }
+      raf = requestAnimationFrame(tick);
+    }
+    el.addEventListener('mouseenter', function () {
+      hovered = true;
+      if (!raf) { lastTime = performance.now(); raf = requestAnimationFrame(tick); }
+    });
+    el.addEventListener('mouseleave', function () {
+      hovered = false; sx.target = 0; sy.target = 0;
+    });
+    document.addEventListener('mousemove', onMove, { passive: true });
+  }
+
+  document.querySelectorAll('.btn-primary').forEach(function (btn) {
+    var wrap = document.createElement('div');
+    wrap.style.cssText = 'display:inline-block;will-change:transform;';
+    btn.parentNode.insertBefore(wrap, btn);
+    wrap.appendChild(btn);
+    applyMagnetic(wrap);
+  });
+})();
+</script>
+
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-signature" aria-hidden="true">
+    <span class="ft-sig-text">Klik.</span>
+  </div>
+  <div class="ft-inner">
+    <div class="ft-grid">
+      <div class="ft-brand-col">
+        <div class="ft-logo">
+          <div class="ft-logo-mark" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 22 22" fill="none">
+              <path d="M6 5 L6 17" stroke="#0F0F0F" stroke-width="2.3" stroke-linecap="round"/>
+              <path d="M6 11 L16 6"  stroke="white"  stroke-width="2"   stroke-linecap="round"/>
+              <path d="M6 11 L16 17" stroke="white"  stroke-width="2"   stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="ft-logotype">Klik<span>.</span></span>
+        </div>
+        <p class="ft-tagline">Web studio sa sjedištem u<br>Zagrebu. Dostupni globalno.</p>
+      </div>
+      <nav class="ft-nav-col" aria-label="Footer navigacija">
+        <p class="ft-col-label">Navigacija</p>
+        <ul class="ft-links">
+          <li><a href="./index.html">Početna</a></li>
+          <li><a href="./index.html#radovi">Radovi</a></li>
+          <li><a href="./index.html#o-nama">O nama</a></li>
+          <li><a href="./usluge.html">Usluge</a></li>
+        </ul>
+      </nav>
+      <div class="ft-contact-col">
+        <p class="ft-col-label">Povežimo se</p>
+        <ul class="ft-links">
+          <li><a href="./kontakt.html">Kontakt</a></li>
+          <li><a href="mailto:ivan.josipovic09@gmail.com">info@klik.hr</a></li>
+          <li><a href="#" aria-label="LinkedIn profil">LinkedIn</a></li>
+          <li><a href="#" aria-label="Instagram profil">Instagram</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="ft-bottom">
+      <span class="ft-copy">© 2026 Klik. Web Studio Zagreb</span>
+      <a href="./index.html" class="ft-top">Natrag na vrh ↑</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

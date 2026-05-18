@@ -213,7 +213,7 @@
       font-weight: 500;
       letter-spacing: 0.22em;
       text-transform: uppercase;
-      color: rgba(246,245,243,0.38);
+      color: rgba(246,245,243,0.65);
       margin-bottom: 32px;
       opacity: 0;
       animation: fadeUp 0.9s cubic-bezier(0.16,1,0.3,1) 0.15s forwards;
@@ -257,7 +257,7 @@
     .hero-sub {
       font-size: 16px;
       font-weight: 400;
-      color: rgba(246,245,243,0.5);
+      color: rgba(246,245,243,0.78);
       line-height: 1.75;
       max-width: 500px;
       margin: 0 auto 44px;
@@ -395,9 +395,9 @@
       border: 1px solid rgba(246,245,243,0.07);
       cursor: pointer;
       box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-      transition: box-shadow 0.35s ease;
+      transition: box-shadow 0.35s ease, border-color 0.32s ease;
     }
-    .portfolio-card:hover { box-shadow: 0 8px 36px rgba(0,0,0,0.5), 0 2px 8px rgba(200,80,58,0.08); }
+    .portfolio-card:hover { box-shadow: 0 8px 36px rgba(0,0,0,0.5), 0 2px 8px rgba(200,80,58,0.08); border-color: rgba(246,245,243,0.16); }
     .portfolio-card:focus-visible { outline: 2px solid #C8503A; outline-offset: 2px; }
     .portfolio-img {
       width: 100%;
@@ -440,23 +440,39 @@
     }
 
     /* === O NAMA === */
-    #o-nama { background: #F6F5F3; }
-    #o-nama .section-heading { color: #0F0F0F; }
+    #o-nama {
+      background: #F4F3F0;
+      position: relative;
+    }
+    /* Subtle top shadow to separate from dark Radovi section above */
+    #o-nama::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: rgba(24,24,27,0.08);
+    }
+    #o-nama .section-heading { color: #18181b; }
+    #o-nama .eyebrow { color: #C8503A; }
     .stats-row {
       display: flex;
       justify-content: center;
       gap: 0;
-      margin-bottom: 80px;
+      margin-bottom: 72px;
+      border-top: 1px solid rgba(24,24,27,0.08);
+      border-bottom: 1px solid rgba(24,24,27,0.08);
+      padding: 40px 0;
     }
     .stat-item {
       flex: 0 1 220px;
-      padding: 32px 32px 32px 0;
-      border-top: 1px solid #E8E6E2;
+      padding: 0 44px;
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
+      border-right: 1px solid rgba(24,24,27,0.09);
     }
+    .stat-item:last-child { border-right: none; }
     .stat-num {
       font-family: 'DM Serif Display', serif;
       font-size: 58px;
@@ -468,43 +484,116 @@
     }
     .stat-label {
       font-size: 14px;
-      color: #999;
+      color: rgba(24,24,27,0.5);
       line-height: 1.5;
     }
     .about-cols {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 80px;
+      gap: 56px;
       align-items: center;
     }
     .about-heading {
       font-family: 'DM Serif Display', serif;
       font-size: clamp(30px, 4vw, 46px);
       font-weight: 400;
-      color: #0F0F0F;
+      color: #18181b;
       letter-spacing: -0.025em;
       line-height: 1.15;
-      margin-bottom: 20px;
+      margin-bottom: 12px;
     }
     .about-body {
       font-size: 15px;
-      color: #777;
+      color: #52525b;
       line-height: 1.78;
-      margin-bottom: 14px;
+      margin-bottom: 8px;
     }
     .about-img-wrap {
       position: relative;
       border-radius: 18px;
       overflow: hidden;
-      aspect-ratio: 4/3;
-      box-shadow: 0 4px 24px rgba(15,15,15,0.1), 0 24px 64px rgba(15,15,15,0.08);
+      width: 357px;
+      height: 357px;
+      margin: 0 auto;
+      background: #0c0c0d;
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 12px 40px rgba(0,0,0,0.14), 0 32px 72px rgba(0,0,0,0.10);
     }
-    .about-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .about-img-tint {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(200,80,58,0.18) 0%, transparent 55%);
-      mix-blend-mode: multiply;
+    /* === METRICS PANEL === */
+    .metrics-panel {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 22px 24px 20px;
+    }
+    .metrics-meta {
+      font-family: 'Inter', monospace;
+      font-size: 9px;
+      letter-spacing: 0.20em;
+      color: rgba(246,245,243,0.26);
+      text-transform: uppercase;
+      white-space: nowrap;
+      display: block;
+    }
+    .metrics-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: 0.26em;
+      color: rgba(246,245,243,0.70);
+      text-transform: uppercase;
+      text-align: center;
+      display: block;
+      margin-top: 8px;
+    }
+    .metrics-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-top: 26px;
+      flex: 1;
+      justify-content: center;
+    }
+    .metric-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .metric-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 10.5px;
+      font-weight: 500;
+      color: rgba(246,245,243,0.40);
+      letter-spacing: 0.02em;
+      width: 126px;
+      flex-shrink: 0;
+    }
+    .metric-track {
+      flex: 1;
+      height: 10px;
+      background: rgba(24,24,27,0.92);
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+    .metric-fill {
+      height: 100%;
+      border-radius: 9999px;
+      background: #EF5634;
+      box-shadow: 0 0 14px rgba(239,86,52,0.45), 0 0 4px rgba(239,86,52,0.22);
+      width: 0;
+      transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .about-img-wrap.is-visible .metric-fill { width: var(--w); }
+    .metric-value {
+      font-family: 'Inter', sans-serif;
+      font-size: 10.5px;
+      font-weight: 500;
+      color: rgba(246,245,243,0.40);
+      letter-spacing: 0.04em;
+      width: 28px;
+      text-align: right;
+      flex-shrink: 0;
     }
 
     /* === KONTAKT === */
@@ -601,9 +690,9 @@
     .ft-inner {
       position: relative;
       z-index: 1;
-      max-width: 1120px;
+      max-width: 1280px;
       margin: 0 auto;
-      padding: 72px 40px 36px;
+      padding: 72px 32px 36px;
     }
     .ft-grid {
       display: grid;
@@ -626,14 +715,14 @@
       align-items: center;
       text-align: center;
     }
-    /* Col 3 — contact, left-aligned within its equal track */
+    /* Col 3 — contact, flush to far-right edge */
     .ft-contact-col {
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
-      text-align: left;
+      align-items: flex-end;
+      text-align: right;
     }
-    .ft-contact-col .ft-links { align-items: flex-start; }
+    .ft-contact-col .ft-links { align-items: flex-end; }
     .ft-nav-col .ft-links    { align-items: center; }
     .ft-logo {
       display: flex;
@@ -730,6 +819,7 @@
     /* === RESPONSIVE === */
     @media (max-width: 900px) {
       #site-nav { top: 12px; }
+      #site-nav { top: 12px; }
       .fnav-brand { display: none; }
       .fnav-divider { display: none; }
       .fnav-inner { padding: 5px; }
@@ -737,12 +827,16 @@
       .section { padding: 72px 20px; }
       .mfst-outer { padding: 48px 24px; }
       .portfolio-grid { grid-template-columns: 1fr; }
-      .stats-row { flex-direction: column; align-items: center; }
-      .stat-item { flex: none; width: 100%; max-width: 280px; padding: 32px 0; }
+      .stats-row { flex-direction: column; align-items: center; padding: 32px 0; }
+      .stat-item { flex: none; width: 100%; max-width: 280px; padding: 20px 0; border-right: none; border-bottom: 1px solid rgba(24,24,27,0.09); }
+      .stat-item:last-child { border-bottom: none; }
       .about-cols { grid-template-columns: 1fr; gap: 40px; }
+      .about-img-wrap { width: 100%; height: auto; aspect-ratio: 1 / 1; }
       .ft-grid { grid-template-columns: 1fr; gap: 40px; }
       .ft-nav-col { align-items: flex-start; text-align: left; }
       .ft-nav-col .ft-links { align-items: flex-start; }
+      .ft-contact-col { align-items: flex-start; text-align: left; }
+      .ft-contact-col .ft-links { align-items: flex-start; }
       .ft-inner { padding: 56px 24px 28px; }
       .ft-sig-text { font-size: 36vw; }
     }
@@ -767,8 +861,8 @@
     <ul class="fnav-tabs" id="fnav-tabs" role="list">
       <li class="fnav-tab" data-href="#hero"    role="listitem" tabindex="0">Početna</li>
       <li class="fnav-tab" data-href="#radovi"  role="listitem" tabindex="0">Radovi</li>
-      <li class="fnav-tab" data-href="#o-nama"       role="listitem" tabindex="0">O nama</li>
-      <li class="fnav-tab" data-href="./proces.html" role="listitem" tabindex="0">Proces</li>
+      <li class="fnav-tab" data-href="#o-nama"        role="listitem" tabindex="0">O nama</li>
+      <li class="fnav-tab" data-href="./usluge.html"  role="listitem" tabindex="0">Usluge</li>
       <li class="fnav-tab" data-href="./kontakt.html" role="listitem" tabindex="0">Kontakt</li>
       <li class="fnav-cursor" id="fnav-cursor" aria-hidden="true"></li>
     </ul>
@@ -795,7 +889,7 @@
       Vaš digitalni otisak. Savršen <span id="text-rotate" aria-live="polite" aria-atomic="true"></span>
     </h1>
     <p class="hero-sub">
-      Gradimo digitalne identitete koji prodaju. Moderni, brzi i precizno izrađeni websiteovi za ambiciozne brendove.
+      Gradimo digitalne identitete koji prodaju. Moderne, brze i precizno izrađene web stranice za ambiciozne brendove.
     </p>
     <div class="hero-actions">
       <a href="./kontakt.html" class="btn-primary">
@@ -804,7 +898,6 @@
           <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </a>
-      <a href="#radovi" class="btn-ghost">Pogledaj radove</a>
     </div>
   </div>
 
@@ -873,18 +966,143 @@
 
     <div class="about-cols">
       <div class="reveal">
-        <h2 class="about-heading">Jedan studio,<br>bez kompromisa.</h2>
+        <h2 class="about-heading">Digitalna rješenja.<br>Globalni standard.</h2>
         <p class="about-body">
-          Klik. je boutique web studio iz Zagreba. Radimo s brendovima kojima je stalo do detalja — od prvog pikselskog prototipa do live produkcije.
+          Klik. djeluje kao nezavisni, high-touch studio sinkroniziran s globalnim dizajnerskim trendovima. Odbacujemo lokalne okvire i agencijsku tromost — stvaramo besprijekorne digitalne prostore za ambiciozne brendove koji žele ostaviti jasan trag na bilo kojem tržištu.
         </p>
         <p class="about-body">
-          Ne radimo po šabloni. Svaki projekt počinje razgovorom, a završava web stranicom koja radi za vaš biznis, 24/7.
+          Spajamo progresivnu vizualnu kulturu s naprednim inženjerstvom za platforme koje ne poznaju granice.
         </p>
         <a href="./kontakt.html" class="btn-primary" style="margin-top:12px;">Dogovorimo kavu</a>
       </div>
-      <div class="about-img-wrap reveal" style="transition-delay:0.15s">
-        <img src="https://placehold.co/600x450/1A1A1A/2E2E2E" alt="Klik. studio radni prostor">
-        <div class="about-img-tint" aria-hidden="true"></div>
+      <div class="reveal" style="transition-delay:0.15s; display:flex; justify-content:center; align-items:center;">
+        <!-- ── iPhone Device Frame ── -->
+        <div style="position:relative; width:262px; height:534px; flex-shrink:0;
+             background:linear-gradient(160deg,#2d2d31 0%,#1d1d20 45%,#0e0e10 100%);
+             border-radius:46px; padding:13px;
+             box-shadow:
+               0 0 0 1px rgba(255,255,255,0.13),
+               0 0 0 2.5px rgba(0,0,0,0.9),
+               0 2px 0 2.5px rgba(255,255,255,0.055),
+               0 32px 90px rgba(0,0,0,0.65),
+               0 10px 28px rgba(0,0,0,0.40),
+               inset 0 1px 0 rgba(255,255,255,0.10),
+               inset 0 -1px 0 rgba(0,0,0,0.45);">
+
+          <!-- Silent switch -->
+          <div style="position:absolute;left:-3.5px;top:76px;width:3.5px;height:22px;
+               background:linear-gradient(90deg,#161618,#28282c);border-radius:2px 0 0 2px;
+               box-shadow:inset 0 1px 0 rgba(255,255,255,0.07);"></div>
+          <!-- Volume up -->
+          <div style="position:absolute;left:-3.5px;top:112px;width:3.5px;height:32px;
+               background:linear-gradient(90deg,#161618,#28282c);border-radius:2px 0 0 2px;
+               box-shadow:inset 0 1px 0 rgba(255,255,255,0.07);"></div>
+          <!-- Volume down -->
+          <div style="position:absolute;left:-3.5px;top:154px;width:3.5px;height:32px;
+               background:linear-gradient(90deg,#161618,#28282c);border-radius:2px 0 0 2px;
+               box-shadow:inset 0 1px 0 rgba(255,255,255,0.07);"></div>
+          <!-- Power button -->
+          <div style="position:absolute;right:-3.5px;top:136px;width:3.5px;height:56px;
+               background:linear-gradient(270deg,#161618,#28282c);border-radius:0 2px 2px 0;
+               box-shadow:inset 0 1px 0 rgba(255,255,255,0.07);"></div>
+
+          <!-- Screen bezel -->
+          <div style="width:100%;height:100%;background:#000;border-radius:34px;overflow:hidden;position:relative;">
+
+            <!-- Dynamic Island -->
+            <div style="position:absolute;top:14px;left:50%;transform:translateX(-50%);
+                 width:94px;height:28px;background:#000;border-radius:20px;z-index:10;
+                 box-shadow:0 0 0 1.5px rgba(255,255,255,0.055);"></div>
+
+            <!-- App Screen canvas -->
+            <div style="background:#09090b;width:100%;height:100%;
+                 padding:56px 22px 18px;display:flex;flex-direction:column;">
+
+              <!-- App header -->
+              <div style="margin-bottom:12px;flex-shrink:0;">
+                <span style="font-family:'Inter',monospace;font-size:7px;letter-spacing:0.18em;
+                     color:#a1a1aa;text-transform:uppercase;white-space:nowrap;display:block;">
+                  STUDIO ANALITIKA / AŽURIRANO Q1 2026
+                </span>
+                <span style="font-family:'Inter',sans-serif;font-size:9px;font-weight:600;
+                     letter-spacing:0.24em;color:#ffffff;text-transform:uppercase;
+                     display:block;margin-top:7px;text-align:center;">
+                  DIZAJN SINERGIJA
+                </span>
+              </div>
+
+              <!-- Hairline separator -->
+              <div style="height:1px;background:rgba(255,255,255,0.10);margin-bottom:0;flex-shrink:0;"></div>
+
+              <!-- Metric rows — flex-1 so they fill remaining screen height -->
+              <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:24px;">
+
+                <!-- Row 1: Skalabilnost Sustava 75% -->
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="font-family:'Inter',sans-serif;font-size:8px;font-weight:500;
+                       color:#e4e4e7;width:82px;flex-shrink:0;line-height:1.35;">
+                    Skalabilnost<br>Sustava
+                  </span>
+                  <div style="flex:1;height:7px;background:#27272a;border-radius:9999px;overflow:hidden;">
+                    <div style="height:100%;width:75%;background:#EF5634;border-radius:9999px;
+                         box-shadow:0 0 15px rgba(239,86,52,0.6);"></div>
+                  </div>
+                  <span style="font-family:'Inter',monospace;font-size:8px;font-weight:700;
+                       color:#ffffff;width:24px;text-align:right;flex-shrink:0;">75%</span>
+                </div>
+
+                <!-- Row 2: Performanse Koda 98% -->
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="font-family:'Inter',sans-serif;font-size:8px;font-weight:500;
+                       color:#e4e4e7;width:82px;flex-shrink:0;line-height:1.35;">
+                    Performanse<br>Koda
+                  </span>
+                  <div style="flex:1;height:7px;background:#27272a;border-radius:9999px;overflow:hidden;">
+                    <div style="height:100%;width:98%;background:#EF5634;border-radius:9999px;
+                         box-shadow:0 0 15px rgba(239,86,52,0.6);"></div>
+                  </div>
+                  <span style="font-family:'Inter',monospace;font-size:8px;font-weight:700;
+                       color:#ffffff;width:24px;text-align:right;flex-shrink:0;">98%</span>
+                </div>
+
+                <!-- Row 3: Vizualna Kultura 96% -->
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="font-family:'Inter',sans-serif;font-size:8px;font-weight:500;
+                       color:#e4e4e7;width:82px;flex-shrink:0;line-height:1.35;">
+                    Vizualna<br>Kultura
+                  </span>
+                  <div style="flex:1;height:7px;background:#27272a;border-radius:9999px;overflow:hidden;">
+                    <div style="height:100%;width:96%;background:#EF5634;border-radius:9999px;
+                         box-shadow:0 0 15px rgba(239,86,52,0.6);"></div>
+                  </div>
+                  <span style="font-family:'Inter',monospace;font-size:8px;font-weight:700;
+                       color:#ffffff;width:24px;text-align:right;flex-shrink:0;">96%</span>
+                </div>
+
+                <!-- Row 4: Vizualni Kod 96% -->
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="font-family:'Inter',sans-serif;font-size:8px;font-weight:500;
+                       color:#e4e4e7;width:82px;flex-shrink:0;line-height:1.35;">
+                    Vizualni<br>Kod
+                  </span>
+                  <div style="flex:1;height:7px;background:#27272a;border-radius:9999px;overflow:hidden;">
+                    <div style="height:100%;width:96%;background:#EF5634;border-radius:9999px;
+                         box-shadow:0 0 15px rgba(239,86,52,0.6);"></div>
+                  </div>
+                  <span style="font-family:'Inter',monospace;font-size:8px;font-weight:700;
+                       color:#ffffff;width:24px;text-align:right;flex-shrink:0;">96%</span>
+                </div>
+
+              </div>
+
+              <!-- Home indicator bar -->
+              <div style="display:flex;justify-content:center;margin-top:12px;flex-shrink:0;">
+                <div style="width:76px;height:4px;background:rgba(255,255,255,0.22);border-radius:9999px;"></div>
+              </div>
+
+            </div><!-- /App Screen -->
+          </div><!-- /Screen bezel -->
+        </div><!-- /iPhone chassis -->
       </div>
     </div>
   </div>
@@ -953,7 +1171,7 @@
           <li><a href="#hero">Početna</a></li>
           <li><a href="#radovi">Radovi</a></li>
           <li><a href="#o-nama">O nama</a></li>
-          <li><a href="./proces.html">Proces</a></li>
+          <li><a href="./usluge.html">Usluge</a></li>
         </ul>
       </nav>
 
@@ -1340,7 +1558,7 @@ document.querySelectorAll('.portfolio-card').forEach(card => {
     const r = card.getBoundingClientRect();
     const x = (e.clientX - r.left) / r.width  - 0.5;
     const y = (e.clientY - r.top)  / r.height - 0.5;
-    card.style.transform = `perspective(900px) rotateY(${x * 9}deg) rotateX(${-y * 6}deg) scale(1.022)`;
+    card.style.transform = `perspective(900px) rotateY(${x * 9}deg) rotateX(${-y * 6}deg) translateY(-5px) scale(1.022)`;
   });
   card.addEventListener('mouseleave', () => {
     card.style.transition = 'transform 0.55s cubic-bezier(0.16,1,0.3,1), box-shadow 0.35s ease';

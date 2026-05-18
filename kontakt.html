@@ -506,7 +506,41 @@
       .k-desc { max-width: 100%; }
       .kontakt-right { padding: 32px 24px; }
       .form-row { grid-template-columns: 1fr; gap: 0; }
+      .ft-grid { grid-template-columns: 1fr; gap: 40px; }
+      .ft-nav-col { align-items: flex-start; text-align: left; }
+      .ft-nav-col .ft-links { align-items: flex-start; }
+      .ft-contact-col { align-items: flex-start; text-align: left; }
+      .ft-contact-col .ft-links { align-items: flex-start; }
+      .ft-inner { padding: 56px 24px 28px; }
+      .ft-sig-text { font-size: 36vw; }
     }
+
+    /* === FOOTER === */
+    footer { background: #0A0A0A; border-top: 1px solid rgba(246,245,243,0.06); position: relative; overflow: hidden; }
+    .ft-signature { position: absolute; inset: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; pointer-events: none; z-index: 0; }
+    .ft-sig-text { font-family: 'DM Serif Display', serif; font-style: italic; font-size: 20vw; font-weight: 400; color: rgba(246,245,243,0.055); letter-spacing: -0.04em; white-space: nowrap; user-select: none; line-height: 1; }
+    .ft-inner { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 72px 32px 36px; }
+    .ft-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 48px; align-items: start; margin-bottom: 56px; }
+    .ft-brand-col { display: flex; flex-direction: column; align-items: flex-start; text-align: left; }
+    .ft-nav-col   { display: flex; flex-direction: column; align-items: center; text-align: center; }
+    .ft-contact-col { display: flex; flex-direction: column; align-items: flex-end; text-align: right; }
+    .ft-contact-col .ft-links { align-items: flex-end; }
+    .ft-nav-col .ft-links { align-items: center; }
+    .ft-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+    .ft-logo-mark { width: 28px; height: 28px; background: #C8503A; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .ft-logotype { font-family: 'DM Serif Display', serif; font-style: italic; font-size: 18px; color: rgba(246,245,243,0.5); letter-spacing: -0.3px; }
+    .ft-logotype span { color: #C8503A; }
+    .ft-tagline { font-size: 13px; line-height: 1.72; color: rgba(246,245,243,0.22); max-width: 220px; }
+    .ft-col-label { font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(246,245,243,0.2); margin-bottom: 20px; }
+    .ft-links { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 13px; }
+    .ft-links a { font-size: 14px; color: rgba(246,245,243,0.42); text-decoration: none; letter-spacing: 0.01em; transition: color 0.16s ease; }
+    .ft-links a:hover { color: #C8503A; }
+    .ft-links a:focus-visible { outline: 2px solid #C8503A; outline-offset: 3px; border-radius: 2px; }
+    .ft-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 22px; border-top: 1px solid rgba(246,245,243,0.06); }
+    .ft-copy { font-size: 11px; color: rgba(246,245,243,0.16); }
+    .ft-top { font-size: 11px; font-weight: 500; letter-spacing: 0.07em; color: rgba(246,245,243,0.26); text-decoration: none; transition: color 0.16s ease; }
+    .ft-top:hover { color: #C8503A; }
+    .ft-top:focus-visible { outline: 2px solid #C8503A; outline-offset: 3px; border-radius: 2px; }
   </style>
 </head>
 <body>
@@ -536,7 +570,7 @@
       <li class="fnav-tab" data-href="./index.html"          role="listitem" tabindex="0">Početna</li>
       <li class="fnav-tab" data-href="./index.html#radovi"   role="listitem" tabindex="0">Radovi</li>
       <li class="fnav-tab" data-href="./index.html#o-nama"   role="listitem" tabindex="0">O nama</li>
-      <li class="fnav-tab" data-href="./proces.html"         role="listitem" tabindex="0">Proces</li>
+      <li class="fnav-tab" data-href="./usluge.html"         role="listitem" tabindex="0">Usluge</li>
       <li class="fnav-tab" data-href="./kontakt.html"        role="listitem" tabindex="0">Kontakt</li>
       <li class="fnav-cursor" id="fnav-cursor" aria-hidden="true"></li>
     </ul>
@@ -826,6 +860,108 @@
   });
 })();
 </script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<script>
+(function () {
+  var successEl = document.getElementById('form-success');
+  if (!successEl) return;
+
+  var brandColors = ['#C8503A', '#F6F5F3', '#27272a'];
+
+  function fireworks() {
+    var duration = 5 * 1000;
+    var animationEnd = Date.now() + duration;
+    var defaults = {
+      startVelocity: 30,
+      spread: 360,
+      ticks: 60,
+      zIndex: 9999,
+      colors: brandColors
+    };
+
+    function randomInRange(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    var interval = setInterval(function () {
+      var timeLeft = animationEnd - Date.now();
+      if (timeLeft <= 0) { clearInterval(interval); return; }
+
+      var particleCount = 50 * (timeLeft / duration);
+      confetti(Object.assign({}, defaults, {
+        particleCount: particleCount,
+        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+      }));
+      confetti(Object.assign({}, defaults, {
+        particleCount: particleCount,
+        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+      }));
+    }, 250);
+  }
+
+  var observer = new MutationObserver(function (mutations) {
+    for (var i = 0; i < mutations.length; i++) {
+      if (mutations[i].type === 'attributes' && mutations[i].attributeName === 'hidden') {
+        if (!successEl.hidden) {
+          fireworks();
+          observer.disconnect();
+          break;
+        }
+      }
+    }
+  });
+
+  observer.observe(successEl, { attributes: true });
+})();
+</script>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-signature" aria-hidden="true">
+    <span class="ft-sig-text">Klik.</span>
+  </div>
+  <div class="ft-inner">
+    <div class="ft-grid">
+      <div class="ft-brand-col">
+        <div class="ft-logo">
+          <div class="ft-logo-mark" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 22 22" fill="none">
+              <path d="M6 5 L6 17" stroke="#0F0F0F" stroke-width="2.3" stroke-linecap="round"/>
+              <path d="M6 11 L16 6"  stroke="white"  stroke-width="2"   stroke-linecap="round"/>
+              <path d="M6 11 L16 17" stroke="white"  stroke-width="2"   stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="ft-logotype">Klik<span>.</span></span>
+        </div>
+        <p class="ft-tagline">Web studio sa sjedištem u<br>Zagrebu. Dostupni globalno.</p>
+      </div>
+      <nav class="ft-nav-col" aria-label="Footer navigacija">
+        <p class="ft-col-label">Navigacija</p>
+        <ul class="ft-links">
+          <li><a href="./index.html">Početna</a></li>
+          <li><a href="./index.html#radovi">Radovi</a></li>
+          <li><a href="./index.html#o-nama">O nama</a></li>
+          <li><a href="./usluge.html">Usluge</a></li>
+        </ul>
+      </nav>
+      <div class="ft-contact-col">
+        <p class="ft-col-label">Povežimo se</p>
+        <ul class="ft-links">
+          <li><a href="./kontakt.html">Kontakt</a></li>
+          <li><a href="mailto:ivan.josipovic09@gmail.com">info@klik.hr</a></li>
+          <li><a href="#" aria-label="LinkedIn profil">LinkedIn</a></li>
+          <li><a href="#" aria-label="Instagram profil">Instagram</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="ft-bottom">
+      <span class="ft-copy">© 2026 Klik. Web Studio Zagreb</span>
+      <a href="./index.html" class="ft-top">Natrag na vrh ↑</a>
+    </div>
+  </div>
+</footer>
 
 </body>
 </html>
