@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Klik. — Česta pitanja</title>
+  <meta name="description" content="Odgovori na najčešća pitanja o izradi web stranica, cijenama i procesu suradnje s Klik. web studijem iz Zagreba.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #080808;
+      color: #F6F5F3;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* === FLOATING NAV === */
+    #site-nav {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 50;
+    }
+    .fnav-inner {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(15,15,15,0.82);
+      backdrop-filter: blur(18px) saturate(1.6);
+      -webkit-backdrop-filter: blur(18px) saturate(1.6);
+      border: 1px solid rgba(232,230,226,0.09);
+      border-radius: 9999px;
+      padding: 6px;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.45),
+                  0 1px 0 rgba(255,255,255,0.04) inset;
+    }
+    .fnav-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      padding: 4px 10px 4px 4px;
+    }
+    .fnav-mark {
+      width: 28px; height: 28px;
+      background: #C8503A;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .fnav-brand:hover .fnav-mark { transform: scale(1.08); }
+    .fnav-logotype {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 16px;
+      color: rgba(246,245,243,0.6);
+      letter-spacing: -0.3px;
+    }
+    .fnav-logotype span { color: #C8503A; }
+    .fnav-divider {
+      width: 1px; height: 20px;
+      background: rgba(232,230,226,0.15);
+      margin: 0 8px;
+      flex-shrink: 0;
+    }
+    .fnav-tabs {
+      position: relative;
+      display: flex;
+      align-items: center;
+      list-style: none;
+    }
+    .fnav-tab {
+      position: relative;
+      z-index: 10;
+      cursor: pointer;
+      padding: 9px 17px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #F6F5F3;
+      mix-blend-mode: difference;
+      white-space: nowrap;
+      user-select: none;
+      border-radius: 9999px;
+    }
+    .fnav-tab:focus-visible {
+      outline: 2px solid rgba(246,245,243,0.5);
+      outline-offset: -2px;
+    }
+    .fnav-cursor {
+      position: absolute;
+      top: 0; left: 0;
+      height: 100%;
+      background: #F6F5F3;
+      border-radius: 9999px;
+      transition: left 0.35s cubic-bezier(0.16,1,0.3,1),
+                  width 0.35s cubic-bezier(0.16,1,0.3,1);
+      pointer-events: none;
+      z-index: 1;
+    }
+    @media (max-width: 900px) {
+      #site-nav { top: 12px; }
+      .fnav-brand { display: none; }
+      .fnav-divider { display: none; }
+      .fnav-inner { padding: 5px; }
+      .fnav-tab { padding: 9px 12px; font-size: 11px; }
+    }
+
+    /* === SPOTLIGHT BG === */
+    #spotlight-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .spotlight {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      will-change: transform;
+    }
+    .spotlight-left {
+      width: 900px;
+      height: 900px;
+      top: 50%;
+      left: 50%;
+      background: radial-gradient(circle at center, rgba(200,80,58,0.55) 0%, rgba(200,80,58,0.18) 40%, transparent 70%);
+      filter: blur(48px);
+      animation: sp-left 12s ease-in-out infinite;
+    }
+    .spotlight-mid {
+      width: 720px;
+      height: 720px;
+      top: 50%;
+      left: 50%;
+      background: radial-gradient(circle at center, rgba(224,83,60,0.45) 0%, rgba(224,83,60,0.12) 45%, transparent 70%);
+      filter: blur(60px);
+      animation: sp-mid 15s ease-in-out infinite;
+      animation-delay: -4s;
+    }
+    .spotlight-right {
+      width: 1000px;
+      height: 1000px;
+      top: 50%;
+      left: 50%;
+      background: radial-gradient(circle at center, rgba(180,55,35,0.38) 0%, rgba(180,55,35,0.10) 45%, transparent 68%);
+      filter: blur(70px);
+      animation: sp-right 18s ease-in-out infinite;
+      animation-delay: -8s;
+    }
+    @keyframes sp-left {
+      0%   { transform: translate(-50%, -50%) rotate(0deg); }
+      33%  { transform: translate(-30%, -70%) rotate(15deg); }
+      67%  { transform: translate(-70%, -30%) rotate(-15deg); }
+      100% { transform: translate(-50%, -50%) rotate(0deg); }
+    }
+    @keyframes sp-mid {
+      0%   { transform: translate(0%, 0%) rotate(-20deg); }
+      33%  { transform: translate(20%, 30%) rotate(0deg); }
+      67%  { transform: translate(-20%, 10%) rotate(20deg); }
+      100% { transform: translate(0%, 0%) rotate(-20deg); }
+    }
+    @keyframes sp-right {
+      0%   { transform: translate(0%, 0%) rotate(10deg); }
+      33%  { transform: translate(-30%, -20%) rotate(-10deg); }
+      67%  { transform: translate(10%, 20%) rotate(25deg); }
+      100% { transform: translate(0%, 0%) rotate(10deg); }
+    }
+    main {
+      position: relative;
+      z-index: 10;
+    }
+
+    /* === GRAIN OVERLAY === */
+    .bg-grain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 100;
+      opacity: 0.028;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+    }
+
+    /* === PAGE LAYOUT === */
+    .page-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 148px 40px 120px;
+    }
+
+    /* === HERO === */
+    .faq-eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #C8503A;
+      margin-bottom: 20px;
+    }
+    .faq-headline {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(36px, 5vw, 58px);
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: #F6F5F3;
+      margin-bottom: 20px;
+    }
+    .faq-headline em {
+      font-style: italic;
+      color: rgba(246,245,243,0.55);
+    }
+    .faq-desc {
+      font-size: 16px;
+      line-height: 1.72;
+      color: rgba(246,245,243,0.42);
+      max-width: 540px;
+      margin-bottom: 72px;
+    }
+
+    /* === ACCORDION === */
+    .faq-list {
+      list-style: none;
+      border-top: 1px solid rgba(232,230,226,0.08);
+    }
+    .faq-item {
+      border-bottom: 1px solid rgba(232,230,226,0.08);
+    }
+    .faq-trigger {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 28px 0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      color: #F6F5F3;
+    }
+    .faq-question {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(17px, 1.8vw, 21px);
+      font-weight: 400;
+      line-height: 1.25;
+      letter-spacing: -0.015em;
+      color: #F6F5F3;
+      transition: color 0.22s ease;
+    }
+    .faq-item.is-open .faq-question,
+    .faq-trigger:hover .faq-question {
+      color: rgba(246,245,243,0.85);
+    }
+    .faq-icon {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid rgba(232,230,226,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.22s ease,
+                  background 0.22s ease,
+                  transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .faq-icon svg {
+      width: 12px;
+      height: 12px;
+      stroke: rgba(246,245,243,0.45);
+      transition: stroke 0.22s ease, transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .faq-trigger:hover .faq-icon {
+      border-color: rgba(200,80,58,0.4);
+      background: rgba(200,80,58,0.06);
+    }
+    .faq-trigger:hover .faq-icon svg {
+      stroke: #C8503A;
+    }
+    .faq-item.is-open .faq-icon {
+      border-color: rgba(200,80,58,0.5);
+      background: rgba(200,80,58,0.1);
+      transform: rotate(45deg);
+    }
+    .faq-item.is-open .faq-icon svg {
+      stroke: #C8503A;
+    }
+    .faq-body {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.44s cubic-bezier(0.16,1,0.3,1);
+    }
+    .faq-answer {
+      font-size: 15px;
+      line-height: 1.78;
+      color: rgba(246,245,243,0.48);
+      padding-bottom: 28px;
+      max-width: 680px;
+    }
+
+    /* === CTA STRIP === */
+    .faq-cta {
+      margin-top: 80px;
+      padding: 48px 44px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(232,230,226,0.08);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+    }
+    .faq-cta-text {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(20px, 2.2vw, 26px);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+    }
+    .faq-cta-text em { font-style: italic; color: rgba(246,245,243,0.45); }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      background: #C8503A;
+      color: #F6F5F3;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      border-radius: 10px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: background 0.2s ease,
+                  transform 0.25s cubic-bezier(0.34,1.56,0.64,1),
+                  box-shadow 0.25s ease;
+      box-shadow: 0 2px 12px rgba(200,80,58,0.35);
+    }
+    .btn-primary:hover {
+      background: #B8432E;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(200,80,58,0.45);
+    }
+    .btn-primary:focus-visible {
+      outline: 2px solid #C8503A;
+      outline-offset: 3px;
+    }
+    @media (max-width: 640px) {
+      .page-wrap { padding: 120px 24px 80px; }
+      .faq-cta { flex-direction: column; align-items: flex-start; padding: 32px 24px; }
+    }
+
+    /* === FOOTER === */
+    footer { background: #0A0A0A; border-top: 1px solid rgba(246,245,243,0.06); position: relative; z-index: 10; overflow: hidden; }
+    .ft-signature { position: absolute; inset: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; pointer-events: none; z-index: 0; }
+    .ft-sig-text { font-family: 'DM Serif Display', serif; font-style: italic; font-size: 20vw; font-weight: 400; color: rgba(246,245,243,0.055); letter-spacing: -0.04em; white-space: nowrap; user-select: none; line-height: 1; }
+    .ft-inner { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 72px 32px 36px; }
+    .ft-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 48px; align-items: start; margin-bottom: 56px; }
+    .ft-brand-col { display: flex; flex-direction: column; align-items: flex-start; text-align: left; }
+    .ft-nav-col   { display: flex; flex-direction: column; align-items: center; text-align: center; }
+    .ft-contact-col { display: flex; flex-direction: column; align-items: flex-end; text-align: right; }
+    .ft-contact-col .ft-links { align-items: flex-end; }
+    .ft-nav-col .ft-links { align-items: center; }
+    .ft-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+    .ft-logo-mark { width: 28px; height: 28px; background: #C8503A; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .ft-logotype { font-family: 'DM Serif Display', serif; font-style: italic; font-size: 18px; color: rgba(246,245,243,0.5); letter-spacing: -0.3px; }
+    .ft-logotype span { color: #C8503A; }
+    .ft-tagline { font-size: 13px; line-height: 1.72; color: rgba(246,245,243,0.22); max-width: 220px; }
+    .ft-col-label { font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(246,245,243,0.2); margin-bottom: 20px; }
+    .ft-links { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 13px; }
+    .ft-links a { font-size: 14px; color: rgba(246,245,243,0.42); text-decoration: none; letter-spacing: 0.01em; transition: color 0.16s ease; }
+    .ft-links a:hover { color: #C8503A; }
+    .ft-links a:focus-visible { outline: 2px solid #C8503A; outline-offset: 3px; border-radius: 2px; }
+    .ft-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 22px; border-top: 1px solid rgba(246,245,243,0.06); }
+    .ft-copy { font-size: 11px; color: rgba(246,245,243,0.16); }
+    .ft-top { font-size: 11px; font-weight: 500; letter-spacing: 0.07em; color: rgba(246,245,243,0.26); text-decoration: none; transition: color 0.16s ease; }
+    .ft-top:hover { color: #C8503A; }
+    @media (max-width: 900px) {
+      .ft-grid { grid-template-columns: 1fr; gap: 40px; }
+      .ft-nav-col { align-items: flex-start; text-align: left; }
+      .ft-nav-col .ft-links { align-items: flex-start; }
+      .ft-contact-col { align-items: flex-start; text-align: left; }
+      .ft-contact-col .ft-links { align-items: flex-start; }
+      .ft-inner { padding: 56px 24px 28px; }
+      .ft-sig-text { font-size: 36vw; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-grain" aria-hidden="true"></div>
+
+<!-- SPOTLIGHT BACKGROUND -->
+<div id="spotlight-bg" aria-hidden="true">
+  <div class="spotlight spotlight-left"></div>
+  <div class="spotlight spotlight-mid"></div>
+  <div class="spotlight spotlight-right"></div>
+</div>
+
+<!-- NAV -->
+<nav id="site-nav" aria-label="Glavna navigacija">
+  <div class="fnav-inner">
+    <a href="./index.html" class="fnav-brand" aria-label="Klik. — natrag na početnu">
+      <div class="fnav-mark">
+        <svg width="16" height="16" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+          <path d="M6 5 L6 17" stroke="#0F0F0F" stroke-width="2.3" stroke-linecap="round"/>
+          <path d="M6 11 L16 6"  stroke="white"  stroke-width="2"   stroke-linecap="round"/>
+          <path d="M6 11 L16 17" stroke="white"  stroke-width="2"   stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="fnav-logotype">Klik<span>.</span></span>
+    </a>
+    <div class="fnav-divider" aria-hidden="true"></div>
+    <ul class="fnav-tabs" id="fnav-tabs" role="list">
+      <li class="fnav-tab" data-href="./index.html"          role="listitem" tabindex="0">Početna</li>
+      <li class="fnav-tab" data-href="./index.html#radovi"   role="listitem" tabindex="0">Radovi</li>
+      <li class="fnav-tab" data-href="./index.html#o-nama"   role="listitem" tabindex="0">O nama</li>
+      <li class="fnav-tab" data-href="./usluge.html"         role="listitem" tabindex="0">Usluge</li>
+      <li class="fnav-tab" data-href="./faq.html"            role="listitem" tabindex="0">FAQ</li>
+      <li class="fnav-tab" data-href="./kontakt.html"        role="listitem" tabindex="0">Kontakt</li>
+      <li class="fnav-cursor" id="fnav-cursor" aria-hidden="true"></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main>
+  <div class="page-wrap">
+
+    <!-- Hero -->
+    <p class="faq-eyebrow">Česta pitanja</p>
+    <h1 class="faq-headline">Sve što želite<br><em>znati o suradnji.</em></h1>
+    <p class="faq-desc">Skupili smo odgovore na pitanja koja najčešće postavljaju klijenti prije pokretanja projekta. Ne pronađete li odgovor — slobodno nas kontaktirajte.</p>
+
+    <!-- Accordion -->
+    <ul class="faq-list" role="list">
+
+      <li class="faq-item">
+        <button class="faq-trigger" aria-expanded="false">
+          <span class="faq-question">Koliko traje izrada web stranice?</span>
+          <span class="faq-icon" aria-hidden="true">
+            <svg viewBox="0 0 12 12" fill="none" stroke-width="1.8" stroke-linecap="round">
+              <line x1="6" y1="1" x2="6" y2="11"/>
+              <line x1="1" y1="6" x2="11" y2="6"/>
+            </svg>
+          </span>
+        </button>
+        <div class="faq-body" role="region">
+          <p class="faq-answer">Standardna custom web stranica obično traje između 3 i 6 tjedana od strategije do lansiranja. Kompleksnije platforme ili duboki rebranding sustavi mogu trajati od 6 do 8+ tjedana, ovisno o opsegu projekta i brzini povratnih informacija.</p>
+        </div>
+      </li>
+
+      <li class="faq-item">
+        <button class="faq-trigger" aria-expanded="false">
+          <span class="faq-question">Koliko košta izrada prilagođene web stranice?</span>
+          <span class="faq-icon" aria-hidden="true">
+            <svg viewBox="0 0 12 12" fill="none" stroke-width="1.8" stroke-linecap="round">
+              <line x1="6" y1="1" x2="6" y2="11"/>
+              <line x1="1" y1="6" x2="11" y2="6"/>
+            </svg>
+          </span>
+        </button>
+        <div class="faq-body" role="region">
+          <p class="faq-answer">Svaki projekt koji radimo je unikatan i krojen prema vašim poslovnim ciljevima. Naši osnovni paketi za custom web stranice kreću se od 1.500 €, dok se napredne platforme s kompleksnim animacijama i dubokim brand sustavima procjenjuju individualno na temelju opsega posla.</p>
+        </div>
+      </li>
+
+      <li class="faq-item">
+        <button class="faq-trigger" aria-expanded="false">
+          <span class="faq-question">Koristite li gotove predloške (templates) ili radite sve ispočetka?</span>
+          <span class="faq-icon" aria-hidden="true">
+            <svg viewBox="0 0 12 12" fill="none" stroke-width="1.8" stroke-linecap="round">
+              <line x1="6" y1="1" x2="6" y2="11"/>
+              <line x1="1" y1="6" x2="11" y2="6"/>
+            </svg>
+          </span>
+        </button>
+        <div class="faq-body" role="region">
+          <p class="faq-answer">Ne koristimo generičke i zagušene gotove predloške. Sve što stvaramo je ručno kodirano i prilagođeno vašem vizualnom identitetu. To osigurava vrhunsku brzinu učitavanja, besprijekoran responzivni dizajn na mobitelima i potpuno jedinstveno vizualno iskustvo.</p>
+        </div>
+      </li>
+
+      <li class="faq-item">
+        <button class="faq-trigger" aria-expanded="false">
+          <span class="faq-question">Na kojoj platformi gradite web stranice?</span>
+          <span class="faq-icon" aria-hidden="true">
+            <svg viewBox="0 0 12 12" fill="none" stroke-width="1.8" stroke-linecap="round">
+              <line x1="6" y1="1" x2="6" y2="11"/>
+              <line x1="1" y1="6" x2="11" y2="6"/>
+            </svg>
+          </span>
+        </button>
+        <div class="faq-body" role="region">
+          <p class="faq-answer">Koristimo moderne i brze tehnologije poput Reacta, Next.js-a i Tailwind CSS-a. To osigurava da vaša stranica bude maksimalno sigurna, munjevito brza i strukturno optimizirana za visoke ocjene na Google SEO tražilicama.</p>
+        </div>
+      </li>
+
+      <li class="faq-item">
+        <button class="faq-trigger" aria-expanded="false">
+          <span class="faq-question">Hoću li moći samostalno ažurirati sadržaj nakon lansiranja?</span>
+          <span class="faq-icon" aria-hidden="true">
+            <svg viewBox="0 0 12 12" fill="none" stroke-width="1.8" stroke-linecap="round">
+              <line x1="6" y1="1" x2="6" y2="11"/>
+              <line x1="1" y1="6" x2="11" y2="6"/>
+            </svg>
+          </span>
+        </button>
+        <div class="faq-body" role="region">
+          <p class="faq-answer">Da. Možemo integrirati jednostavan sustav za upravljanje sadržajem (CMS) koji vam omogućuje laku izmjenu tekstova, slika ili dodavanje novih radova bez diranja koda. Nakon lansiranja, dobivate i personaliziranu video edukaciju za korištenje sustava.</p>
+        </div>
+      </li>
+
+    </ul>
+
+    <!-- CTA strip -->
+    <div class="faq-cta">
+      <p class="faq-cta-text">Ostala pitanja?<br><em>Razgovarajmo.</em></p>
+      <a href="./kontakt.html" class="btn-primary">
+        Pošaljite upit
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-signature" aria-hidden="true">
+    <span class="ft-sig-text">Klik.</span>
+  </div>
+  <div class="ft-inner">
+    <div class="ft-grid">
+      <div class="ft-brand-col">
+        <div class="ft-logo">
+          <div class="ft-logo-mark" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 22 22" fill="none">
+              <path d="M6 5 L6 17" stroke="#0F0F0F" stroke-width="2.3" stroke-linecap="round"/>
+              <path d="M6 11 L16 6"  stroke="white"  stroke-width="2"   stroke-linecap="round"/>
+              <path d="M6 11 L16 17" stroke="white"  stroke-width="2"   stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="ft-logotype">Klik<span>.</span></span>
+        </div>
+        <p class="ft-tagline">Web studio sa sjedištem u<br>Zagrebu. Dostupni globalno.</p>
+      </div>
+      <nav class="ft-nav-col" aria-label="Footer navigacija">
+        <p class="ft-col-label">Navigacija</p>
+        <ul class="ft-links">
+          <li><a href="./index.html">Početna</a></li>
+          <li><a href="./index.html#radovi">Radovi</a></li>
+          <li><a href="./index.html#o-nama">O nama</a></li>
+          <li><a href="./usluge.html">Usluge</a></li>
+          <li><a href="./faq.html">FAQ</a></li>
+        </ul>
+      </nav>
+      <div class="ft-contact-col">
+        <p class="ft-col-label">Povežimo se</p>
+        <ul class="ft-links">
+          <li><a href="./kontakt.html">Kontakt</a></li>
+          <li><a href="mailto:ivan.josipovic09@gmail.com">info@klik.hr</a></li>
+          <li><a href="#" aria-label="LinkedIn profil">LinkedIn</a></li>
+          <li><a href="#" aria-label="Instagram profil">Instagram</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="ft-bottom">
+      <span class="ft-copy">© 2026 Klik. Web Studio Zagreb</span>
+      <a href="#" class="ft-top">Natrag na vrh ↑</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* === Floating nav cursor === */
+(function () {
+  const tabs   = document.querySelectorAll('.fnav-tab');
+  const cursor = document.getElementById('fnav-cursor');
+  const list   = document.getElementById('fnav-tabs');
+  if (!cursor || !list) return;
+
+  function moveTo(el) {
+    cursor.style.left  = el.offsetLeft + 'px';
+    cursor.style.width = el.offsetWidth + 'px';
+  }
+
+  /* Mark current page tab */
+  tabs.forEach(function (tab) {
+    if ((tab.dataset.href || '') === './faq.html') {
+      tab.classList.add('is-active');
+    }
+  });
+
+  tabs.forEach(function (tab) {
+    tab.addEventListener('mouseenter', function () { moveTo(tab); });
+    tab.addEventListener('click', function () {
+      const href = tab.dataset.href;
+      if (href) window.location.href = href;
+    });
+    tab.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        const href = tab.dataset.href;
+        if (href) window.location.href = href;
+      }
+    });
+  });
+
+  list.addEventListener('mouseleave', function () {
+    /* Retract cursor — active page is shown via coral text, not the pill */
+    cursor.style.width = '0';
+  });
+})();
+
+/* === FAQ Accordion === */
+(function () {
+  const items = document.querySelectorAll('.faq-item');
+
+  items.forEach(function (item) {
+    const trigger = item.querySelector('.faq-trigger');
+    const body    = item.querySelector('.faq-body');
+    const answer  = item.querySelector('.faq-answer');
+
+    trigger.addEventListener('click', function () {
+      const isOpen = item.classList.contains('is-open');
+
+      /* Close all others */
+      items.forEach(function (other) {
+        if (other !== item && other.classList.contains('is-open')) {
+          other.classList.remove('is-open');
+          other.querySelector('.faq-trigger').setAttribute('aria-expanded', 'false');
+          other.querySelector('.faq-body').style.maxHeight = '0';
+        }
+      });
+
+      if (isOpen) {
+        item.classList.remove('is-open');
+        trigger.setAttribute('aria-expanded', 'false');
+        body.style.maxHeight = '0';
+      } else {
+        item.classList.add('is-open');
+        trigger.setAttribute('aria-expanded', 'true');
+        body.style.maxHeight = answer.scrollHeight + 32 + 'px';
+      }
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
