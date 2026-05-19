@@ -840,6 +840,20 @@
       .ft-inner { padding: 56px 24px 28px; }
       .ft-sig-text { font-size: 36vw; }
     }
+
+    /* iPhone analytics screen animations */
+    @keyframes scaleBarIn {
+      from { transform: scaleX(0); }
+      to   { transform: scaleX(1); }
+    }
+    @keyframes numReveal {
+      from { opacity: 0; transform: translateY(5px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes statusPulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(239,86,52,0.5); }
+      50%       { opacity: 0.6; box-shadow: 0 0 0 3px rgba(239,86,52,0); }
+    }
   </style>
 </head>
 <body>
@@ -973,7 +987,7 @@
         <p class="about-body">
           Spajamo progresivnu vizualnu kulturu s naprednim inženjerstvom za platforme koje ne poznaju granice.
         </p>
-        <a href="./kontakt.html" class="btn-primary" style="margin-top:12px;">Dogovorimo kavu</a>
+        <a href="./kontakt.html" class="btn-primary" style="margin-top:12px;">Kreirajmo zajedno</a>
       </div>
       <div class="reveal" style="transition-delay:0.15s; display:flex; justify-content:center; align-items:center;">
         <!-- ── iPhone Device Frame ── -->
@@ -1016,87 +1030,84 @@
 
             <!-- App Screen canvas -->
             <div style="background:#09090b;width:100%;height:100%;
-                 padding:56px 22px 18px;display:flex;flex-direction:column;">
+                 padding:56px 14px 16px;display:flex;flex-direction:column;user-select:none;">
 
-              <!-- App header -->
-              <div style="margin-bottom:12px;flex-shrink:0;">
-                <span style="font-family:'Inter',monospace;font-size:7px;letter-spacing:0.18em;
-                     color:#a1a1aa;text-transform:uppercase;white-space:nowrap;display:block;">
-                  STUDIO ANALITIKA / AŽURIRANO Q1 2026
-                </span>
-                <span style="font-family:'Inter',sans-serif;font-size:9px;font-weight:600;
-                     letter-spacing:0.24em;color:#ffffff;text-transform:uppercase;
-                     display:block;margin-top:7px;text-align:center;">
-                  DIZAJN SINERGIJA
-                </span>
+              <!-- Header: branded logo + label -->
+              <div style="display:flex;align-items:baseline;justify-content:center;
+                   gap:5px;margin-bottom:12px;flex-shrink:0;">
+                <span style="font-family:'Inter',sans-serif;font-size:10px;font-weight:700;
+                     color:#EF5634;letter-spacing:-0.01em;line-height:1;">klik.</span>
+                <span style="font-family:'Inter',sans-serif;font-size:8px;font-weight:600;
+                     letter-spacing:0.20em;color:#ffffff;text-transform:uppercase;
+                     opacity:0.90;line-height:1;">ANALITIKA</span>
               </div>
 
-              <!-- Hairline separator -->
-              <div style="height:1px;background:rgba(255,255,255,0.10);margin-bottom:0;flex-shrink:0;"></div>
+              <!-- Animated performance benchmark dashboard -->
+              <div style="flex:1; display:flex; flex-direction:column; gap:10px; min-height:0; overflow:hidden;">
 
-              <!-- Metric rows — flex-1 so they fill remaining screen height -->
-              <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:24px;">
-
-                <!-- Row 1: Skalabilnost Sustava 75% -->
-                <div style="display:flex;align-items:center;gap:8px;">
-                  <span style="font-family:'Inter',sans-serif;font-size:8px;font-weight:500;
-                       color:#e4e4e7;width:82px;flex-shrink:0;line-height:1.35;">
-                    Skalabilnost<br>Sustava
-                  </span>
-                  <div style="flex:1;height:7px;background:#27272a;border-radius:9999px;overflow:hidden;">
-                    <div style="height:100%;width:75%;background:#EF5634;border-radius:9999px;
-                         box-shadow:0 0 15px rgba(239,86,52,0.6);"></div>
+                <!-- ── Main Metric Card ── -->
+                <div style="flex:1; background:rgba(255,255,255,0.04); border:1px solid #27272a; border-radius:12px; padding:16px; display:flex; flex-direction:column; justify-content:space-between;">
+                  <div>
+                    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+                      <span style="font-size:9.5px; font-weight:500; letter-spacing:0.10em; color:#71717a; text-transform:uppercase;">OPTIMIZACIJA KODA</span>
+                      <span style="font-size:8.5px; font-weight:600; color:#EF5634; background:rgba(239,86,52,0.12); border-radius:4px; padding:2px 6px; letter-spacing:0.02em;">▲ 8.6%</span>
+                    </div>
+                    <div style="font-size:46px; font-weight:700; color:#ffffff; letter-spacing:-0.04em; line-height:1; margin-bottom:5px; animation:numReveal 0.8s cubic-bezier(0.22,1,0.36,1) 0.2s both;">98.6</div>
+                    <div style="font-size:11px; color:#d4d4d8;">od prošlog perioda</div>
                   </div>
-                  <span style="font-family:'Inter',monospace;font-size:8px;font-weight:700;
-                       color:#ffffff;width:24px;text-align:right;flex-shrink:0;">75%</span>
+                  <div>
+                    <div style="position:relative; height:7px; background:rgba(255,255,255,0.08); border-radius:99px; overflow:hidden; margin-bottom:6px;">
+                      <div style="position:absolute; left:0; top:0; height:100%; width:69%; background:linear-gradient(90deg,rgba(239,86,52,0.55),#EF5634); border-radius:99px; transform-origin:left center; animation:scaleBarIn 1.4s cubic-bezier(0.22,1,0.36,1) 0.4s both; filter:drop-shadow(0 0 6px rgba(239,86,52,0.65));"></div>
+                      <div style="position:absolute; top:-3px; left:68.4%; width:1.5px; height:13px; background:rgba(255,255,255,0.35); border-radius:1px;"></div>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; font-size:10px; color:#d4d4d8;">
+                      <span>Prosjek tržišta</span>
+                      <span>960</span>
+                    </div>
+                  </div>
                 </div>
 
-                <!-- Row 2: Performanse Koda 98% -->
-                <div style="display:flex;align-items:center;gap:8px;">
-                  <span style="font-family:'Inter',sans-serif;font-size:8px;font-weight:500;
-                       color:#e4e4e7;width:82px;flex-shrink:0;line-height:1.35;">
-                    Performanse<br>Koda
-                  </span>
-                  <div style="flex:1;height:7px;background:#27272a;border-radius:9999px;overflow:hidden;">
-                    <div style="height:100%;width:98%;background:#EF5634;border-radius:9999px;
-                         box-shadow:0 0 15px rgba(239,86,52,0.6);"></div>
+                <!-- ── Studio Metrics Card ── -->
+                <div style="flex:1; background:rgba(255,255,255,0.025); border:1px solid #27272a; border-radius:12px; padding:14px 16px; display:flex; flex-direction:column; justify-content:space-between;">
+                  <div style="font-size:9.5px; font-weight:500; letter-spacing:0.10em; color:#71717a; text-transform:uppercase;">Metrike Studioa</div>
+                  <div>
+                    <!-- Row 1 -->
+                    <div>
+                      <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:5px;">
+                        <span style="font-size:12px; font-weight:500; color:#e4e4e7;">Odziv Poslužitelja</span>
+                        <span style="font-size:13px; font-weight:700; color:#ffffff; letter-spacing:-0.02em;">94</span>
+                      </div>
+                      <div style="height:4px; background:rgba(255,255,255,0.07); border-radius:99px; overflow:hidden;">
+                        <div style="height:100%; width:94%; background:linear-gradient(90deg,rgba(239,86,52,0.45),#EF5634); border-radius:99px; transform-origin:left center; animation:scaleBarIn 1s cubic-bezier(0.22,1,0.36,1) 0.55s both;"></div>
+                      </div>
+                    </div>
+                    <!-- Row 2 -->
+                    <div style="margin-top:13px;">
+                      <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:5px;">
+                        <span style="font-size:12px; font-weight:500; color:#e4e4e7;">Brzina Učitavanja</span>
+                        <span style="font-size:13px; font-weight:700; color:#ffffff; letter-spacing:-0.02em;">99</span>
+                      </div>
+                      <div style="height:4px; background:rgba(255,255,255,0.07); border-radius:99px; overflow:hidden;">
+                        <div style="height:100%; width:99%; background:linear-gradient(90deg,rgba(239,86,52,0.45),#EF5634); border-radius:99px; transform-origin:left center; animation:scaleBarIn 1s cubic-bezier(0.22,1,0.36,1) 0.70s both;"></div>
+                      </div>
+                    </div>
+                    <!-- Row 3 -->
+                    <div style="margin-top:13px;">
+                      <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:5px;">
+                        <span style="font-size:12px; font-weight:500; color:#e4e4e7;">Sinkronizacija Sustava</span>
+                        <span style="font-size:13px; font-weight:700; color:#ffffff; letter-spacing:-0.02em;">87</span>
+                      </div>
+                      <div style="height:4px; background:rgba(255,255,255,0.07); border-radius:99px; overflow:hidden;">
+                        <div style="height:100%; width:87%; background:linear-gradient(90deg,rgba(239,86,52,0.45),#EF5634); border-radius:99px; transform-origin:left center; animation:scaleBarIn 1s cubic-bezier(0.22,1,0.36,1) 0.85s both;"></div>
+                      </div>
+                    </div>
                   </div>
-                  <span style="font-family:'Inter',monospace;font-size:8px;font-weight:700;
-                       color:#ffffff;width:24px;text-align:right;flex-shrink:0;">98%</span>
                 </div>
 
-                <!-- Row 3: Vizualna Kultura 96% -->
-                <div style="display:flex;align-items:center;gap:8px;">
-                  <span style="font-family:'Inter',sans-serif;font-size:8px;font-weight:500;
-                       color:#e4e4e7;width:82px;flex-shrink:0;line-height:1.35;">
-                    Vizualna<br>Kultura
-                  </span>
-                  <div style="flex:1;height:7px;background:#27272a;border-radius:9999px;overflow:hidden;">
-                    <div style="height:100%;width:96%;background:#EF5634;border-radius:9999px;
-                         box-shadow:0 0 15px rgba(239,86,52,0.6);"></div>
-                  </div>
-                  <span style="font-family:'Inter',monospace;font-size:8px;font-weight:700;
-                       color:#ffffff;width:24px;text-align:right;flex-shrink:0;">96%</span>
-                </div>
-
-                <!-- Row 4: Vizualni Kod 96% -->
-                <div style="display:flex;align-items:center;gap:8px;">
-                  <span style="font-family:'Inter',sans-serif;font-size:8px;font-weight:500;
-                       color:#e4e4e7;width:82px;flex-shrink:0;line-height:1.35;">
-                    Vizualni<br>Kod
-                  </span>
-                  <div style="flex:1;height:7px;background:#27272a;border-radius:9999px;overflow:hidden;">
-                    <div style="height:100%;width:96%;background:#EF5634;border-radius:9999px;
-                         box-shadow:0 0 15px rgba(239,86,52,0.6);"></div>
-                  </div>
-                  <span style="font-family:'Inter',monospace;font-size:8px;font-weight:700;
-                       color:#ffffff;width:24px;text-align:right;flex-shrink:0;">96%</span>
-                </div>
-
-              </div>
+              </div><!-- /dashboard -->
 
               <!-- Home indicator bar -->
-              <div style="display:flex;justify-content:center;margin-top:12px;flex-shrink:0;">
+              <div style="display:flex;justify-content:center;margin-top:10px;flex-shrink:0;">
                 <div style="width:76px;height:4px;background:rgba(255,255,255,0.22);border-radius:9999px;"></div>
               </div>
 
@@ -1126,7 +1137,7 @@
       Spremi za pokrenuti<br><em>nešto novo?</em>
     </h2>
     <p class="kontakt-sub reveal">
-      Napišite nam. Odgovaramo u roku 24 sata.
+      Podijelite svoju viziju s nama. Odgovaramo u roku 24 sata.
     </p>
     <div class="reveal" style="display:flex;justify-content:center;">
       <a href="./kontakt.html" class="btn-primary">

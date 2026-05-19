@@ -263,32 +263,42 @@
     .services-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
+      gap: 0;
     }
 
-    /* Gradient-border shell */
+    /* Card shell — each card carries its own border; adjacent borders collapse via -1px margin */
     .card-outer {
       position: relative;
-      padding: 1px;
-      border-radius: 20px;
+      border-radius: 0;
       height: 100%;
-      background: linear-gradient(
-        148deg,
-        rgba(255,255,255,0.13) 0%,
-        rgba(255,255,255,0.05) 44%,
-        rgba(255,255,255,0)    100%
-      );
-      transition: transform 0.42s cubic-bezier(0.16,1,0.3,1);
+      isolation: isolate;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      background: #080808;
+      overflow: hidden;
+      border: 1px solid #3f3f46;
+      transition: border-color 0.44s ease;
     }
-    .card-outer:hover { transform: translateY(-7px); }
 
-    /* Ambient glow on hover */
+    /* Outer corners: left card rounds left side, right card rounds right side */
+    .services-grid > .card-outer:first-child { border-radius: 20px 0 0 20px; }
+    .services-grid > .card-outer:last-child  { border-radius: 0 20px 20px 0; }
+
+    /* Collapse the double-border where adjacent cards touch into a single 1px line */
+    .services-grid > .card-outer + .card-outer { margin-left: -1px; }
+
+    /* Hovered card's border illuminates with brand coral; z-index brings it above neighbor */
+    .card-outer:hover {
+      border-color: rgba(239,86,52,0.55);
+      z-index: 1;
+    }
+
+    /* Ambient inner glow on hover — contained within card bounds */
     .card-outer::before {
       content: '';
       position: absolute;
-      inset: -28px;
-      border-radius: 36px;
-      background: radial-gradient(ellipse 68% 55% at 50% 50%, rgba(200,80,58,0.08) 0%, transparent 70%);
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(200,80,58,0.11) 0%, transparent 70%);
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.5s ease;
@@ -296,23 +306,23 @@
     }
     .card-outer:hover::before { opacity: 1; }
 
-    /* Glass panel */
+    /* Flatten inner div radius — wrapper clips outer corners */
+    .card-outer > div { border-radius: 0 !important; }
+
+    /* Glass panel — legacy class kept; new cards use > div */
     .card-inner {
-      background: rgba(255,255,255,0.028);
-      border-radius: 19px;
+      background: #0c0b0e;
+      border-radius: 0;
       padding: 40px 32px 36px;
-      backdrop-filter: blur(24px) saturate(1.25);
-      -webkit-backdrop-filter: blur(24px) saturate(1.25);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.055),
-                  0 20px 56px rgba(0,0,0,0.34);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
       height: 100%;
       display: flex;
       flex-direction: column;
-      transition: box-shadow 0.42s ease;
+      transition: box-shadow 0.44s ease;
     }
-    .card-outer:hover .card-inner {
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.07),
-                  0 28px 72px rgba(0,0,0,0.42);
+    .card-outer:hover .card-inner,
+    .card-outer:hover > div {
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.09);
     }
 
     .card-num {
@@ -429,64 +439,55 @@
     .proc-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 2px;
-      margin-bottom: 80px;
+      gap: 0;
       list-style: none;
-      position: relative;
-      background: rgba(255,255,255,0.012);
-      border: 1px solid rgba(232,230,226,0.06);
-      border-radius: 16px;
-      overflow: hidden;
+      margin-bottom: 80px;
     }
 
+    /* Flush border system — mirrors services grid */
     .proc-card {
       position: relative;
-      padding: 48px 36px 52px;
-      border: 1px solid rgba(232,230,226,0.08);
+      isolation: isolate;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      background: #080808;
       overflow: hidden;
+      border: 1px solid #3f3f46;
+      display: flex;
+      flex-direction: column;
       cursor: default;
       opacity: 0;
       transform: translateY(20px);
-      transition: opacity 0.72s cubic-bezier(0.16,1,0.3,1),
+      transition: border-color 0.44s ease,
+                  opacity 0.72s cubic-bezier(0.16,1,0.3,1),
                   transform 0.72s cubic-bezier(0.16,1,0.3,1);
     }
-    .proc-card:first-child { border-radius: 14px 0 0 14px; }
-    .proc-card:last-child  { border-radius: 0 14px 14px 0; }
-    .proc-card.is-visible  { opacity: 1; transform: translateY(0); }
+    .proc-grid > .proc-card + .proc-card { margin-left: -1px; }
+    .proc-grid > .proc-card:first-child { border-radius: 20px 0 0 20px; }
+    .proc-grid > .proc-card:last-child  { border-radius: 0 20px 20px 0; }
+    .proc-card.is-visible { opacity: 1; transform: translateY(0); }
+    .proc-card:hover { border-color: rgba(239,86,52,0.55); z-index: 1; }
 
-    /* Coral top accent — grows on hover */
+    /* Ambient inner glow on hover */
     .proc-card::before {
       content: '';
       position: absolute;
-      top: 0; left: 0;
-      height: 2px; width: 0;
-      background: #C8503A;
-      transition: width 0.52s cubic-bezier(0.22,1,0.36,1);
-    }
-    .proc-card:hover::before { width: 100%; }
-
-    /* Ambient glow */
-    .proc-card::after {
-      content: '';
-      position: absolute;
-      top: -60px; left: -60px;
-      width: 300px; height: 300px;
-      border-radius: 50%;
-      background: radial-gradient(ellipse, rgba(200,80,58,0.10) 0%, transparent 68%);
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(200,80,58,0.11) 0%, transparent 70%);
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.5s ease;
+      z-index: -1;
     }
-    .proc-card:hover::after { opacity: 1; }
+    .proc-card:hover::before { opacity: 1; }
 
     .proc-card-num {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(44px, 4.2vw, 60px);
-      font-weight: 400;
-      line-height: 1;
-      letter-spacing: -0.03em;
-      color: #C8503A;
-      margin-bottom: 28px;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #EF5634;
+      margin-bottom: 10px;
     }
 
     .proc-card-tag {
@@ -494,48 +495,47 @@
       font-weight: 600;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: rgba(200,80,58,0.55);
+      color: rgba(239,86,52,0.55);
       margin-bottom: 10px;
       transition: color 0.3s ease;
     }
-    .proc-card:hover .proc-card-tag { color: #C8503A; }
+    .proc-card:hover .proc-card-tag { color: #EF5634; }
 
     .proc-card-title {
       font-family: 'DM Serif Display', serif;
-      font-size: clamp(21px, 1.9vw, 27px);
+      font-size: clamp(19px, 1.7vw, 24px);
       font-weight: 400;
-      line-height: 1.15;
+      line-height: 1.18;
       letter-spacing: -0.02em;
-      color: rgba(246,245,243,0.88);
+      color: #F6F5F3;
       margin-bottom: 8px;
-      transition: color 0.3s ease;
     }
-    .proc-card:hover .proc-card-title { color: #F6F5F3; }
 
     .proc-card-duration {
       font-size: 10px;
       font-weight: 500;
       letter-spacing: 0.10em;
       text-transform: uppercase;
-      color: rgba(246,245,243,0.18);
-      margin-bottom: 20px;
+      color: rgba(246,245,243,0.22);
+      margin-bottom: 16px;
       transition: color 0.3s ease;
     }
-    .proc-card:hover .proc-card-duration { color: rgba(246,245,243,0.38); }
+    .proc-card:hover .proc-card-duration { color: rgba(246,245,243,0.42); }
 
     .proc-card-desc {
       font-size: 14px;
       line-height: 1.74;
-      color: rgba(246,245,243,0.38);
-      margin-bottom: 28px;
+      color: rgba(246,245,243,0.40);
+      margin-bottom: 24px;
+      flex-grow: 1;
       transition: color 0.3s ease;
     }
-    .proc-card:hover .proc-card-desc { color: rgba(246,245,243,0.56); }
+    .proc-card:hover .proc-card-desc { color: rgba(246,245,243,0.58); }
 
     .proc-card-rule {
       width: 100%; height: 1px;
       background: rgba(232,230,226,0.07);
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .proc-card-deliverables {
@@ -546,21 +546,23 @@
     }
     .proc-card-deliverables li {
       display: flex;
-      align-items: center;
-      gap: 10px;
+      align-items: baseline;
+      gap: 9px;
       font-size: 13px;
-      color: rgba(246,245,243,0.30);
+      color: rgba(246,245,243,0.32);
       transition: color 0.3s ease;
     }
-    .proc-card:hover .proc-card-deliverables li { color: rgba(246,245,243,0.52); }
+    .proc-card:hover .proc-card-deliverables li { color: rgba(246,245,243,0.54); }
     .proc-card-deliverables li::before {
-      content: '';
-      width: 14px; height: 1px;
-      background: rgba(200,80,58,0.38);
+      content: '+';
+      color: #EF5634;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.1;
       flex-shrink: 0;
-      transition: background 0.3s ease;
+      transition: opacity 0.3s ease;
     }
-    .proc-card:hover .proc-card-deliverables li::before { background: #C8503A; }
+    .proc-card:hover .proc-card-deliverables li::before { opacity: 1; }
 
     /* =====================================================================
        BOTTOM CTA
@@ -746,89 +748,289 @@
   <section class="services-section" aria-labelledby="services-heading">
     <p class="section-label" id="services-heading">Naše usluge</p>
 
+    <div style="overflow:hidden;border-radius:20px;isolation:isolate;">
+
     <div class="services-grid">
 
-      <!-- Kartica 1 — Web Dizajn & UI/UX -->
+      <!-- ── Kartica 1: Web Dizajn & UI/UX ── -->
       <div class="card-outer">
-        <div class="card-inner">
-          <p class="card-num">01</p>
-          <div class="card-icon" aria-hidden="true">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <rect x="2" y="3" width="20" height="14" rx="2.5" stroke="currentColor" stroke-width="1.6"/>
-              <path d="M8 21h8M12 17v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-              <path d="M7 9l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M13 14h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <div style="background:#0c0b0e;border-radius:0;height:100%;display:flex;flex-direction:column;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.055);transition:box-shadow 0.48s ease;backface-visibility:hidden;-webkit-backface-visibility:hidden;">
+
+          <!-- Visual: UI canvas / wireframe -->
+          <div style="height:192px;position:relative;flex-shrink:0;background:#07070e;border-bottom:1px solid rgba(255,255,255,0.05);overflow:hidden;">
+            <svg viewBox="0 0 320 192" fill="none" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%;" aria-hidden="true">
+              <defs>
+                <radialGradient id="c1glow" cx="78%" cy="72%" r="48%">
+                  <stop offset="0%" stop-color="#EF5634" stop-opacity="0.13"/>
+                  <stop offset="100%" stop-color="#EF5634" stop-opacity="0"/>
+                </radialGradient>
+                <pattern id="c1dots" width="24" height="24" patternUnits="userSpaceOnUse">
+                  <circle cx="12" cy="12" r="0.55" fill="rgba(255,255,255,0.06)"/>
+                </pattern>
+              </defs>
+              <rect width="320" height="192" fill="url(#c1dots)"/>
+              <rect width="320" height="192" fill="url(#c1glow)"/>
+              <!-- Browser chrome -->
+              <rect x="22" y="18" width="276" height="156" rx="7" fill="rgba(255,255,255,0.018)" stroke="rgba(255,255,255,0.09)" stroke-width="0.7"/>
+              <rect x="22" y="18" width="276" height="22" rx="7" fill="rgba(255,255,255,0.04)"/>
+              <rect x="22" y="32" width="276" height="8" fill="rgba(255,255,255,0.04)"/>
+              <circle cx="37" cy="29" r="3.5" fill="rgba(255,255,255,0.08)"/>
+              <circle cx="49" cy="29" r="3.5" fill="rgba(255,255,255,0.08)"/>
+              <circle cx="61" cy="29" r="3.5" fill="rgba(255,255,255,0.08)"/>
+              <rect x="76" y="24" width="144" height="10" rx="5" fill="rgba(255,255,255,0.04)"/>
+              <!-- Nav row -->
+              <rect x="30" y="48" width="260" height="14" rx="2" fill="rgba(255,255,255,0.02)"/>
+              <rect x="38" y="51" width="32" height="8" rx="2" fill="rgba(255,255,255,0.09)"/>
+              <rect x="80" y="53" width="20" height="4" rx="1.5" fill="rgba(255,255,255,0.05)"/>
+              <rect x="108" y="53" width="20" height="4" rx="1.5" fill="rgba(255,255,255,0.05)"/>
+              <rect x="136" y="53" width="20" height="4" rx="1.5" fill="rgba(255,255,255,0.05)"/>
+              <rect x="258" y="51" width="22" height="8" rx="3.5" fill="rgba(239,86,52,0.22)" stroke="rgba(239,86,52,0.38)" stroke-width="0.5"/>
+              <!-- Left content column -->
+              <rect x="30" y="70" width="138" height="90" rx="3" fill="rgba(255,255,255,0.012)"/>
+              <rect x="40" y="80" width="90" height="7" rx="2" fill="rgba(255,255,255,0.14)"/>
+              <rect x="40" y="91" width="70" height="7" rx="2" fill="rgba(255,255,255,0.09)"/>
+              <rect x="40" y="106" width="108" height="3.5" rx="1.5" fill="rgba(255,255,255,0.05)"/>
+              <rect x="40" y="113" width="88" height="3.5" rx="1.5" fill="rgba(255,255,255,0.05)"/>
+              <rect x="40" y="129" width="44" height="11" rx="5" fill="rgba(239,86,52,0.22)" stroke="rgba(239,86,52,0.40)" stroke-width="0.5"/>
+              <rect x="48" y="132.5" width="24" height="3.5" rx="1" fill="rgba(239,86,52,0.55)"/>
+              <!-- Right image column — selected (coral) -->
+              <rect x="178" y="70" width="110" height="90" rx="3" fill="rgba(239,86,52,0.05)" stroke="rgba(239,86,52,0.28)" stroke-width="0.8"/>
+              <path d="M196 146 L210 126 L222 138 L230 120 L272 146 Z" fill="rgba(239,86,52,0.10)"/>
+              <circle cx="197" cy="106" r="8" fill="rgba(239,86,52,0.08)"/>
+              <!-- Selection handle squares -->
+              <rect x="175" y="67" width="7" height="7" rx="1.5" fill="#EF5634" opacity="0.85"/>
+              <rect x="289" y="67" width="7" height="7" rx="1.5" fill="#EF5634" opacity="0.85"/>
+              <rect x="175" y="156" width="7" height="7" rx="1.5" fill="#EF5634" opacity="0.85"/>
+              <rect x="289" y="156" width="7" height="7" rx="1.5" fill="#EF5634" opacity="0.85"/>
+              <!-- Selection dashed lines -->
+              <line x1="182" y1="70.5" x2="289" y2="70.5" stroke="#EF5634" stroke-width="0.6" stroke-dasharray="4 3" opacity="0.35"/>
+              <line x1="178.5" y1="74" x2="178.5" y2="156" stroke="#EF5634" stroke-width="0.6" stroke-dasharray="4 3" opacity="0.35"/>
+              <line x1="296" y1="74" x2="296" y2="156" stroke="#EF5634" stroke-width="0.6" stroke-dasharray="4 3" opacity="0.35"/>
+              <line x1="182" y1="159.5" x2="289" y2="159.5" stroke="#EF5634" stroke-width="0.6" stroke-dasharray="4 3" opacity="0.35"/>
+              <!-- Layer label tag -->
+              <rect x="178" y="56" width="58" height="11" rx="3" fill="rgba(239,86,52,0.14)" stroke="rgba(239,86,52,0.28)" stroke-width="0.5"/>
+              <rect x="184" y="60.5" width="32" height="3" rx="1" fill="rgba(239,86,52,0.55)"/>
+              <rect x="220" y="60.5" width="10" height="3" rx="1" fill="rgba(255,255,255,0.18)"/>
+              <!-- Cursor arrow (coral) -->
+              <g transform="translate(284,157)" opacity="0.94">
+                <path d="M1.5 1.5 L1.5 14 L5 10.5 L8.5 17.5 L11 16.5 L7.5 9.5 L11 9.5 Z" fill="#EF5634"/>
+              </g>
+              <ellipse cx="291" cy="169" rx="12" ry="8" fill="rgba(239,86,52,0.08)"/>
             </svg>
           </div>
-          <h2 class="card-title">Web Dizajn<br>&amp; UI/UX</h2>
-          <p class="card-desc">
-            Stvaramo vizualno snažna, intuitivna sučelja koja ostavljaju trajan dojam. Od prvog wireframea do finalnog piksela — svaki detalj ima svoju svrhu.
-          </p>
-          <div class="card-rule" aria-hidden="true"></div>
-          <p class="card-list-label">Što dobivate</p>
-          <ul class="card-list">
-            <li>Dizajn korisničkog sučelja (UI)</li>
-            <li>Korisničko iskustvo (UX)</li>
-            <li>Interaktivni wireframeovi</li>
-            <li>Animirani prototipi</li>
-            <li>Responzivni mobilni dizajn</li>
-          </ul>
+
+          <!-- Content -->
+          <div style="padding:24px 26px 28px;flex:1;display:flex;flex-direction:column;">
+            <p style="font-size:10px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:#EF5634;margin-bottom:12px;">01</p>
+            <h2 style="font-family:'DM Serif Display',serif;font-size:22px;font-weight:400;line-height:1.18;letter-spacing:-0.02em;color:#F6F5F3;margin-bottom:12px;">Web Dizajn<br>&amp; UI/UX</h2>
+            <p style="font-size:14px;line-height:1.74;color:rgba(246,245,243,0.44);margin-bottom:20px;flex-grow:1;">Stvaramo vizualno snažna, intuitivna sučelja koja ostavljaju trajan dojam. Od prvog wireframea do finalnog piksela — svaki detalj ima svoju svrhu.</p>
+            <div style="height:1px;background:rgba(232,230,226,0.07);margin-bottom:15px;"></div>
+            <p style="font-size:9px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:rgba(246,245,243,0.22);margin-bottom:11px;">Što dobivate</p>
+            <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+              <li style="display:flex;align-items:baseline;gap:9px;font-size:13px;line-height:1.5;color:rgba(246,245,243,0.54);"><span style="color:#EF5634;font-size:14px;font-weight:700;flex-shrink:0;line-height:1.1;">+</span>Dizajn korisničkog sučelja (UI)</li>
+              <li style="display:flex;align-items:baseline;gap:9px;font-size:13px;line-height:1.5;color:rgba(246,245,243,0.54);"><span style="color:#EF5634;font-size:14px;font-weight:700;flex-shrink:0;line-height:1.1;">+</span>Korisničko iskustvo (UX)</li>
+              <li style="display:flex;align-items:baseline;gap:9px;font-size:13px;line-height:1.5;color:rgba(246,245,243,0.54);"><span style="color:#EF5634;font-size:14px;font-weight:700;flex-shrink:0;line-height:1.1;">+</span>Interaktivni wireframeovi</li>
+              <li style="display:flex;align-items:baseline;gap:9px;font-size:13px;line-height:1.5;color:rgba(246,245,243,0.54);"><span style="color:#EF5634;font-size:14px;font-weight:700;flex-shrink:0;line-height:1.1;">+</span>Animirani prototipi</li>
+              <li style="display:flex;align-items:baseline;gap:9px;font-size:13px;line-height:1.5;color:rgba(246,245,243,0.54);"><span style="color:#EF5634;font-size:14px;font-weight:700;flex-shrink:0;line-height:1.1;">+</span>Responzivni mobilni dizajn</li>
+            </ul>
+          </div>
         </div>
       </div>
 
-      <!-- Kartica 2 — Frontend Razvoj -->
+      <!-- ── Kartica 2: Frontend Razvoj ── -->
       <div class="card-outer">
-        <div class="card-inner">
-          <p class="card-num">02</p>
-          <div class="card-icon" aria-hidden="true">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path d="M8 6L3 12l5 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M16 6l5 6-5 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M14 4l-4 16" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        <div style="background:#0c0b0e;border-radius:0;height:100%;display:flex;flex-direction:column;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.055);transition:box-shadow 0.48s ease;backface-visibility:hidden;-webkit-backface-visibility:hidden;">
+
+          <!-- Visual: Code editor window -->
+          <div style="height:192px;position:relative;flex-shrink:0;background:#060608;border-bottom:1px solid rgba(255,255,255,0.05);overflow:hidden;">
+            <svg viewBox="0 0 320 192" fill="none" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%;" aria-hidden="true">
+              <defs>
+                <radialGradient id="c2glow" cx="22%" cy="30%" r="52%">
+                  <stop offset="0%" stop-color="#EF5634" stop-opacity="0.09"/>
+                  <stop offset="100%" stop-color="#EF5634" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              <rect width="320" height="192" fill="url(#c2glow)"/>
+              <!-- Editor window -->
+              <rect x="14" y="10" width="292" height="172" rx="8" fill="rgba(0,0,0,0.45)" stroke="rgba(255,255,255,0.07)" stroke-width="0.7"/>
+              <!-- Title bar -->
+              <rect x="14" y="10" width="292" height="24" rx="8" fill="rgba(255,255,255,0.045)"/>
+              <rect x="14" y="26" width="292" height="8" fill="rgba(255,255,255,0.045)"/>
+              <circle cx="29" cy="22" r="4.2" fill="rgba(255,75,75,0.32)"/>
+              <circle cx="42" cy="22" r="4.2" fill="rgba(255,180,40,0.28)"/>
+              <circle cx="55" cy="22" r="4.2" fill="rgba(70,195,70,0.22)"/>
+              <!-- File tab -->
+              <rect x="68" y="14" width="78" height="16" rx="4" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+              <rect x="68" y="14" width="78" height="1.5" rx="0.75" fill="rgba(239,86,52,0.55)"/>
+              <rect x="74" y="20" width="46" height="5" rx="1.5" fill="rgba(255,255,255,0.28)"/>
+              <!-- Gutter -->
+              <rect x="14" y="34" width="26" height="148" fill="rgba(0,0,0,0.28)"/>
+              <line x1="40" y1="34" x2="40" y2="182" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+              <!-- Line numbers -->
+              <text x="18" y="52" font-family="monospace" font-size="7.5" fill="rgba(255,255,255,0.14)">1</text>
+              <text x="18" y="65" font-family="monospace" font-size="7.5" fill="rgba(255,255,255,0.14)">2</text>
+              <text x="18" y="78" font-family="monospace" font-size="7.5" fill="rgba(255,255,255,0.14)">3</text>
+              <text x="18" y="91" font-family="monospace" font-size="7.5" fill="rgba(255,255,255,0.14)">4</text>
+              <text x="18" y="104" font-family="monospace" font-size="7.5" fill="rgba(239,86,52,0.60)">5</text>
+              <text x="18" y="117" font-family="monospace" font-size="7.5" fill="rgba(255,255,255,0.14)">6</text>
+              <text x="18" y="130" font-family="monospace" font-size="7.5" fill="rgba(255,255,255,0.14)">7</text>
+              <text x="18" y="143" font-family="monospace" font-size="7.5" fill="rgba(255,255,255,0.14)">8</text>
+              <text x="18" y="156" font-family="monospace" font-size="7.5" fill="rgba(255,255,255,0.14)">9</text>
+              <!-- Line 1: import App from 'next/app' -->
+              <rect x="46" y="45" width="26" height="6.5" rx="1.5" fill="rgba(239,86,52,0.68)"/>
+              <rect x="77" y="45" width="14" height="6.5" rx="1.5" fill="rgba(255,255,255,0.68)"/>
+              <rect x="96" y="45" width="17" height="6.5" rx="1.5" fill="rgba(239,86,52,0.50)"/>
+              <rect x="118" y="45" width="44" height="6.5" rx="1.5" fill="rgba(175,218,115,0.52)"/>
+              <!-- Line 2: import type { Metadata } from 'next' -->
+              <rect x="46" y="58" width="26" height="6.5" rx="1.5" fill="rgba(239,86,52,0.68)"/>
+              <rect x="77" y="58" width="18" height="6.5" rx="1.5" fill="rgba(239,86,52,0.42)"/>
+              <rect x="100" y="58" width="50" height="6.5" rx="1.5" fill="rgba(255,255,255,0.55)"/>
+              <rect x="155" y="58" width="17" height="6.5" rx="1.5" fill="rgba(239,86,52,0.50)"/>
+              <rect x="177" y="58" width="26" height="6.5" rx="1.5" fill="rgba(175,218,115,0.52)"/>
+              <!-- Line 4: export default function RootLayout -->
+              <rect x="46" y="84" width="28" height="6.5" rx="1.5" fill="rgba(239,86,52,0.68)"/>
+              <rect x="79" y="84" width="28" height="6.5" rx="1.5" fill="rgba(239,86,52,0.50)"/>
+              <rect x="112" y="84" width="32" height="6.5" rx="1.5" fill="rgba(239,86,52,0.40)"/>
+              <rect x="149" y="84" width="52" height="6.5" rx="1.5" fill="rgba(255,255,255,0.70)"/>
+              <rect x="206" y="84" width="6" height="6.5" rx="1.5" fill="rgba(255,255,255,0.22)"/>
+              <!-- Line 5 active highlight + return ( -->
+              <rect x="42" y="97" width="264" height="14" fill="rgba(239,86,52,0.055)"/>
+              <rect x="46" y="99" width="28" height="6.5" rx="1.5" fill="rgba(239,86,52,0.72)"/>
+              <rect x="79" y="99" width="7" height="6.5" rx="1.5" fill="rgba(255,255,255,0.22)"/>
+              <circle cx="296" cy="104" r="3.5" fill="#EF5634" opacity="0.85" style="filter:drop-shadow(0 0 4px rgba(239,86,52,0.8));"/>
+              <!-- Line 6: <html lang="hr"> -->
+              <rect x="56" y="111" width="7" height="6.5" rx="1.5" fill="rgba(239,86,52,0.50)"/>
+              <rect x="67" y="111" width="16" height="6.5" rx="1.5" fill="rgba(239,86,52,0.82)"/>
+              <rect x="88" y="111" width="16" height="6.5" rx="1.5" fill="rgba(255,255,255,0.38)"/>
+              <rect x="108" y="111" width="14" height="6.5" rx="1.5" fill="rgba(175,218,115,0.55)"/>
+              <rect x="126" y="111" width="7" height="6.5" rx="1.5" fill="rgba(239,86,52,0.50)"/>
+              <!-- Line 7: <body className={...}> -->
+              <rect x="66" y="124" width="7" height="6.5" rx="1.5" fill="rgba(239,86,52,0.50)"/>
+              <rect x="77" y="124" width="20" height="6.5" rx="1.5" fill="rgba(239,86,52,0.80)"/>
+              <rect x="102" y="124" width="36" height="6.5" rx="1.5" fill="rgba(255,255,255,0.35)"/>
+              <rect x="143" y="124" width="38" height="6.5" rx="1.5" fill="rgba(175,218,115,0.40)"/>
+              <rect x="185" y="124" width="7" height="6.5" rx="1.5" fill="rgba(239,86,52,0.50)"/>
+              <!-- Line 8: </html> -->
+              <rect x="56" y="137" width="7" height="6.5" rx="1.5" fill="rgba(239,86,52,0.40)"/>
+              <rect x="67" y="137" width="7" height="6.5" rx="1.5" fill="rgba(239,86,52,0.35)"/>
+              <rect x="78" y="137" width="16" height="6.5" rx="1.5" fill="rgba(239,86,52,0.70)"/>
+              <rect x="98" y="137" width="7" height="6.5" rx="1.5" fill="rgba(239,86,52,0.40)"/>
+              <!-- Line 9: closing brace -->
+              <rect x="46" y="150" width="7" height="6.5" rx="1.5" fill="rgba(255,255,255,0.22)"/>
+              <!-- Performance gauge badge -->
+              <rect x="222" y="140" width="72" height="34" rx="6" fill="rgba(0,0,0,0.55)" stroke="rgba(255,255,255,0.07)" stroke-width="0.6"/>
+              <circle cx="244" cy="157" r="10" stroke="rgba(255,255,255,0.07)" stroke-width="2" fill="none"/>
+              <circle cx="244" cy="157" r="10" stroke="#EF5634" stroke-width="2.2" fill="none" stroke-dasharray="54 9" stroke-linecap="round" transform="rotate(-90 244 157)" style="filter:drop-shadow(0 0 4px rgba(239,86,52,0.7));"/>
+              <rect x="260" y="149" width="22" height="6" rx="1.5" fill="rgba(239,86,52,0.68)"/>
+              <rect x="260" y="159" width="16" height="4" rx="1" fill="rgba(255,255,255,0.16)"/>
             </svg>
           </div>
-          <h2 class="card-title">Frontend<br>Razvoj</h2>
-          <p class="card-desc">
-            Gradimo brze, moderne web aplikacije s naglaskom na performanse, čitljivost koda i dugoročnu održivost. Fluid animacije i precizna interakcija su naš standard.
-          </p>
-          <div class="card-rule" aria-hidden="true"></div>
-          <p class="card-list-label">Što dobivate</p>
-          <ul class="card-list">
-            <li>Prilagođene web aplikacije</li>
-            <li>Optimizacija performansi (Core Web Vitals)</li>
-            <li>Fluid animacije i mikro-interakcije</li>
-            <li>Integracija CMS sustava</li>
-            <li>Tehnička SEO optimizacija</li>
-          </ul>
+
+          <!-- Content -->
+          <div style="padding:24px 26px 28px;flex:1;display:flex;flex-direction:column;">
+            <p style="font-size:10px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:#EF5634;margin-bottom:12px;">02</p>
+            <h2 style="font-family:'DM Serif Display',serif;font-size:22px;font-weight:400;line-height:1.18;letter-spacing:-0.02em;color:#F6F5F3;margin-bottom:12px;">Frontend<br>Razvoj</h2>
+            <p style="font-size:14px;line-height:1.74;color:rgba(246,245,243,0.44);margin-bottom:20px;flex-grow:1;">Gradimo brze, moderne web aplikacije s naglaskom na performanse, čitljivost koda i dugoročnu održivost. Fluid animacije i precizna interakcija su naš standard.</p>
+            <div style="height:1px;background:rgba(232,230,226,0.07);margin-bottom:15px;"></div>
+            <p style="font-size:9px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:rgba(246,245,243,0.22);margin-bottom:11px;">Što dobivate</p>
+            <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+              <li style="display:flex;align-items:baseline;gap:9px;font-size:13px;line-height:1.5;color:rgba(246,245,243,0.54);"><span style="color:#EF5634;font-size:14px;font-weight:700;flex-shrink:0;line-height:1.1;">+</span>Prilagođene web aplikacije</li>
+              <li style="display:flex;align-items:baseline;gap:9px;font-size:13px;line-height:1.5;color:rgba(246,245,243,0.54);"><span style="color:#EF5634;font-size:14px;font-weight:700;flex-shrink:0;line-height:1.1;">+</span>Optimizacija performansi (Core Web Vitals)</li>
+              <li style="display:flex;align-items:baseline;gap:9px;font-size:13px;line-height:1.5;color:rgba(246,245,243,0.54);"><span style="color:#EF5634;font-size:14px;font-weight:700;flex-shrink:0;line-height:1.1;">+</span>Fluid animacije i mikro-interakcije</li>
+              <li style="display:flex;align-items:baseline;gap:9px;font-size:13px;line-height:1.5;color:rgba(246,245,243,0.54);"><span style="color:#EF5634;font-size:14px;font-weight:700;flex-shrink:0;line-height:1.1;">+</span>Integracija CMS sustava</li>
+              <li style="display:flex;align-items:baseline;gap:9px;font-size:13px;line-height:1.5;color:rgba(246,245,243,0.54);"><span style="color:#EF5634;font-size:14px;font-weight:700;flex-shrink:0;line-height:1.1;">+</span>Tehnička SEO optimizacija</li>
+            </ul>
+          </div>
         </div>
       </div>
 
-      <!-- Kartica 3 — Digitalni Brending -->
+      <!-- ── Kartica 3: Digitalni Brending ── -->
       <div class="card-outer">
-        <div class="card-inner">
-          <p class="card-num">03</p>
-          <div class="card-icon" aria-hidden="true">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path d="M12 2l2.9 5.8L21 9l-4.5 4.4 1.1 6.3L12 17l-5.6 2.7 1.1-6.3L3 9l6.1-.2L12 2z" stroke="currentColor" stroke-width="1.55" stroke-linejoin="round"/>
+        <div style="background:#0c0b0e;border-radius:0;height:100%;display:flex;flex-direction:column;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,0.055);transition:box-shadow 0.48s ease;backface-visibility:hidden;-webkit-backface-visibility:hidden;">
+
+          <!-- Visual: Brand identity studio -->
+          <div style="height:192px;position:relative;flex-shrink:0;background:#080808;border-bottom:1px solid rgba(255,255,255,0.05);overflow:hidden;">
+            <svg viewBox="0 0 320 192" fill="none" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%;" aria-hidden="true">
+              <defs>
+                <radialGradient id="c3glow" cx="50%" cy="55%" r="52%">
+                  <stop offset="0%" stop-color="#EF5634" stop-opacity="0.11"/>
+                  <stop offset="100%" stop-color="#EF5634" stop-opacity="0"/>
+                </radialGradient>
+                <pattern id="c3grid" width="32" height="32" patternUnits="userSpaceOnUse">
+                  <line x1="0" y1="32" x2="32" y2="32" stroke="rgba(255,255,255,0.03)" stroke-width="0.5"/>
+                  <line x1="32" y1="0" x2="32" y2="32" stroke="rgba(255,255,255,0.03)" stroke-width="0.5"/>
+                </pattern>
+              </defs>
+              <rect width="320" height="192" fill="url(#c3grid)"/>
+              <rect width="320" height="192" fill="url(#c3glow)"/>
+              <!-- Palette label -->
+              <rect x="24" y="18" width="48" height="5" rx="1.5" fill="rgba(255,255,255,0.07)"/>
+              <!-- Color swatches row -->
+              <rect x="24"  y="30" width="34" height="28" rx="4" fill="#EF5634" style="filter:drop-shadow(0 4px 12px rgba(239,86,52,0.42));"/>
+              <rect x="64"  y="30" width="34" height="28" rx="4" fill="#C8503A"/>
+              <rect x="104" y="30" width="34" height="28" rx="4" fill="rgba(246,245,243,0.88)" stroke="rgba(255,255,255,0.10)" stroke-width="0.5"/>
+              <rect x="144" y="30" width="34" height="28" rx="4" fill="rgba(113,113,122,0.80)"/>
+              <rect x="184" y="30" width="34" height="28" rx="4" fill="rgba(39,39,42,0.92)" stroke="rgba(255,255,255,0.07)" stroke-width="0.5"/>
+              <rect x="224" y="30" width="34" height="28" rx="4" fill="rgba(8,8,8,0.96)" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+              <!-- Swatch hex labels -->
+              <rect x="27"  y="62" width="28" height="4" rx="1" fill="rgba(239,86,52,0.42)"/>
+              <rect x="67"  y="62" width="22" height="4" rx="1" fill="rgba(255,255,255,0.08)"/>
+              <rect x="107" y="62" width="18" height="4" rx="1" fill="rgba(255,255,255,0.08)"/>
+              <rect x="147" y="62" width="22" height="4" rx="1" fill="rgba(255,255,255,0.08)"/>
+              <rect x="187" y="62" width="20" height="4" rx="1" fill="rgba(255,255,255,0.08)"/>
+              <rect x="227" y="62" width="18" height="4" rx="1" fill="rgba(255,255,255,0.08)"/>
+              <!-- Divider -->
+              <line x1="24" y1="74" x2="296" y2="74" stroke="rgba(255,255,255,0.05)" stroke-width="0.6"/>
+              <!-- klik. brand badge -->
+              <rect x="24" y="84" width="100" height="58" rx="8" fill="rgba(12,12,12,0.90)" stroke="rgba(255,255,255,0.09)" stroke-width="0.7"/>
+              <text x="40" y="121" font-family="Georgia,'DM Serif Display',serif" font-size="24" font-style="italic" fill="rgba(246,245,243,0.90)">klik</text>
+              <text x="87" y="121" font-family="Georgia,'DM Serif Display',serif" font-size="24" font-style="italic" fill="#EF5634">.</text>
+              <!-- Type scale panel -->
+              <rect x="134" y="84" width="162" height="58" rx="4" fill="rgba(255,255,255,0.012)" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+              <rect x="142" y="93"  width="72" height="8"   rx="2"   fill="rgba(255,255,255,0.14)"/>
+              <rect x="220" y="95"  width="28" height="4.5" rx="1.5" fill="rgba(255,255,255,0.06)"/>
+              <rect x="142" y="107" width="52" height="6"   rx="2"   fill="rgba(255,255,255,0.10)"/>
+              <rect x="200" y="108" width="22" height="3.5" rx="1"   fill="rgba(255,255,255,0.05)"/>
+              <rect x="142" y="119" width="36" height="5"   rx="1.5" fill="rgba(255,255,255,0.07)"/>
+              <rect x="184" y="120" width="18" height="3"   rx="1"   fill="rgba(255,255,255,0.04)"/>
+              <rect x="142" y="130" width="24" height="3.5" rx="1"   fill="rgba(255,255,255,0.045)"/>
+              <!-- Cross marks (grid registration) -->
+              <line x1="270" y1="90"  x2="270" y2="100" stroke="rgba(239,86,52,0.36)" stroke-width="1.1" stroke-linecap="round"/>
+              <line x1="265" y1="95"  x2="275" y2="95"  stroke="rgba(239,86,52,0.36)" stroke-width="1.1" stroke-linecap="round"/>
+              <line x1="282" y1="116" x2="282" y2="124" stroke="rgba(239,86,52,0.24)" stroke-width="0.9" stroke-linecap="round"/>
+              <line x1="278" y1="120" x2="286" y2="120" stroke="rgba(239,86,52,0.24)" stroke-width="0.9" stroke-linecap="round"/>
+              <!-- Brand book strip at bottom -->
+              <rect x="24" y="152" width="272" height="24" rx="5" fill="rgba(239,86,52,0.06)" stroke="rgba(239,86,52,0.18)" stroke-width="0.6"/>
+              <rect x="34"  y="159" width="58" height="5" rx="1.5" fill="rgba(239,86,52,0.40)"/>
+              <rect x="100" y="159" width="4"  height="5" rx="1"   fill="rgba(239,86,52,0.18)"/>
+              <rect x="112" y="159" width="48" height="5" rx="1.5" fill="rgba(255,255,255,0.12)"/>
+              <rect x="168" y="159" width="4"  height="5" rx="1"   fill="rgba(239,86,52,0.18)"/>
+              <rect x="180" y="159" width="44" height="5" rx="1.5" fill="rgba(255,255,255,0.12)"/>
+              <rect x="232" y="159" width="4"  height="5" rx="1"   fill="rgba(239,86,52,0.18)"/>
+              <rect x="244" y="159" width="36" height="5" rx="1.5" fill="rgba(255,255,255,0.12)"/>
             </svg>
           </div>
-          <h2 class="card-title">Digitalni<br>Brending</h2>
-          <p class="card-desc">
-            Oblikujemo vizualne identitete koji jasno komuniciraju vrijednosti vašeg branda — dosljedno, snažno i pamtljivo na svim digitalnim platformama.
-          </p>
-          <div class="card-rule" aria-hidden="true"></div>
-          <p class="card-list-label">Što dobivate</p>
-          <ul class="card-list">
-            <li>Logo i vizualni identitet</li>
-            <li>Sustav boja i tipografije</li>
-            <li>Brand book i smjernice</li>
-            <li>Digitalni materijali i predlošci</li>
-            <li>Grafički dizajn za digitalne kanale</li>
-          </ul>
+
+          <!-- Content -->
+          <div style="padding:24px 26px 28px;flex:1;display:flex;flex-direction:column;">
+            <p style="font-size:10px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:#EF5634;margin-bottom:12px;">03</p>
+            <h2 style="font-family:'DM Serif Display',serif;font-size:22px;font-weight:400;line-height:1.18;letter-spacing:-0.02em;color:#F6F5F3;margin-bottom:12px;">Digitalni<br>Brending</h2>
+            <p style="font-size:14px;line-height:1.74;color:rgba(246,245,243,0.44);margin-bottom:20px;flex-grow:1;">Oblikujemo vizualne identitete koji jasno komuniciraju vrijednosti vašeg branda — dosljedno, snažno i pamtljivo na svim digitalnim platformama.</p>
+            <div style="height:1px;background:rgba(232,230,226,0.07);margin-bottom:15px;"></div>
+            <p style="font-size:9px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:rgba(246,245,243,0.22);margin-bottom:11px;">Što dobivate</p>
+            <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+              <li style="display:flex;align-items:baseline;gap:9px;font-size:13px;line-height:1.5;color:rgba(246,245,243,0.54);"><span style="color:#EF5634;font-size:14px;font-weight:700;flex-shrink:0;line-height:1.1;">+</span>Logo i vizualni identitet</li>
+              <li style="display:flex;align-items:baseline;gap:9px;font-size:13px;line-height:1.5;color:rgba(246,245,243,0.54);"><span style="color:#EF5634;font-size:14px;font-weight:700;flex-shrink:0;line-height:1.1;">+</span>Sustav boja i tipografije</li>
+              <li style="display:flex;align-items:baseline;gap:9px;font-size:13px;line-height:1.5;color:rgba(246,245,243,0.54);"><span style="color:#EF5634;font-size:14px;font-weight:700;flex-shrink:0;line-height:1.1;">+</span>Brand book i smjernice</li>
+              <li style="display:flex;align-items:baseline;gap:9px;font-size:13px;line-height:1.5;color:rgba(246,245,243,0.54);"><span style="color:#EF5634;font-size:14px;font-weight:700;flex-shrink:0;line-height:1.1;">+</span>Digitalni materijali i predlošci</li>
+              <li style="display:flex;align-items:baseline;gap:9px;font-size:13px;line-height:1.5;color:rgba(246,245,243,0.54);"><span style="color:#EF5634;font-size:14px;font-weight:700;flex-shrink:0;line-height:1.1;">+</span>Grafički dizajn za digitalne kanale</li>
+            </ul>
+          </div>
         </div>
       </div>
 
     </div><!-- /services-grid -->
+    </div><!-- /services-grid-mask -->
   </section>
 
   <!-- ===================================================================
@@ -850,54 +1052,309 @@
     <p class="proc-section-sub">Strukturirani pristup od ideje do realizacije.</p>
     <div class="proc-connector" aria-hidden="true"></div>
 
+    <div style="overflow:hidden;border-radius:20px;isolation:isolate;">
     <ul class="proc-grid">
 
-      <!-- Faza 01 -->
+      <!-- ── Faza 01: Koncept & Strategija ── -->
       <li class="proc-card">
-        <div class="proc-card-num" aria-hidden="true">01</div>
-        <p class="proc-card-tag">Istraživanje</p>
-        <h3 class="proc-card-title">Koncept &amp; Strategija</h3>
-        <p class="proc-card-duration">1–2 tjedna</p>
-        <p class="proc-card-desc">Duboko istraživanje brenda i postavljanje vizualnog smjera. Prije nego što nacrtamo ikakav piksel, zajedno s vama definiramo čvrste temelje projekta.</p>
-        <div class="proc-card-rule" aria-hidden="true"></div>
-        <ul class="proc-card-deliverables" aria-label="Ključni isporučeni rezultati">
-          <li>Analiza tržišta i konkurencije</li>
-          <li>Definiranje vizualnog identiteta</li>
-          <li>Informacijska arhitektura stranice</li>
-        </ul>
+
+        <!-- Visual: Discovery / Research map -->
+        <div style="height:192px;position:relative;flex-shrink:0;background:#06060a;border-bottom:1px solid #3f3f46;overflow:hidden;">
+          <svg viewBox="0 0 320 192" fill="none" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%;" aria-hidden="true">
+            <defs>
+              <radialGradient id="proc1glow" cx="50%" cy="52%" r="50%">
+                <stop offset="0%" stop-color="#EF5634" stop-opacity="0.14"/>
+                <stop offset="100%" stop-color="#EF5634" stop-opacity="0"/>
+              </radialGradient>
+              <pattern id="proc1dots" width="22" height="22" patternUnits="userSpaceOnUse">
+                <circle cx="11" cy="11" r="0.55" fill="rgba(255,255,255,0.06)"/>
+              </pattern>
+            </defs>
+            <rect width="320" height="192" fill="url(#proc1dots)"/>
+            <rect width="320" height="192" fill="url(#proc1glow)"/>
+            <!-- Scan rings -->
+            <circle cx="160" cy="96" r="64" stroke="rgba(239,86,52,0.10)" stroke-width="0.7" stroke-dasharray="6 4" fill="none"/>
+            <circle cx="160" cy="96" r="44" stroke="rgba(239,86,52,0.18)" stroke-width="0.8" fill="none"/>
+            <circle cx="160" cy="96" r="26" stroke="rgba(239,86,52,0.32)" stroke-width="0.9" fill="rgba(239,86,52,0.04)"/>
+            <!-- Bullseye -->
+            <circle cx="160" cy="96" r="12" stroke="#EF5634" stroke-width="1.2" fill="rgba(239,86,52,0.08)"/>
+            <circle cx="160" cy="96" r="4" fill="#EF5634" opacity="0.90" style="filter:drop-shadow(0 0 6px rgba(239,86,52,0.70));"/>
+            <!-- Crosshairs -->
+            <line x1="160" y1="22" x2="160" y2="78" stroke="rgba(239,86,52,0.22)" stroke-width="0.7" stroke-dasharray="3 3"/>
+            <line x1="160" y1="114" x2="160" y2="170" stroke="rgba(239,86,52,0.22)" stroke-width="0.7" stroke-dasharray="3 3"/>
+            <line x1="22" y1="96" x2="108" y2="96" stroke="rgba(239,86,52,0.22)" stroke-width="0.7" stroke-dasharray="3 3"/>
+            <line x1="212" y1="96" x2="298" y2="96" stroke="rgba(239,86,52,0.22)" stroke-width="0.7" stroke-dasharray="3 3"/>
+            <!-- Node connections -->
+            <line x1="76" y1="42" x2="140" y2="78" stroke="rgba(255,255,255,0.07)" stroke-width="0.7"/>
+            <line x1="248" y1="38" x2="178" y2="75" stroke="rgba(255,255,255,0.07)" stroke-width="0.7"/>
+            <line x1="62" y1="154" x2="136" y2="114" stroke="rgba(255,255,255,0.07)" stroke-width="0.7"/>
+            <line x1="258" y1="156" x2="182" y2="116" stroke="rgba(255,255,255,0.07)" stroke-width="0.7"/>
+            <line x1="294" y1="90" x2="222" y2="93" stroke="rgba(255,255,255,0.07)" stroke-width="0.7"/>
+            <!-- Nodes -->
+            <circle cx="76" cy="42" r="5.5" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.16)" stroke-width="0.7"/>
+            <circle cx="248" cy="38" r="5.5" fill="rgba(239,86,52,0.10)" stroke="rgba(239,86,52,0.42)" stroke-width="0.7"/>
+            <circle cx="62" cy="154" r="5.5" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.14)" stroke-width="0.7"/>
+            <circle cx="258" cy="156" r="5.5" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.14)" stroke-width="0.7"/>
+            <circle cx="294" cy="90" r="4.5" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.12)" stroke-width="0.7"/>
+            <!-- Research doc TL -->
+            <rect x="20" y="24" width="44" height="34" rx="4" fill="rgba(255,255,255,0.018)" stroke="rgba(255,255,255,0.09)" stroke-width="0.6"/>
+            <rect x="27" y="32" width="30" height="4" rx="1" fill="rgba(255,255,255,0.10)"/>
+            <rect x="27" y="40" width="22" height="3" rx="1" fill="rgba(255,255,255,0.05)"/>
+            <rect x="27" y="46" width="26" height="3" rx="1" fill="rgba(255,255,255,0.05)"/>
+            <!-- Research doc TR -->
+            <rect x="256" y="18" width="46" height="34" rx="4" fill="rgba(255,255,255,0.018)" stroke="rgba(255,255,255,0.09)" stroke-width="0.6"/>
+            <rect x="263" y="26" width="28" height="4" rx="1" fill="rgba(255,255,255,0.10)"/>
+            <rect x="263" y="34" width="20" height="3" rx="1" fill="rgba(255,255,255,0.05)"/>
+            <rect x="263" y="40" width="24" height="3" rx="1" fill="rgba(255,255,255,0.05)"/>
+            <!-- Data tag BL -->
+            <rect x="18" y="152" width="34" height="20" rx="4" fill="rgba(239,86,52,0.08)" stroke="rgba(239,86,52,0.22)" stroke-width="0.5"/>
+            <rect x="24" y="158" width="22" height="4" rx="1" fill="rgba(239,86,52,0.42)"/>
+            <rect x="24" y="165" width="14" height="3" rx="1" fill="rgba(239,86,52,0.22)"/>
+            <!-- Data tag BR -->
+            <rect x="268" y="148" width="34" height="20" rx="4" fill="rgba(255,255,255,0.025)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+            <rect x="274" y="154" width="22" height="4" rx="1" fill="rgba(255,255,255,0.12)"/>
+            <rect x="274" y="161" width="14" height="3" rx="1" fill="rgba(255,255,255,0.07)"/>
+          </svg>
+        </div>
+
+        <!-- Content -->
+        <div style="padding:26px 28px 32px;flex:1;display:flex;flex-direction:column;">
+          <div class="proc-card-num">01</div>
+          <p class="proc-card-tag">Istraživanje</p>
+          <h3 class="proc-card-title">Koncept &amp; Strategija</h3>
+          <p class="proc-card-duration">1–2 tjedna</p>
+          <p class="proc-card-desc">Duboko istraživanje brenda i postavljanje vizualnog smjera. Prije nego što nacrtamo ikakav piksel, zajedno s vama definiramo čvrste temelje projekta.</p>
+          <div class="proc-card-rule" aria-hidden="true"></div>
+          <ul class="proc-card-deliverables" aria-label="Ključni isporučeni rezultati">
+            <li>Analiza tržišta i konkurencije</li>
+            <li>Definiranje vizualnog identiteta</li>
+            <li>Informacijska arhitektura stranice</li>
+          </ul>
+        </div>
+
       </li>
 
-      <!-- Faza 02 -->
+      <!-- ── Faza 02: Vrhunski Dizajn ── -->
       <li class="proc-card">
-        <div class="proc-card-num" aria-hidden="true">02</div>
-        <p class="proc-card-tag">Dizajn</p>
-        <h3 class="proc-card-title">Vrhunski Dizajn</h3>
-        <p class="proc-card-duration">2–3 tjedna</p>
-        <p class="proc-card-desc">Izrada unikatnih UI/UX rješenja i naprednih prototipa bez ikakvih šablona. Svaki element je ručno dizajniran za vaš brend i vaše korisnike.</p>
-        <div class="proc-card-rule" aria-hidden="true"></div>
-        <ul class="proc-card-deliverables" aria-label="Ključni isporučeni rezultati">
-          <li>UI sustav i komponente po mjeri</li>
-          <li>Interaktivni prototip za odobrenje</li>
-          <li>Responzivni dizajn za sve uređaje</li>
-        </ul>
+
+        <!-- Visual: Design canvas / artboard -->
+        <div style="height:192px;position:relative;flex-shrink:0;background:#07070e;border-bottom:1px solid #3f3f46;overflow:hidden;">
+          <svg viewBox="0 0 320 192" fill="none" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%;" aria-hidden="true">
+            <defs>
+              <radialGradient id="proc2glow" cx="38%" cy="40%" r="52%">
+                <stop offset="0%" stop-color="#EF5634" stop-opacity="0.09"/>
+                <stop offset="100%" stop-color="#EF5634" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <rect width="320" height="192" fill="url(#proc2glow)"/>
+            <!-- Ruler top -->
+            <rect x="0" y="0" width="320" height="15" fill="rgba(255,255,255,0.025)"/>
+            <line x1="0" y1="15" x2="320" y2="15" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+            <line x1="40"  y1="8"  x2="40"  y2="15" stroke="rgba(255,255,255,0.18)" stroke-width="0.5"/>
+            <line x1="80"  y1="10" x2="80"  y2="15" stroke="rgba(255,255,255,0.10)" stroke-width="0.5"/>
+            <line x1="120" y1="8"  x2="120" y2="15" stroke="rgba(255,255,255,0.18)" stroke-width="0.5"/>
+            <line x1="160" y1="10" x2="160" y2="15" stroke="rgba(255,255,255,0.10)" stroke-width="0.5"/>
+            <line x1="200" y1="8"  x2="200" y2="15" stroke="rgba(255,255,255,0.18)" stroke-width="0.5"/>
+            <line x1="240" y1="10" x2="240" y2="15" stroke="rgba(255,255,255,0.10)" stroke-width="0.5"/>
+            <line x1="280" y1="8"  x2="280" y2="15" stroke="rgba(255,255,255,0.18)" stroke-width="0.5"/>
+            <!-- Ruler left -->
+            <rect x="0" y="15" width="14" height="177" fill="rgba(255,255,255,0.020)"/>
+            <line x1="14" y1="15" x2="14" y2="192" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+            <line x1="8"  y1="48"  x2="14" y2="48"  stroke="rgba(255,255,255,0.18)" stroke-width="0.5"/>
+            <line x1="10" y1="80"  x2="14" y2="80"  stroke="rgba(255,255,255,0.10)" stroke-width="0.5"/>
+            <line x1="8"  y1="112" x2="14" y2="112" stroke="rgba(255,255,255,0.18)" stroke-width="0.5"/>
+            <line x1="10" y1="144" x2="14" y2="144" stroke="rgba(255,255,255,0.10)" stroke-width="0.5"/>
+            <line x1="8"  y1="176" x2="14" y2="176" stroke="rgba(255,255,255,0.14)" stroke-width="0.5"/>
+            <!-- Artboard (dashed) -->
+            <rect x="22" y="22" width="198" height="158" rx="3" fill="rgba(255,255,255,0.010)" stroke="rgba(255,255,255,0.08)" stroke-width="0.7" stroke-dasharray="5 3"/>
+            <!-- Alignment guides -->
+            <line x1="121" y1="22" x2="121" y2="180" stroke="rgba(239,86,52,0.20)" stroke-width="0.6" stroke-dasharray="4 4"/>
+            <line x1="22"  y1="101" x2="220" y2="101" stroke="rgba(239,86,52,0.16)" stroke-width="0.6" stroke-dasharray="4 4"/>
+            <!-- Selected element on canvas -->
+            <rect x="42" y="36" width="128" height="84" rx="3" fill="rgba(255,255,255,0.016)" stroke="rgba(255,255,255,0.07)" stroke-width="0.6"/>
+            <rect x="54" y="48" width="78" height="8" rx="2" fill="rgba(255,255,255,0.14)"/>
+            <rect x="54" y="62" width="106" height="4" rx="1.5" fill="rgba(255,255,255,0.06)"/>
+            <rect x="54" y="70" width="88" height="4" rx="1.5" fill="rgba(255,255,255,0.06)"/>
+            <rect x="54" y="82" width="44" height="14" rx="6" fill="rgba(239,86,52,0.22)" stroke="rgba(239,86,52,0.38)" stroke-width="0.5"/>
+            <rect x="60" y="86.5" width="28" height="4" rx="1" fill="rgba(239,86,52,0.55)"/>
+            <!-- Selection handles -->
+            <rect x="37"  y="31"  width="7" height="7" rx="1.5" fill="#EF5634" opacity="0.90"/>
+            <rect x="161" y="31"  width="7" height="7" rx="1.5" fill="#EF5634" opacity="0.90"/>
+            <rect x="37"  y="115" width="7" height="7" rx="1.5" fill="#EF5634" opacity="0.90"/>
+            <rect x="161" y="115" width="7" height="7" rx="1.5" fill="#EF5634" opacity="0.90"/>
+            <rect x="39" y="33" width="132" height="88" rx="2" fill="none" stroke="#EF5634" stroke-width="0.6" stroke-dasharray="4 3" opacity="0.32"/>
+            <!-- Cursor arrow -->
+            <g transform="translate(158,111)" opacity="0.94">
+              <path d="M1.5 1.5 L1.5 14 L5 10.5 L8.5 17.5 L11 16.5 L7.5 9.5 L11 9.5 Z" fill="#EF5634"/>
+            </g>
+            <!-- Second canvas element (unselected) -->
+            <rect x="42" y="130" width="80" height="40" rx="3" fill="rgba(255,255,255,0.008)" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+            <rect x="50" y="138" width="56" height="4" rx="1" fill="rgba(255,255,255,0.07)"/>
+            <rect x="50" y="146" width="40" height="3" rx="1" fill="rgba(255,255,255,0.05)"/>
+            <!-- Layers / Properties panel -->
+            <rect x="230" y="22" width="76" height="158" rx="3" fill="rgba(255,255,255,0.016)" stroke="rgba(255,255,255,0.06)" stroke-width="0.6"/>
+            <rect x="230" y="22" width="76" height="20" rx="3" fill="rgba(255,255,255,0.025)"/>
+            <rect x="230" y="34" width="76" height="8" fill="rgba(255,255,255,0.025)"/>
+            <rect x="236" y="28" width="38" height="4" rx="1" fill="rgba(255,255,255,0.12)"/>
+            <!-- Layer items -->
+            <rect x="236" y="48" width="8" height="8" rx="1.5" fill="rgba(239,86,52,0.30)" stroke="rgba(239,86,52,0.50)" stroke-width="0.5"/>
+            <rect x="248" y="50" width="36" height="4" rx="1" fill="rgba(255,255,255,0.18)"/>
+            <rect x="236" y="62" width="8" height="8" rx="1.5" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.10)" stroke-width="0.5"/>
+            <rect x="248" y="64" width="30" height="4" rx="1" fill="rgba(255,255,255,0.09)"/>
+            <rect x="236" y="76" width="8" height="8" rx="1.5" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.10)" stroke-width="0.5"/>
+            <rect x="248" y="78" width="28" height="4" rx="1" fill="rgba(255,255,255,0.09)"/>
+            <rect x="236" y="92" width="62" height="1" rx="0.5" fill="rgba(255,255,255,0.05)"/>
+            <!-- Coral swatch -->
+            <rect x="236" y="100" width="18" height="18" rx="3" fill="#EF5634" opacity="0.88" style="filter:drop-shadow(0 2px 6px rgba(239,86,52,0.38));"/>
+            <rect x="258" y="104" width="36" height="4" rx="1" fill="rgba(255,255,255,0.10)"/>
+            <rect x="258" y="112" width="24" height="3" rx="1" fill="rgba(255,255,255,0.06)"/>
+            <!-- Size fields -->
+            <rect x="236" y="124" width="28" height="14" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.07)" stroke-width="0.4"/>
+            <rect x="269" y="124" width="28" height="14" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.07)" stroke-width="0.4"/>
+            <rect x="240" y="128" width="18" height="4" rx="1" fill="rgba(255,255,255,0.09)"/>
+            <rect x="273" y="128" width="18" height="4" rx="1" fill="rgba(255,255,255,0.09)"/>
+          </svg>
+        </div>
+
+        <!-- Content -->
+        <div style="padding:26px 28px 32px;flex:1;display:flex;flex-direction:column;">
+          <div class="proc-card-num">02</div>
+          <p class="proc-card-tag">Dizajn</p>
+          <h3 class="proc-card-title">Vrhunski Dizajn</h3>
+          <p class="proc-card-duration">2–3 tjedna</p>
+          <p class="proc-card-desc">Izrada unikatnih UI/UX rješenja i naprednih prototipa bez ikakvih šablona. Svaki element je ručno dizajniran za vaš brend i vaše korisnike.</p>
+          <div class="proc-card-rule" aria-hidden="true"></div>
+          <ul class="proc-card-deliverables" aria-label="Ključni isporučeni rezultati">
+            <li>UI sustav i komponente po mjeri</li>
+            <li>Interaktivni prototip za odobrenje</li>
+            <li>Responzivni dizajn za sve uređaje</li>
+          </ul>
+        </div>
+
       </li>
 
-      <!-- Faza 03 -->
+      <!-- ── Faza 03: Inženjering & Motion ── -->
       <li class="proc-card">
-        <div class="proc-card-num" aria-hidden="true">03</div>
-        <p class="proc-card-tag">Razvoj</p>
-        <h3 class="proc-card-title">Inženjering &amp; Motion</h3>
-        <p class="proc-card-duration">3–5 tjedana</p>
-        <p class="proc-card-desc">Pretvaranje dizajna u munjevito brz, fluidan kod s premium animacijama. Lansiramo web koji ne samo što izgleda savršeno, već i performira savršeno.</p>
-        <div class="proc-card-rule" aria-hidden="true"></div>
-        <ul class="proc-card-deliverables" aria-label="Ključni isporučeni rezultati">
-          <li>Frontend razvoj (Next.js / React)</li>
-          <li>Premium animacije i micro-interakcije</li>
-          <li>Performanse, SEO i tehničke optimizacije</li>
-        </ul>
+
+        <!-- Visual: Code editor + animation timeline -->
+        <div style="height:192px;position:relative;flex-shrink:0;background:#060608;border-bottom:1px solid #3f3f46;overflow:hidden;">
+          <svg viewBox="0 0 320 192" fill="none" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%;" aria-hidden="true">
+            <defs>
+              <radialGradient id="proc3glow" cx="35%" cy="35%" r="55%">
+                <stop offset="0%" stop-color="#EF5634" stop-opacity="0.10"/>
+                <stop offset="100%" stop-color="#EF5634" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <rect width="320" height="192" fill="url(#proc3glow)"/>
+            <!-- Code editor panel -->
+            <rect x="12" y="12" width="180" height="128" rx="7" fill="rgba(0,0,0,0.44)" stroke="rgba(255,255,255,0.07)" stroke-width="0.7"/>
+            <rect x="12" y="12" width="180" height="22" rx="7" fill="rgba(255,255,255,0.04)"/>
+            <rect x="12" y="26" width="180" height="8" fill="rgba(255,255,255,0.04)"/>
+            <circle cx="26" cy="23" r="3.5" fill="rgba(255,80,80,0.32)"/>
+            <circle cx="38" cy="23" r="3.5" fill="rgba(255,180,40,0.26)"/>
+            <circle cx="50" cy="23" r="3.5" fill="rgba(70,200,70,0.22)"/>
+            <rect x="60" y="15" width="60" height="16" rx="3" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.07)" stroke-width="0.5"/>
+            <rect x="60" y="15" width="60" height="1.5" rx="0.75" fill="rgba(239,86,52,0.55)"/>
+            <rect x="66" y="21" width="36" height="5" rx="1.5" fill="rgba(255,255,255,0.22)"/>
+            <!-- Gutter -->
+            <rect x="12" y="34" width="22" height="106" fill="rgba(0,0,0,0.22)"/>
+            <line x1="34" y1="34" x2="34" y2="140" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+            <!-- Line numbers -->
+            <text x="16" y="49"  font-family="monospace" font-size="6.5" fill="rgba(255,255,255,0.14)">1</text>
+            <text x="16" y="61"  font-family="monospace" font-size="6.5" fill="rgba(255,255,255,0.14)">2</text>
+            <text x="16" y="73"  font-family="monospace" font-size="6.5" fill="rgba(255,255,255,0.14)">3</text>
+            <text x="16" y="85"  font-family="monospace" font-size="6.5" fill="rgba(239,86,52,0.65)">4</text>
+            <text x="16" y="97"  font-family="monospace" font-size="6.5" fill="rgba(255,255,255,0.14)">5</text>
+            <text x="16" y="109" font-family="monospace" font-size="6.5" fill="rgba(255,255,255,0.14)">6</text>
+            <text x="16" y="121" font-family="monospace" font-size="6.5" fill="rgba(255,255,255,0.14)">7</text>
+            <text x="16" y="133" font-family="monospace" font-size="6.5" fill="rgba(255,255,255,0.14)">8</text>
+            <!-- Code lines 1–3 -->
+            <rect x="38" y="43" width="22" height="5.5" rx="1.5" fill="rgba(239,86,52,0.68)"/>
+            <rect x="64" y="43" width="32" height="5.5" rx="1.5" fill="rgba(255,255,255,0.65)"/>
+            <rect x="100" y="43" width="16" height="5.5" rx="1.5" fill="rgba(175,218,115,0.45)"/>
+            <rect x="38" y="55" width="18" height="5.5" rx="1.5" fill="rgba(239,86,52,0.55)"/>
+            <rect x="60" y="55" width="28" height="5.5" rx="1.5" fill="rgba(255,255,255,0.45)"/>
+            <rect x="92" y="55" width="22" height="5.5" rx="1.5" fill="rgba(175,218,115,0.42)"/>
+            <rect x="48" y="67" width="26" height="5.5" rx="1.5" fill="rgba(255,255,255,0.28)"/>
+            <rect x="78" y="67" width="14" height="5.5" rx="1.5" fill="rgba(239,86,52,0.70)"/>
+            <rect x="96" y="67" width="36" height="5.5" rx="1.5" fill="rgba(255,255,255,0.55)"/>
+            <!-- Line 4 active -->
+            <rect x="34" y="79" width="158" height="12" fill="rgba(239,86,52,0.055)"/>
+            <rect x="48" y="81" width="28" height="5.5" rx="1.5" fill="rgba(239,86,52,0.75)"/>
+            <rect x="80" y="81" width="18" height="5.5" rx="1.5" fill="rgba(255,255,255,0.22)"/>
+            <rect x="102" y="81" width="24" height="5.5" rx="1.5" fill="rgba(175,218,115,0.50)"/>
+            <circle cx="183" cy="85" r="3" fill="#EF5634" opacity="0.90" style="filter:drop-shadow(0 0 4px rgba(239,86,52,0.80));"/>
+            <!-- Lines 5–8 -->
+            <rect x="48" y="91" width="22" height="5.5" rx="1.5" fill="rgba(255,255,255,0.28)"/>
+            <rect x="74" y="91" width="34" height="5.5" rx="1.5" fill="rgba(239,86,52,0.42)"/>
+            <rect x="38" y="103" width="20" height="5.5" rx="1.5" fill="rgba(255,255,255,0.18)"/>
+            <rect x="62" y="103" width="30" height="5.5" rx="1.5" fill="rgba(175,218,115,0.38)"/>
+            <rect x="38" y="115" width="14" height="5.5" rx="1.5" fill="rgba(239,86,52,0.48)"/>
+            <rect x="56" y="115" width="40" height="5.5" rx="1.5" fill="rgba(255,255,255,0.28)"/>
+            <rect x="38" y="127" width="8" height="5.5" rx="1.5" fill="rgba(255,255,255,0.18)"/>
+            <!-- Timeline panel (right) -->
+            <rect x="202" y="12" width="106" height="88" rx="6" fill="rgba(0,0,0,0.38)" stroke="rgba(255,255,255,0.06)" stroke-width="0.6"/>
+            <rect x="202" y="12" width="106" height="18" rx="6" fill="rgba(255,255,255,0.03)"/>
+            <rect x="202" y="22" width="106" height="8" fill="rgba(255,255,255,0.03)"/>
+            <rect x="208" y="16" width="42" height="5" rx="1.5" fill="rgba(255,255,255,0.12)"/>
+            <!-- Tracks -->
+            <rect x="208" y="36" width="94" height="7" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.05)" stroke-width="0.4"/>
+            <rect x="208" y="36" width="62" height="7" rx="2" fill="rgba(239,86,52,0.28)"/>
+            <circle cx="270" cy="39.5" r="4" fill="#EF5634" style="filter:drop-shadow(0 0 5px rgba(239,86,52,0.75));"/>
+            <rect x="208" y="50" width="94" height="7" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.05)" stroke-width="0.4"/>
+            <rect x="208" y="50" width="36" height="7" rx="2" fill="rgba(239,86,52,0.18)"/>
+            <circle cx="244" cy="53.5" r="3.5" fill="rgba(239,86,52,0.55)"/>
+            <rect x="208" y="64" width="94" height="7" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.05)" stroke-width="0.4"/>
+            <rect x="208" y="64" width="76" height="7" rx="2" fill="rgba(239,86,52,0.20)"/>
+            <circle cx="284" cy="67.5" r="3.5" fill="rgba(239,86,52,0.55)"/>
+            <!-- Scrubber -->
+            <line x1="270" y1="30" x2="270" y2="76" stroke="rgba(239,86,52,0.45)" stroke-width="0.8"/>
+            <rect x="264" y="28" width="12" height="5" rx="1.5" fill="#EF5634" opacity="0.82"/>
+            <rect x="208" y="78" width="94" height="7" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.05)" stroke-width="0.4"/>
+            <rect x="208" y="78" width="50" height="7" rx="2" fill="rgba(239,86,52,0.12)"/>
+            <!-- Performance graph -->
+            <rect x="202" y="108" width="106" height="32" rx="5" fill="rgba(0,0,0,0.32)" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+            <polyline points="208,134 222,126 236,120 248,112 258,108 270,114 280,110 296,113 302,116" stroke="rgba(255,255,255,0.12)" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+            <polyline points="208,136 218,130 232,122 244,114 256,112 268,116 280,112 296,115" stroke="#EF5634" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 3px rgba(239,86,52,0.55));"/>
+            <circle cx="296" cy="115" r="3" fill="#EF5634" style="filter:drop-shadow(0 0 5px rgba(239,86,52,0.70));"/>
+            <!-- Full-width animation strip -->
+            <rect x="12" y="150" width="296" height="30" rx="5" fill="rgba(255,255,255,0.020)" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+            <rect x="12" y="150" width="296" height="9" fill="rgba(0,0,0,0.22)" rx="5"/>
+            <circle cx="52"  cy="154.5" r="3"   fill="rgba(239,86,52,0.40)"/>
+            <circle cx="104" cy="154.5" r="3.5" fill="#EF5634" style="filter:drop-shadow(0 0 4px rgba(239,86,52,0.65));"/>
+            <circle cx="160" cy="154.5" r="3"   fill="rgba(239,86,52,0.42)"/>
+            <circle cx="220" cy="154.5" r="3"   fill="rgba(239,86,52,0.34)"/>
+            <circle cx="272" cy="154.5" r="3"   fill="rgba(239,86,52,0.28)"/>
+            <rect x="34"  y="163" width="38" height="11" rx="2" fill="rgba(255,255,255,0.04)"/>
+            <rect x="38"  y="167" width="28" height="3.5" rx="1" fill="rgba(255,255,255,0.09)"/>
+            <rect x="86"  y="163" width="40" height="11" rx="2" fill="rgba(239,86,52,0.08)" stroke="rgba(239,86,52,0.20)" stroke-width="0.4"/>
+            <rect x="90"  y="167" width="30" height="3.5" rx="1" fill="rgba(239,86,52,0.40)"/>
+            <rect x="142" y="163" width="38" height="11" rx="2" fill="rgba(255,255,255,0.04)"/>
+            <rect x="146" y="167" width="28" height="3.5" rx="1" fill="rgba(255,255,255,0.09)"/>
+            <rect x="202" y="163" width="38" height="11" rx="2" fill="rgba(255,255,255,0.04)"/>
+            <rect x="206" y="167" width="28" height="3.5" rx="1" fill="rgba(255,255,255,0.09)"/>
+          </svg>
+        </div>
+
+        <!-- Content -->
+        <div style="padding:26px 28px 32px;flex:1;display:flex;flex-direction:column;">
+          <div class="proc-card-num">03</div>
+          <p class="proc-card-tag">Razvoj</p>
+          <h3 class="proc-card-title">Inženjering &amp; Motion</h3>
+          <p class="proc-card-duration">3–5 tjedana</p>
+          <p class="proc-card-desc">Pretvaranje dizajna u munjevito brz, fluidan kod s premium animacijama. Lansiramo web koji ne samo što izgleda savršeno, već i performira savršeno.</p>
+          <div class="proc-card-rule" aria-hidden="true"></div>
+          <ul class="proc-card-deliverables" aria-label="Ključni isporučeni rezultati">
+            <li>Frontend razvoj (Next.js / React)</li>
+            <li>Premium animacije i micro-interakcije</li>
+            <li>Performanse, SEO i tehničke optimizacije</li>
+          </ul>
+        </div>
+
       </li>
 
     </ul>
+    </div><!-- /proc-grid-mask -->
   </section>
 
   <!-- ===================================================================
