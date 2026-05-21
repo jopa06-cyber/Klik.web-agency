@@ -32,24 +32,24 @@
       align-items: center;
       gap: 4px;
       background: rgba(15,15,15,0.82);
-      backdrop-filter: blur(16px) saturate(1.4);
-      -webkit-backdrop-filter: blur(16px) saturate(1.4);
-      border: 1px solid rgba(232,230,226,0.10);
+      backdrop-filter: blur(18px) saturate(1.6);
+      -webkit-backdrop-filter: blur(18px) saturate(1.6);
+      border: 1px solid rgba(232,230,226,0.09);
       border-radius: 9999px;
-      padding: 6px 6px 6px 17px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.45), inset 0 1px 0 rgba(246,245,243,0.05);
+      padding: 6px;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.45), 0 1px 0 rgba(255,255,255,0.04) inset;
     }
     .fnav-brand {
       display: flex;
       align-items: center;
-      gap: 9px;
+      gap: 8px;
       text-decoration: none;
-      flex-shrink: 0;
+      padding: 4px 10px 4px 4px;
     }
     .fnav-mark {
-      width: 30px; height: 30px;
+      width: 28px; height: 28px;
       background: #C8503A;
-      border-radius: 7px;
+      border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
       transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
@@ -58,9 +58,9 @@
     .fnav-logotype {
       font-family: 'DM Serif Display', serif;
       font-style: italic;
-      font-size: 19px;
-      letter-spacing: -0.4px;
-      color: #F6F5F3;
+      font-size: 16px;
+      letter-spacing: -0.3px;
+      color: rgba(246,245,243,0.6);
     }
     .fnav-logotype span { color: #C8503A; }
     .fnav-divider {
@@ -398,10 +398,82 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
+    /* === HAMBURGER BUTTON === */
+    .fnav-hamburger {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 38px; height: 38px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: #F6F5F3;
+      border-radius: 10px;
+      flex-shrink: 0;
+      transition: background 0.18s ease;
+    }
+    .fnav-hamburger:hover  { background: rgba(246,245,243,0.08); }
+    .fnav-hamburger:active { background: rgba(246,245,243,0.13); }
+    .fnav-hamburger:focus-visible { outline: 2px solid rgba(246,245,243,0.45); outline-offset: 2px; }
+
+    /* === MOBILE OVERLAY MENU === */
+    #mobile-menu {
+      position: fixed;
+      top: 72px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-6px);
+      width: calc(100vw - 32px);
+      max-width: 420px;
+      background: rgba(13,13,13,0.97);
+      backdrop-filter: blur(24px) saturate(1.5);
+      -webkit-backdrop-filter: blur(24px) saturate(1.5);
+      border: 1px solid rgba(232,230,226,0.10);
+      border-radius: 20px;
+      padding: 8px;
+      z-index: 49;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease,
+                  transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    #mobile-menu.open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+    .mob-link {
+      display: block;
+      padding: 15px 20px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #F6F5F3;
+      text-decoration: none;
+      border-radius: 13px;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.15s ease;
+    }
+    .mob-link:hover  { background: rgba(246,245,243,0.06); }
+    .mob-link:active { background: rgba(246,245,243,0.11); }
+    .mob-link:focus-visible { outline: 2px solid rgba(246,245,243,0.4); outline-offset: -2px; }
+
+    @media (max-width: 767px) {
+      .fnav-tabs      { display: none; }
+      .fnav-divider   { display: none; }
+      .fnav-hamburger { display: flex; }
+      .fnav-inner     { padding: 6px 6px 6px 14px; }
+    }
+    @media (min-width: 768px) {
+      .fnav-hamburger { display: none !important; }
+      #mobile-menu    { display: none !important; }
+    }
+
     /* === RESPONSIVE === */
     @media (max-width: 900px) {
       #site-nav { top: 12px; }
-      .fnav-brand { display: none; }
       .fnav-divider { display: none; }
       .fnav-inner { padding: 5px; }
       .fnav-tab { padding: 9px 10px; font-size: 10px; }
@@ -450,8 +522,32 @@
       <li class="fnav-tab" data-href="./kontakt.html"       role="listitem" tabindex="0">Kontakt</li>
       <li class="fnav-cursor" id="fnav-cursor" aria-hidden="true"></li>
     </ul>
+    <button class="fnav-hamburger" id="fnav-hamburger"
+            aria-label="Otvori izbornik" aria-expanded="false" aria-controls="mobile-menu">
+      <svg id="icon-menu" width="20" height="20" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+      <svg id="icon-close" width="20" height="20" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"
+           style="display:none">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
   </div>
 </nav>
+
+<div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Mobilna navigacija">
+  <a class="mob-link" href="./index.html"          data-mob>POČETNA</a>
+  <a class="mob-link" href="./index.html#radovi"   data-mob>RADOVI</a>
+  <a class="mob-link" href="./index.html#o-nama"   data-mob>O NAMA</a>
+  <a class="mob-link" href="./usluge.html"         data-mob>USLUGE</a>
+  <a class="mob-link" href="./faq.html"            data-mob>FAQ</a>
+  <a class="mob-link" href="./kontakt.html"        data-mob>KONTAKT</a>
+</div>
 
 <!-- MAIN -->
 <main>
@@ -636,6 +732,29 @@
     wrap.appendChild(btn);
     applyMagnetic(wrap);
   });
+})();
+</script>
+
+<script>
+(function () {
+  var btn       = document.getElementById('fnav-hamburger');
+  var menu      = document.getElementById('mobile-menu');
+  var iconMenu  = document.getElementById('icon-menu');
+  var iconClose = document.getElementById('icon-close');
+  if (!btn || !menu) return;
+  function setOpen(open) {
+    menu.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', String(open));
+    iconMenu.style.display  = open ? 'none'  : 'block';
+    iconClose.style.display = open ? 'block' : 'none';
+  }
+  btn.addEventListener('click', function () { setOpen(!menu.classList.contains('open')); });
+  document.querySelectorAll('[data-mob]').forEach(function (l) {
+    l.addEventListener('click', function () { setOpen(false); });
+  });
+  document.addEventListener('click', function (e) {
+    if (!btn.contains(e.target) && !menu.contains(e.target)) setOpen(false);
+  }, { passive: true });
 })();
 </script>
 
