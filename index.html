@@ -8,27 +8,12 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600&display=swap"></noscript>
+  <!-- Three.js ESM build preloaded on desktop only; mobile ignores this hint entirely -->
+  <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js" media="(min-width: 768px)" crossorigin="anonymous">
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            ember: '#C8503A',
-            carbon: '#0F0F0F',
-            chalk: '#F6F5F3',
-            linen: '#E8E6E2',
-          },
-          fontFamily: {
-            display: ['"DM Serif Display"', 'serif'],
-            sans: ['Inter', 'sans-serif'],
-          }
-        }
-      }
-    }
-  </script>
+  <link rel="stylesheet" href="./dist/tailwind.css">
 
   <style>
     *, *::before, *::after { box-sizing: border-box; }
@@ -1006,7 +991,7 @@
   <div class="hero-content">
     <p class="hero-eyebrow">Web Studio · Zagreb, Hrvatska</p>
     <h1 class="hero-headline">
-      Vaš digitalni otisak. Savršen <span id="text-rotate" aria-live="polite" aria-atomic="true"></span>
+      Vaš digitalni otisak. Savršen <span id="text-rotate" aria-live="polite" aria-atomic="true"><span class="tr-word"><span class="tr-char" style="transform:translateY(0);opacity:1">K</span><span class="tr-char" style="transform:translateY(0);opacity:1">l</span><span class="tr-char" style="transform:translateY(0);opacity:1">i</span><span class="tr-char" style="transform:translateY(0);opacity:1">k</span><span class="tr-char" style="transform:translateY(0);opacity:1">.</span></span></span>
     </h1>
     <p class="hero-sub">
       Gradimo digitalne identitete koji prodaju. Moderne, brze i precizno izrađene web stranice za ambiciozne brendove.
@@ -1043,7 +1028,7 @@
 
     <div class="portfolio-grid">
       <div class="portfolio-card reveal" tabindex="0" role="article" aria-label="Restoran Volta — projekt">
-        <img src="https://placehold.co/720x450/1A1A1A/333333" alt="Restoran Volta — web projekt" class="portfolio-img">
+        <img src="https://placehold.co/720x450/1A1A1A/333333" alt="Restoran Volta — web projekt" class="portfolio-img" width="720" height="450" loading="lazy">
         <div class="portfolio-overlay" aria-hidden="true"></div>
         <div class="portfolio-info">
           <span class="portfolio-tag">Restoran & Gastronomija</span>
@@ -1052,7 +1037,7 @@
       </div>
 
       <div class="portfolio-card reveal" style="transition-delay:0.1s" tabindex="0" role="article" aria-label="Studio Arca — projekt">
-        <img src="https://placehold.co/720x450/181818/2E2E2E" alt="Studio Arca — web projekt" class="portfolio-img">
+        <img src="https://placehold.co/720x450/181818/2E2E2E" alt="Studio Arca — web projekt" class="portfolio-img" width="720" height="450" loading="lazy">
         <div class="portfolio-overlay" aria-hidden="true"></div>
         <div class="portfolio-info">
           <span class="portfolio-tag">Arhitektura</span>
@@ -1314,8 +1299,7 @@
 </footer>
 
 
-<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
-<script>
+<script type="module">
 /* =============================================
    THREE.JS HERO — dual-renderer depth system
    Positions are authored as viewport fractions [fracX, fracY] at a z-depth,
@@ -1327,9 +1311,21 @@
      ANCHOR (3 shapes) — near the central text, light visual connection
      FRAME  (8 shapes) — pushed to all four corners/edges, full-canvas frame
      FG     (2 shapes) — close to camera, CSS-blurred, foreground depth cue
+
+   Loading strategy: <script type="module"> auto-defers (non-blocking). Desktop
+   dynamically imports the ESM build via await import(). Mobile (<768 px) skips
+   the import entirely — no download, no WebGL init, no RAF loop.
    ============================================= */
-(function () {
-  if (typeof THREE === 'undefined') return;
+async function initThreeScene() {
+  if (window.innerWidth < 768) {
+    var _c1 = document.getElementById('hero-canvas');
+    var _c2 = document.getElementById('hero-canvas-fg');
+    if (_c1) _c1.style.display = 'none';
+    if (_c2) _c2.style.display = 'none';
+    return;
+  }
+
+  const THREE = await import('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js');
 
   // ── Shared mouse state ────────────────────────────────────────────────────
   let mx = 0, my = 0, cx = 0, cy = 0;
@@ -1504,9 +1500,11 @@
       });
     });
   });
-})();
+}
+initThreeScene();
+</script>
 
-
+<script>
 /* =============================================
    SCROLL EFFECTS
    ============================================= */
@@ -1832,11 +1830,12 @@ document.querySelectorAll('.portfolio-card').forEach(card => {
   }
 
   // ── Init ──────────────────────────────────────────────────────────────────
-  // Render first word immediately as visible. The parent .hero-headline has
-  // a CSS fadeUp animation (opacity 0 → 1, delay 0.3 s), so these chars
-  // will be revealed naturally as part of the headline entrance — no extra
-  // animation needed here.
-  root.appendChild(buildDOM(TEXTS[0], true));
+  // First word pre-rendered as static HTML (tr-word/tr-char spans) to prevent
+  // CLS from the span going empty → populated on first paint. Skip buildDOM
+  // if the static markup is already there.
+  if (!root.querySelector('.tr-char')) {
+    root.appendChild(buildDOM(TEXTS[0], true));
+  }
 
   setInterval(rotate, INTERVAL);
 })();

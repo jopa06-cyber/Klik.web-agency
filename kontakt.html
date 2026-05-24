@@ -7,7 +7,8 @@
   <meta name="description" content="Pokrenite vaš web projekt s Klik. studijem iz Zagreba. Ispunite upit i javit ćemo se unutar 24 sata.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600&display=swap"></noscript>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -969,13 +970,22 @@
 </script>
 
 
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 <script>
 (function () {
   var successEl = document.getElementById('form-success');
   if (!successEl) return;
 
   var brandColors = ['#C8503A', '#F6F5F3', '#27272a'];
+
+  // Load confetti only when the success screen actually appears — saves ~50 KB on every page load
+  var _confettiReady = false;
+  function loadAndFire(callback) {
+    if (_confettiReady) { callback(); return; }
+    var s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js';
+    s.onload = function () { _confettiReady = true; callback(); };
+    document.body.appendChild(s);
+  }
 
   function fireworks() {
     var duration = 5 * 1000;
@@ -1012,7 +1022,7 @@
     for (var i = 0; i < mutations.length; i++) {
       if (mutations[i].type === 'attributes' && mutations[i].attributeName === 'hidden') {
         if (!successEl.hidden) {
-          fireworks();
+          loadAndFire(fireworks);
           observer.disconnect();
           break;
         }

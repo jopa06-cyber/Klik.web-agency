@@ -1,0 +1,12 @@
+# Tailwind standalone CLI binary (downloaded locally, not needed in repo)
+tailwindcss.exe
+
+# Node.js dependencies
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temp screenshots from development
+temporary screenshots/

@@ -1,0 +1,12 @@
+{
+  "name": "klik-website",
+  "version": "1.0.0",
+  "description": "Klik. Web Studio — production website",
+  "scripts": {
+    "build:css": "tailwindcss -i tailwind.input.css -o dist/tailwind.css --minify",
+    "dev:css": "tailwindcss -i tailwind.input.css -o dist/tailwind.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
+  }
+}
