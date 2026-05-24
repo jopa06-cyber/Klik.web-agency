@@ -17,12 +17,16 @@
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600&display=swap"></noscript>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    /* Smooth scroll only on pointer devices — prevents fighting iOS/Android momentum scrolling */
+    @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+      html { scroll-behavior: smooth; }
+    }
     body {
       font-family: 'Inter', sans-serif;
       background: #080808;
       color: #F6F5F3;
       min-height: 100vh;
+      min-height: 100dvh; /* Dynamic viewport: stays stable as mobile URL bar shows/hides */
       overflow-x: hidden;
     }
 
@@ -127,6 +131,7 @@
       pointer-events: none;
       overflow: hidden;
       background-color: #080808;
+      transform: translateZ(0); /* Force own composite layer; prevents scroll-triggered repaints */
     }
     .bg-mesh {
       position: absolute;
@@ -150,6 +155,7 @@
       opacity: 0.038;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)'/%3E%3C/svg%3E");
       background-size: 200px 200px;
+      transform: translateZ(0); /* Own composite layer — prevents repaint on scroll */
     }
 
     /* =====================================================================
@@ -1714,7 +1720,9 @@
 
     container.appendChild(svg);
 
-    if (reduced) return; /* Static for reduced-motion users */
+    /* strokeDashoffset is not compositor-accelerated — skip on touch devices to prevent scroll jitter */
+    var isTouchDevice = !window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (reduced || isTouchDevice) return;
 
     /* Animate after layout so getTotalLength() returns valid values */
     requestAnimationFrame(function () {
