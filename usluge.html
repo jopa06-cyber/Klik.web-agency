@@ -741,13 +741,18 @@
       .hero { padding: 110px 24px 64px; }
       .services-section { padding: 0 24px 72px; }
       .services-grid { grid-template-columns: 1fr; gap: 16px; }
+      .services-grid > .card-outer               { border-radius: 16px; border-color: rgba(232,230,226,0.1); }
+      .services-grid > .card-outer:first-child   { border-radius: 16px; }
+      .services-grid > .card-outer:last-child    { border-radius: 16px; }
+      .services-grid > .card-outer + .card-outer { margin-left: 0; }
       .bridge { padding: 0 24px 60px; }
       .process-section { padding: 0 24px; }
       .proc-connector { display: none; }
-      .proc-grid { grid-template-columns: 1fr; gap: 0; border-radius: 12px; }
-      .proc-card { padding: 40px 24px 44px; }
-      .proc-card:first-child { border-radius: 11px 11px 0 0; }
-      .proc-card:last-child  { border-radius: 0 0 11px 11px; }
+      .proc-grid { grid-template-columns: 1fr; gap: 16px; }
+      .proc-card { padding: 40px 24px 44px; border-color: rgba(232,230,226,0.1); border-radius: 16px; }
+      .proc-grid > .proc-card:first-child { border-radius: 16px; }
+      .proc-grid > .proc-card:last-child  { border-radius: 16px; }
+      .proc-grid > .proc-card + .proc-card { margin-left: 0; }
       .cta-section { padding: 80px 24px 100px; }
     }
 
