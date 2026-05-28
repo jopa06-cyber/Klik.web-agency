@@ -177,15 +177,7 @@
       background: radial-gradient(ellipse at center, rgba(194,81,56,0.13) 0%, transparent 65%);
       filter: blur(120px);
     }
-    /* Subtle dot-grid environment layer */
-    .hero-dots {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      z-index: 2;
-      background-image: radial-gradient(circle, rgba(246,245,243,0.055) 1px, transparent 1px);
-      background-size: 30px 30px;
-    }
+
     .hero-content {
       position: relative;
       z-index: 10;
@@ -875,6 +867,28 @@
       #mobile-menu    { display: none !important; }
     }
 
+    @media (min-width: 901px) {
+      #radovi .container {
+        max-width: min(90vw, 1440px);
+      }
+      .portfolio-grid {
+        gap: 28px;
+      }
+      .portfolio-info {
+        bottom: 36px;
+        left: 36px;
+        right: 36px;
+      }
+      .portfolio-name {
+        font-size: 30px;
+      }
+      .portfolio-tag {
+        font-size: 11px;
+        padding: 5px 13px;
+        margin-bottom: 14px;
+      }
+    }
+
     @media (max-width: 900px) {
       #site-nav { top: 12px; }
       .fnav-divider { display: none; }
@@ -981,8 +995,7 @@
     <div class="hero-glow-tl"></div>
     <div class="hero-glow-br"></div>
   </div>
-  <!-- Depth layer 2: dot grid environment -->
-  <div class="hero-dots" aria-hidden="true"></div>
+
   <!-- Depth layer 2.5: mobile-only animated SVG wireframes — z-index:5 clears both canvases -->
   <style>@media(min-width:768px){#mhf-mob{display:none!important}}@keyframes mhf-a{0%{opacity:.50;transform:translate3d(0,0px,0) rotate(0deg)}25%{opacity:.70;transform:translate3d(14px,-18px,0) rotate(90deg)}50%{opacity:.58;transform:translate3d(0,-28px,0) rotate(180deg)}75%{opacity:.72;transform:translate3d(-12px,-10px,0) rotate(270deg)}100%{opacity:.50;transform:translate3d(0,0px,0) rotate(360deg)}}@keyframes mhf-b{0%{opacity:.44;transform:translate3d(0,0px,0) rotate(-15deg)}33%{opacity:.66;transform:translate3d(5px,-11px,0) rotate(15deg)}66%{opacity:.52;transform:translate3d(-5px,-7px,0) rotate(-10deg)}100%{opacity:.44;transform:translate3d(0,0px,0) rotate(-15deg)}}@keyframes mhf-c{0%{opacity:.48;transform:translate3d(0,0px,0) rotate(0deg)}33%{opacity:.70;transform:translate3d(6px,-22px,0) rotate(120deg)}66%{opacity:.56;transform:translate3d(-4px,-36px,0) rotate(240deg)}100%{opacity:.48;transform:translate3d(0,0px,0) rotate(360deg)}}@keyframes mhf-d{0%{opacity:.50;transform:translate3d(0,0px,0) rotate(0deg)}25%{opacity:.70;transform:translate3d(-16px,-10px,0) rotate(-90deg)}50%{opacity:.56;transform:translate3d(0,-20px,0) rotate(-180deg)}75%{opacity:.72;transform:translate3d(16px,-10px,0) rotate(-270deg)}100%{opacity:.50;transform:translate3d(0,0px,0) rotate(-360deg)}}</style>
   <div id="mhf-mob" style="position:absolute;inset:0;overflow:hidden;pointer-events:none;user-select:none;z-index:5" aria-hidden="true">
@@ -1490,17 +1503,7 @@ async function initThreeScene() {
     scene.add(mesh);
   }
 
-  function makeParticles(count, color, opacity, spreadX, spreadY, spreadZ) {
-    const pos = new Float32Array(count * 3);
-    for (let i = 0; i < count; i++) {
-      pos[i * 3]     = (Math.random() - 0.5) * spreadX;
-      pos[i * 3 + 1] = (Math.random() - 0.5) * spreadY;
-      pos[i * 3 + 2] = (Math.random() - 0.5) * spreadZ - 2;
-    }
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    return new THREE.Points(geo, new THREE.PointsMaterial({ color, size: 0.042, transparent: true, opacity }));
-  }
+
 
   // ── LAYER A — sharp background + mid-ground canvas ───────────────────────
   const rA    = makeRenderer('hero-canvas');
@@ -1545,11 +1548,6 @@ async function initThreeScene() {
 
   if (rA) {
     SPECS_A.forEach(([G, c, fx, fy, z, s, o]) => spawnWire(scA, meshA, G, c, fx, fy, z, s, o, camA));
-    const p1 = makeParticles(140, 0xC8503A, 0.55, 22, 14, 10);
-    const p2 = makeParticles(95,  0xF6F5F3, 0.22, 20, 13,  8);
-    scA.add(p1, p2);
-    scA.userData.p1 = p1;
-    scA.userData.p2 = p2;
   }
 
   // ── LAYER B — CSS-blurred foreground canvas ───────────────────────────────
@@ -1584,10 +1582,7 @@ async function initThreeScene() {
       mesh.rotation.x += rx * 1.25; mesh.rotation.y += ry * 1.25; mesh.rotation.z += rz * 1.25;
     });
 
-    if (scA.userData.p1) {
-      scA.userData.p1.rotation.y =  t * 0.035;
-      scA.userData.p2.rotation.y = -t * 0.022;
-    }
+
 
     cx += (mx * 0.45 - cx) * 0.04;
     cy += (-my * 0.28 - cy) * 0.04;
