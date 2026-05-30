@@ -998,15 +998,15 @@
 
   <!-- Depth layer 2.5: mobile-only animated SVG wireframes — z-index:5 clears both canvases -->
   <style>@media(min-width:768px){#mhf-mob{display:none!important}}@keyframes mhf-a{0%{opacity:.50;transform:translate3d(0,0px,0) rotate(0deg)}25%{opacity:.70;transform:translate3d(14px,-18px,0) rotate(90deg)}50%{opacity:.58;transform:translate3d(0,-28px,0) rotate(180deg)}75%{opacity:.72;transform:translate3d(-12px,-10px,0) rotate(270deg)}100%{opacity:.50;transform:translate3d(0,0px,0) rotate(360deg)}}@keyframes mhf-b{0%{opacity:.44;transform:translate3d(0,0px,0) rotate(-15deg)}33%{opacity:.66;transform:translate3d(5px,-11px,0) rotate(15deg)}66%{opacity:.52;transform:translate3d(-5px,-7px,0) rotate(-10deg)}100%{opacity:.44;transform:translate3d(0,0px,0) rotate(-15deg)}}@keyframes mhf-c{0%{opacity:.48;transform:translate3d(0,0px,0) rotate(0deg)}33%{opacity:.70;transform:translate3d(6px,-22px,0) rotate(120deg)}66%{opacity:.56;transform:translate3d(-4px,-36px,0) rotate(240deg)}100%{opacity:.48;transform:translate3d(0,0px,0) rotate(360deg)}}@keyframes mhf-d{0%{opacity:.50;transform:translate3d(0,0px,0) rotate(0deg)}25%{opacity:.70;transform:translate3d(-16px,-10px,0) rotate(-90deg)}50%{opacity:.56;transform:translate3d(0,-20px,0) rotate(-180deg)}75%{opacity:.72;transform:translate3d(16px,-10px,0) rotate(-270deg)}100%{opacity:.50;transform:translate3d(0,0px,0) rotate(-360deg)}}</style>
-  <div id="mhf-mob" style="position:absolute;inset:0;overflow:hidden;pointer-events:none;user-select:none;z-index:5" aria-hidden="true">
+  <div id="mhf-mob" style="position:absolute;inset:0;overflow:hidden;pointer-events:none;user-select:none;z-index:5;contain:layout paint" aria-hidden="true">
     <!-- 1: Chalk octa — upper-left near margin, orbit — edge opacity -->
-    <svg style="position:absolute;top:1%;left:5%;will-change:transform,opacity;animation:mhf-a 12s linear 0s infinite both" viewBox="0 0 60 60" width="48" height="48" fill="none">
+    <svg style="position:absolute;top:1%;left:5%;backface-visibility:hidden;-webkit-backface-visibility:hidden;will-change:transform,opacity;animation:mhf-a 12s linear 0s infinite both" viewBox="0 0 60 60" width="48" height="48" fill="none">
       <g stroke="#F6F5F3" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round">
         <path d="M30,3 L3,30 M30,3 L57,30 M30,3 L39,22 M30,3 L21,38 M30,57 L3,30 M30,57 L57,30 M30,57 L39,22 M30,57 L21,38 M3,30 L39,22 M3,30 L21,38 M57,30 L39,22 M57,30 L21,38"/>
       </g>
     </svg>
     <!-- 2: Red ico — top-right bleed, deep-float — edge opacity -->
-    <svg style="position:absolute;top:3%;right:-22px;will-change:transform,opacity;animation:mhf-c 16s linear 1.8s infinite both" viewBox="0 0 90 90" width="76" height="76" fill="none">
+    <svg style="position:absolute;top:3%;right:-22px;backface-visibility:hidden;-webkit-backface-visibility:hidden;will-change:transform,opacity;animation:mhf-c 16s linear 1.8s infinite both" viewBox="0 0 90 90" width="76" height="76" fill="none">
       <g stroke="#C8503A" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
         <path d="M45,8 L45,27 M45,8 L70,33 M45,8 L62,56 M45,8 L28,56 M45,8 L20,33"/>
         <path d="M45,27 L70,33 L62,56 L28,56 L20,33 Z"/>
@@ -1017,21 +1017,21 @@
     </svg>
     <!-- 3: Chalk octa — CENTER behind eyebrow, opacity:0.68 → effective ~0.08–0.14 -->
     <div style="position:absolute;top:9%;left:38%;opacity:0.68">
-      <svg style="will-change:transform,opacity;animation:mhf-b 5s linear 0.8s infinite both" viewBox="0 0 60 60" width="40" height="40" fill="none">
+      <svg style="backface-visibility:hidden;-webkit-backface-visibility:hidden;will-change:transform,opacity;animation:mhf-b 5s linear 0.8s infinite both" viewBox="0 0 60 60" width="40" height="40" fill="none">
         <g stroke="#F6F5F3" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
           <path d="M30,3 L3,30 M30,3 L57,30 M30,3 L39,22 M30,3 L21,38 M30,57 L3,30 M30,57 L57,30 M30,57 L39,22 M30,57 L21,38 M3,30 L39,22 M3,30 L21,38 M57,30 L39,22 M57,30 L21,38"/>
         </g>
       </svg>
     </div>
     <!-- 4: Large chalk octa — left-edge bleed anchor, deep-float — edge opacity -->
-    <svg style="position:absolute;top:17%;left:-26px;will-change:transform,opacity;animation:mhf-c 19s linear 0.5s infinite both" viewBox="0 0 60 60" width="88" height="88" fill="none">
+    <svg style="position:absolute;top:17%;left:-26px;backface-visibility:hidden;-webkit-backface-visibility:hidden;will-change:transform,opacity;animation:mhf-c 19s linear 0.5s infinite both" viewBox="0 0 60 60" width="88" height="88" fill="none">
       <g stroke="#F6F5F3" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
         <path d="M30,3 L3,30 M30,3 L57,30 M30,3 L39,22 M30,3 L21,38 M30,57 L3,30 M30,57 L57,30 M30,57 L39,22 M30,57 L21,38 M3,30 L39,22 M3,30 L21,38 M57,30 L39,22 M57,30 L21,38"/>
       </g>
     </svg>
     <!-- 5: Red ico — CENTER-right near heading, opacity:0.68 → effective ~0.08–0.14 -->
     <div style="position:absolute;top:21%;right:20%;opacity:0.68">
-      <svg style="will-change:transform,opacity;animation:mhf-b 4.5s linear 2.5s infinite both" viewBox="0 0 90 90" width="34" height="34" fill="none">
+      <svg style="backface-visibility:hidden;-webkit-backface-visibility:hidden;will-change:transform,opacity;animation:mhf-b 4.5s linear 2.5s infinite both" viewBox="0 0 90 90" width="34" height="34" fill="none">
         <g stroke="#C8503A" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
           <path d="M45,8 L45,27 M45,8 L70,33 M45,8 L62,56 M45,8 L28,56 M45,8 L20,33"/>
           <path d="M45,27 L70,33 L62,56 L28,56 L20,33 Z"/>
@@ -1043,7 +1043,7 @@
     </div>
     <!-- 6: Red ico — DEAD CENTER behind heading, opacity:0.68 → effective ~0.10–0.15 -->
     <div style="position:absolute;top:31%;left:38%;opacity:0.68">
-      <svg style="will-change:transform,opacity;animation:mhf-a 10s linear 3.5s infinite both" viewBox="0 0 90 90" width="60" height="60" fill="none">
+      <svg style="backface-visibility:hidden;-webkit-backface-visibility:hidden;will-change:transform,opacity;animation:mhf-a 10s linear 3.5s infinite both" viewBox="0 0 90 90" width="60" height="60" fill="none">
         <g stroke="#C8503A" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round">
           <path d="M45,8 L45,27 M45,8 L70,33 M45,8 L62,56 M45,8 L28,56 M45,8 L20,33"/>
           <path d="M45,27 L70,33 L62,56 L28,56 L20,33 Z"/>
@@ -1054,7 +1054,7 @@
       </svg>
     </div>
     <!-- 7: Red ico — right-edge mid, counter-drift — edge opacity -->
-    <svg style="position:absolute;top:38%;right:-16px;will-change:transform,opacity;animation:mhf-d 12s linear 0.3s infinite both" viewBox="0 0 90 90" width="68" height="68" fill="none">
+    <svg style="position:absolute;top:38%;right:-16px;backface-visibility:hidden;-webkit-backface-visibility:hidden;will-change:transform,opacity;animation:mhf-d 12s linear 0.3s infinite both" viewBox="0 0 90 90" width="68" height="68" fill="none">
       <g stroke="#C8503A" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M45,8 L45,27 M45,8 L70,33 M45,8 L62,56 M45,8 L28,56 M45,8 L20,33"/>
         <path d="M45,27 L70,33 L62,56 L28,56 L20,33 Z"/>
@@ -1065,7 +1065,7 @@
     </svg>
     <!-- 8: Chalk octa — CENTER-left behind subtext, opacity:0.68 → effective ~0.08–0.14 -->
     <div style="position:absolute;top:45%;left:20%;opacity:0.68">
-      <svg style="will-change:transform,opacity;animation:mhf-b 7s linear 3s infinite both" viewBox="0 0 60 60" width="44" height="44" fill="none">
+      <svg style="backface-visibility:hidden;-webkit-backface-visibility:hidden;will-change:transform,opacity;animation:mhf-b 7s linear 3s infinite both" viewBox="0 0 60 60" width="44" height="44" fill="none">
         <g stroke="#F6F5F3" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
           <path d="M30,3 L3,30 M30,3 L57,30 M30,3 L39,22 M30,3 L21,38 M30,57 L3,30 M30,57 L57,30 M30,57 L39,22 M30,57 L21,38 M3,30 L39,22 M3,30 L21,38 M57,30 L39,22 M57,30 L21,38"/>
         </g>
@@ -1073,14 +1073,14 @@
     </div>
     <!-- 9: Chalk octa — CENTER-right behind subtext, opacity:0.68 → effective ~0.08–0.14 -->
     <div style="position:absolute;top:52%;right:18%;opacity:0.68">
-      <svg style="will-change:transform,opacity;animation:mhf-a 9s linear 2s infinite both" viewBox="0 0 60 60" width="38" height="38" fill="none">
+      <svg style="backface-visibility:hidden;-webkit-backface-visibility:hidden;will-change:transform,opacity;animation:mhf-a 9s linear 2s infinite both" viewBox="0 0 60 60" width="38" height="38" fill="none">
         <g stroke="#F6F5F3" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
           <path d="M30,3 L3,30 M30,3 L57,30 M30,3 L39,22 M30,3 L21,38 M30,57 L3,30 M30,57 L57,30 M30,57 L39,22 M30,57 L21,38 M3,30 L39,22 M3,30 L21,38 M57,30 L39,22 M57,30 L21,38"/>
         </g>
       </svg>
     </div>
     <!-- 10: Red ico — left-edge bleed lower, orbit — edge opacity -->
-    <svg style="position:absolute;top:58%;left:-22px;will-change:transform,opacity;animation:mhf-a 11s linear 1s infinite both" viewBox="0 0 90 90" width="78" height="78" fill="none">
+    <svg style="position:absolute;top:58%;left:-22px;backface-visibility:hidden;-webkit-backface-visibility:hidden;will-change:transform,opacity;animation:mhf-a 11s linear 1s infinite both" viewBox="0 0 90 90" width="78" height="78" fill="none">
       <g stroke="#C8503A" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M45,8 L45,27 M45,8 L70,33 M45,8 L62,56 M45,8 L28,56 M45,8 L20,33"/>
         <path d="M45,27 L70,33 L62,56 L28,56 L20,33 Z"/>
@@ -1090,14 +1090,14 @@
       </g>
     </svg>
     <!-- 11: Chalk octa — right-edge bleed lower, counter-drift — edge opacity -->
-    <svg style="position:absolute;top:69%;right:-12px;will-change:transform,opacity;animation:mhf-d 13s linear 4.5s infinite both" viewBox="0 0 60 60" width="64" height="64" fill="none">
+    <svg style="position:absolute;top:69%;right:-12px;backface-visibility:hidden;-webkit-backface-visibility:hidden;will-change:transform,opacity;animation:mhf-d 13s linear 4.5s infinite both" viewBox="0 0 60 60" width="64" height="64" fill="none">
       <g stroke="#F6F5F3" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M30,3 L3,30 M30,3 L57,30 M30,3 L39,22 M30,3 L21,38 M30,57 L3,30 M30,57 L57,30 M30,57 L39,22 M30,57 L21,38 M3,30 L39,22 M3,30 L21,38 M57,30 L39,22 M57,30 L21,38"/>
       </g>
     </svg>
     <!-- 12: Red ico — CENTER lower near CTA, opacity:0.68 → effective ~0.08–0.14 -->
     <div style="position:absolute;top:81%;left:24%;opacity:0.68">
-      <svg style="will-change:transform,opacity;animation:mhf-b 8s linear 2.8s infinite both" viewBox="0 0 90 90" width="46" height="46" fill="none">
+      <svg style="backface-visibility:hidden;-webkit-backface-visibility:hidden;will-change:transform,opacity;animation:mhf-b 8s linear 2.8s infinite both" viewBox="0 0 90 90" width="46" height="46" fill="none">
         <g stroke="#C8503A" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
           <path d="M45,8 L45,27 M45,8 L70,33 M45,8 L62,56 M45,8 L28,56 M45,8 L20,33"/>
           <path d="M45,27 L70,33 L62,56 L28,56 L20,33 Z"/>
