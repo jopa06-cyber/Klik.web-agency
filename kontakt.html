@@ -721,10 +721,10 @@
       <div class="kontakt-right">
         <p class="form-title">Novi projekt</p>
 
-        <form id="kontakt-form" novalidate>
+        <form action="https://formspree.io/f/xdavevrg" method="POST" id="contact-form" novalidate>
           <div class="form-row">
             <div class="form-field floating">
-              <input type="text" id="ime" name="ime" placeholder=" " required autocomplete="name">
+              <input type="text" id="ime" name="name" placeholder=" " required autocomplete="name">
               <label for="ime">Ime i prezime</label>
               <span class="field-error" id="ime-err" role="alert"></span>
             </div>
@@ -738,7 +738,7 @@
           <div class="form-field">
             <label for="vrsta">Vrsta projekta</label>
             <div class="select-wrap" id="vrsta-wrap">
-              <select id="vrsta" name="vrsta" required>
+              <select id="vrsta" name="project_type" required>
                 <option value="" disabled selected>Odaberite vrstu projekta</option>
                 <option value="web-stranica">Web stranica</option>
                 <option value="estetska-optimizacija">Estetska optimizacija weba</option>
@@ -755,7 +755,7 @@
           <div class="form-field">
             <label for="proracun">Planirani budžet <span class="label-opt">(nije obavezno)</span></label>
             <div class="select-wrap" id="proracun-wrap">
-              <select id="proracun" name="proracun">
+              <select id="proracun" name="budget">
                 <option value="" disabled selected>Okvirni raspon</option>
                 <option value="ispod-1500">Ispod 1.500 €</option>
                 <option value="1500-3k">1.500 € – 3.000 €</option>
@@ -769,7 +769,7 @@
           </div>
 
           <div class="form-field floating">
-            <textarea id="poruka" name="poruka" placeholder=" " required></textarea>
+            <textarea id="poruka" name="message" placeholder=" " required></textarea>
             <label for="poruka">Poruka</label>
             <span class="field-error" id="poruka-err" role="alert"></span>
           </div>
@@ -828,9 +828,9 @@
   });
 })();
 
-/* === Form validation & submit === */
+/* === Form validation & Formspree submit === */
 (function () {
-  const form      = document.getElementById('kontakt-form');
+  const form      = document.getElementById('contact-form');
   const successEl = document.getElementById('form-success');
   if (!form) return;
 
@@ -864,14 +864,14 @@
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
   }
 
-  form.addEventListener('submit', e => {
+  form.addEventListener('submit', async function(e) {
     e.preventDefault();
     let valid = true;
 
-    if (!fields.ime.el.value.trim())                        { showError('ime');    valid = false; }
-    if (!isValidEmail(fields.email.el.value.trim()))        { showError('email');  valid = false; }
-    if (!fields.vrsta.el.value)                             { showError('vrsta');  valid = false; }
-    if (!fields.poruka.el.value.trim())                     { showError('poruka'); valid = false; }
+    if (!fields.ime.el.value.trim())                 { showError('ime');    valid = false; }
+    if (!isValidEmail(fields.email.el.value.trim())) { showError('email');  valid = false; }
+    if (!fields.vrsta.el.value)                      { showError('vrsta');  valid = false; }
+    if (!fields.poruka.el.value.trim())              { showError('poruka'); valid = false; }
 
     if (!valid) {
       const firstKey = Object.keys(fields).find(k => fields[k].el.classList.contains('error'));
@@ -879,19 +879,43 @@
       return;
     }
 
-    // Animate form out, reveal success
-    form.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-    form.style.opacity    = '0';
-    form.style.transform  = 'translateY(8px)';
-    setTimeout(() => {
-      form.hidden     = true;
-      successEl.hidden = false;
-      successEl.style.opacity    = '0';
-      successEl.style.transition = 'opacity 0.4s ease';
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        successEl.style.opacity = '1';
-      }));
-    }, 320);
+    const button = form.querySelector('button[type="submit"]');
+    const originalHTML = button.innerHTML;
+    button.disabled = true;
+    button.innerHTML = '<span>Slanje...</span>';
+
+    try {
+      const response = await fetch(form.action, {
+        method: form.method,
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (response.ok) {
+        form.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        form.style.opacity    = '0';
+        form.style.transform  = 'translateY(8px)';
+        setTimeout(() => {
+          form.hidden      = true;
+          successEl.hidden = false;
+          successEl.style.opacity    = '0';
+          successEl.style.transition = 'opacity 0.4s ease';
+          requestAnimationFrame(() => requestAnimationFrame(() => {
+            successEl.style.opacity = '1';
+          }));
+        }, 320);
+      } else {
+        throw new Error();
+      }
+    } catch (err) {
+      button.innerHTML = '<span>Greška! Pokušajte ponovno.</span>';
+      button.style.background = '#ef4444';
+      setTimeout(() => {
+        button.disabled  = false;
+        button.innerHTML = originalHTML;
+        button.style.background = '';
+      }, 4000);
+    }
   });
 })();
 

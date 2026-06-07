@@ -371,15 +371,52 @@
       grid-template-columns: repeat(2, 1fr);
       gap: 14px;
     }
+    @property --shine-angle {
+      syntax: '<angle>';
+      initial-value: 0deg;
+      inherits: false;
+    }
+    @keyframes shine-rotate {
+      to { --shine-angle: 360deg; }
+    }
+
     .portfolio-card {
       position: relative;
       border-radius: 16px;
       overflow: hidden;
       background: #1A1A1A;
-      border: 1px solid rgba(246,245,243,0.07);
       cursor: default;
       box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-      transition: box-shadow 0.35s ease, border-color 0.32s ease;
+      transition: box-shadow 0.35s ease;
+    }
+    .portfolio-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      padding: 2px;
+      background: conic-gradient(
+        from var(--shine-angle),
+        transparent 0deg,
+        transparent 230deg,
+        rgba(200,80,58,0.2) 258deg,
+        #C8503A 278deg,
+        #E8663A 300deg,
+        #FFA060 320deg,
+        rgba(255,210,170,0.92) 332deg,
+        transparent 342deg,
+        transparent 360deg
+      );
+      -webkit-mask-image: linear-gradient(#fff 0 0), linear-gradient(#fff 0 0);
+      -webkit-mask-clip: content-box, border-box;
+      -webkit-mask-composite: xor;
+      mask-image: linear-gradient(#fff 0 0), linear-gradient(#fff 0 0);
+      mask-clip: content-box, border-box;
+      mask-composite: exclude;
+      animation: shine-rotate 6s infinite linear;
+      z-index: 5;
+      pointer-events: none;
+      will-change: background;
     }
     .portfolio-card--video img.portfolio-img {
       position: relative;
@@ -402,7 +439,7 @@
       transition: opacity 0.3s ease;
       will-change: opacity;
     }
-    .portfolio-card:hover { box-shadow: 0 8px 36px rgba(0,0,0,0.5), 0 2px 8px rgba(200,80,58,0.08); border-color: rgba(246,245,243,0.16); }
+    .portfolio-card:hover { box-shadow: 0 8px 36px rgba(0,0,0,0.5), 0 2px 8px rgba(200,80,58,0.08); }
 
     .portfolio-img {
       width: 100%;
@@ -1189,7 +1226,7 @@
     <h2 class="section-heading reveal">Odabrani projekti</h2>
 
     <div class="portfolio-grid">
-      <div class="portfolio-card portfolio-card--video reveal">
+      <div class="portfolio-card portfolio-card--video style-smile-card reveal">
         <img src="./style%26smile%20hero%20screenshot.jpg" alt="Style &amp; Smile — web projekt" class="portfolio-img" width="720" height="450" loading="lazy">
         <video class="portfolio-video-hover" muted playsinline loop preload="none" aria-hidden="true">
           <source src="./style%26smile%20hero%20za%20klik.mp4" type="video/mp4">
@@ -1201,7 +1238,7 @@
         </div>
       </div>
 
-      <div class="portfolio-card portfolio-card--video reveal" style="transition-delay:0.1s; background:#f3ede2;">
+      <div class="portfolio-card portfolio-card--video jans-art-card reveal" style="transition-delay:0.1s; background:#f3ede2;">
         <img src="./jans%20art%20hero%20screenshot.jpg" alt="Jan's Art — web projekt" class="portfolio-img" width="720" height="352" loading="lazy">
         <video class="portfolio-video-hover" muted playsinline loop preload="none" aria-hidden="true">
           <source src="./jans%20art%20hero%20za%20klik..mp4" type="video/mp4">
