@@ -192,6 +192,15 @@
       color: #C8503A;
       font-style: italic;
     }
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
     .k-desc {
       font-size: 15px;
       line-height: 1.72;
@@ -701,7 +710,7 @@
       <!-- LEFT — Studio info -->
       <div class="kontakt-left">
         <p class="k-eyebrow">Web Studio · Zagreb, Hrvatska</p>
-        <h1 class="k-headline">Začnimo nešto<br><em>vrijedno.</em></h1>
+        <h1 class="k-headline">Začnimo nešto<br><em>vrijedno.</em><span class="sr-only"> | Kontaktirajte KLIK. WEB AGENCY za Izradu Web Stranica</span></h1>
         <p class="k-desc">Svaki uspješan projekt počinje pravim razgovorom. Ispunite obrazac i javit ćemo se unutar 24 sata s prijedlogom strategije.</p>
 
         <div class="k-divider"></div>
@@ -726,7 +735,7 @@
       <div class="card-glow-wrap">
       <div class="card-glow" aria-hidden="true"></div>
       <div class="kontakt-right">
-        <p class="form-title">Novi projekt</p>
+        <h2 class="form-title">Novi projekt</h2>
 
         <form action="https://formspree.io/f/xdavevrg" method="POST" id="contact-form" novalidate>
           <div class="form-row">

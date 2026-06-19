@@ -204,6 +204,15 @@
       animation: fadeUp 0.85s cubic-bezier(0.16,1,0.3,1) 0.13s both;
     }
     .hero-headline em { color: #C8503A; font-style: italic; }
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
     .hero-desc {
       font-size: 16px;
       line-height: 1.72;
@@ -882,6 +891,7 @@
     <p class="hero-eyebrow">Studio · Zagreb</p>
     <h1 class="hero-headline" id="hero-heading">
       Oblikujemo digitalna iskustva<br>koja <span class="hero-rotate-wrap" id="hero-rotate-wrap" aria-live="polite"></span>
+      <span class="sr-only"> | Web Dizajn i Razvoj Stranica | KLIK.</span>
     </h1>
     <p class="hero-desc">
       Spajamo dizajn, tehnologiju i strategiju u produkte koji ostavljaju trajan trag — za brandove koji ne žele biti samo prisutni, već zapamćeni.
@@ -1078,7 +1088,7 @@
           <div style="padding:24px 26px 28px;flex:1;display:flex;flex-direction:column;">
             <p style="font-size:10px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:#EF5634;margin-bottom:8px;">02</p>
             <p style="font-size:9px;font-weight:500;letter-spacing:0.13em;text-transform:uppercase;color:rgba(246,245,243,0.35);margin-bottom:12px;">INŽENJERING</p>
-            <h3 style="font-family:'DM Serif Display',serif;font-size:22px;font-weight:400;line-height:1.18;letter-spacing:-0.02em;color:#F6F5F3;margin-bottom:12px;">Estetska optimizacija weba</h3>
+            <h3 style="font-family:'DM Serif Display',serif;font-size:22px;font-weight:400;line-height:1.18;letter-spacing:-0.02em;color:#F6F5F3;margin-bottom:12px;">Estetika i optimizacija weba</h3>
             <p style="font-size:14px;line-height:1.74;color:rgba(246,245,243,0.44);margin-bottom:20px;flex-grow:1;">Naš kod prati besprijekornost našeg dizajna. Kroz pedantno frontend inženjerstvo eliminiramo nepotreban layout shift, ubrzavamo renderiranje do maksimuma i stvaramo fluidna digitalna iskustva koja oduševljavaju vaše posjetitelje.</p>
             <div style="height:1px;background:rgba(232,230,226,0.07);margin-bottom:15px;"></div>
             <p style="font-size:9px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:rgba(246,245,243,0.22);margin-bottom:11px;">Što dobivate</p>

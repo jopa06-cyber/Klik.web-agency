@@ -222,6 +222,15 @@
       animation: fadeUp 0.9s cubic-bezier(0.16,1,0.3,1) 0.3s forwards;
     }
     .hero-headline em { color: #C8503A; font-style: italic; }
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
 
     /* === TEXT ROTATE === */
     /* Outer inline-flex container — sits on the text baseline */
@@ -1198,6 +1207,7 @@
     <p class="hero-eyebrow">Web Studio · Zagreb, Hrvatska</p>
     <h1 class="hero-headline">
       Vaš digitalni otisak. Savršen <span id="text-rotate" aria-live="polite" aria-atomic="true"><span class="tr-word"><span class="tr-char" style="transform:translateY(0);opacity:1">K</span><span class="tr-char" style="transform:translateY(0);opacity:1">l</span><span class="tr-char" style="transform:translateY(0);opacity:1">i</span><span class="tr-char" style="transform:translateY(0);opacity:1">k</span><span class="tr-char" style="transform:translateY(0);opacity:1">.</span></span></span>
+      <span class="sr-only"> | Izrada Web Stranica Zagreb</span>
     </h1>
     <p class="hero-sub">
       Gradimo digitalne identitete koji prodaju. Moderne, brze i precizno izrađene web stranice za ambiciozne brendove.
@@ -1221,8 +1231,8 @@
 <!-- MANIFESTO -->
 <section id="manifesto" aria-label="Naša filozofija">
   <div class="mfst-outer">
-    <p class="mfst-text" id="manifesto-text"
-       aria-label="Ne vjerujemo u generička rješenja i gotove šablone. Svaki brend zaslužuje unikatan digitalni prostor skrojen s apsolutnom preciznošću."></p>
+    <h2 class="mfst-text" id="manifesto-text"
+       aria-label="Ne vjerujemo u generička rješenja i gotove šablone. Svaki brend zaslužuje unikatan digitalni prostor skrojen s apsolutnom preciznošću."></h2>
   </div>
 </section>
 
@@ -1241,7 +1251,7 @@
         <div class="portfolio-overlay" aria-hidden="true"></div>
         <div class="portfolio-info">
           <span class="portfolio-tag">Frizerski salon</span>
-          <div class="portfolio-name">Style & Smile</div>
+          <h3 class="portfolio-name">Style & Smile</h3>
         </div>
       </div>
 
@@ -1253,7 +1263,7 @@
         <div class="portfolio-overlay" aria-hidden="true"></div>
         <div class="portfolio-info">
           <span class="portfolio-tag">Kaligrafija &amp; Dizajn</span>
-          <div class="portfolio-name">Jan's Art</div>
+          <h3 class="portfolio-name">Jan's Art</h3>
         </div>
       </div>
 
